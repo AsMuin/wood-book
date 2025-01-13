@@ -145,7 +145,7 @@
 
     /* Book Receipt */
     .book-receipt_admin-btn {
-        @apply rounded-md bg-light-300 font-semibold text-primary-admin hover:bg-light-300/80 !important;
+        @apply text-primary-admin rounded-md bg-light-300 font-semibold hover:bg-light-300/80 !important;
     }
 
     /* Book Ticket */
