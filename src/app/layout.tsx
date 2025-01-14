@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
-
 const ibmPlexSans = localFont({
     src: [
         {
@@ -47,8 +46,12 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+
     return (
         <html lang="en">
+            <head>
+            {process.env.NODE_ENV==='development'&& <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script>}
+            </head>
             <body className={`${ibmPlexSans.className} ${bebasNeue.variable} antialiased`}>{children}</body>
         </html>
     );
