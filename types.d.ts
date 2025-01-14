@@ -12,4 +12,3 @@ export interface IBook {
     videoUrl: string;
     summary: string;
 }
-

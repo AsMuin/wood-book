@@ -118,7 +118,7 @@
     }
 
     .book-overview_btn {
-        @apply mt-4 min-h-14 w-fit bg-primary text-dark-100 hover:bg-primary/90 max-md:w-full !important;
+        @apply mt-4 min-h-14 bg-primary text-dark-100 hover:bg-primary/90 md:w-full;
     }
 
     /* File Upload */
@@ -145,7 +145,7 @@
 
     /* Book Receipt */
     .book-receipt_admin-btn {
-        @apply text-primary-admin rounded-md bg-light-300 font-semibold hover:bg-light-300/80 !important;
+        @apply rounded-md bg-light-300 font-semibold text-primary-admin hover:bg-light-300/80 !important;
     }
 
     /* Book Ticket */
