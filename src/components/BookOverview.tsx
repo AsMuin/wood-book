@@ -15,7 +15,7 @@ export default function BookOverview({
     coverUrl,
     videoUrl,
     summary
-}: IBook) {
+}: Omit<IBook, 'isLoanedBook'>) {
     return (
         <section className="book-overview">
             <div className="flex flex-1 flex-col gap-5">
