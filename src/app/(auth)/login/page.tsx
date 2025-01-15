@@ -15,6 +15,7 @@ export default function SignIn() {
             placeholder: '请输入密码'
         }
     ];
+
     return (
         <div>
             <AuthForm type="LOGIN" schema={loginSchema} formConfig={loginFormConfig} onSubmit={() => {}} />

@@ -7,6 +7,7 @@ import { Button } from './ui/button';
 export interface IBookCardProps extends IBook {
     isLoanedBook: boolean;
 }
+
 export default function BookCard({ id, title, genre, coverColor, coverUrl, isLoanedBook = false }: IBookCardProps) {
     return (
         <li className={cn(isLoanedBook && 'w-full xs:w-52')}>

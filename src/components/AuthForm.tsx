@@ -29,6 +29,7 @@ export interface AuthFormProps<T extends FieldValues> {
 export default function AuthForm<T extends FieldValues>({ type, schema, formConfig, onSubmit }: AuthFormProps<T>) {
     const isLogin = type === 'LOGIN';
     const defaultValues = {} as DefaultValues<T>;
+
     formConfig.forEach(item => {
         defaultValues[item.key as keyof DefaultValues<T>] = item.defaultValue;
     });
@@ -40,6 +41,7 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
     const handleSubmit: SubmitHandler<T> = async data => {
         console.log(data);
     };
+
     return (
         <div className="flex flex-col gap-4">
             <h1 className="text-2xl font-semibold text-white">{isLogin ? '欢迎回来' : '注册属于你的账号'}</h1>

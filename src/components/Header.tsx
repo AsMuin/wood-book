@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+
 export default function Header() {
     const pathname = usePathname();
     const navBarList = [
@@ -12,6 +13,7 @@ export default function Header() {
             label: '图书馆'
         }
     ];
+
     return (
         <header className="my-10 flex justify-between gap-5">
             <Link href="/">

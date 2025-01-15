@@ -30,6 +30,7 @@ export default function Registry() {
             type: 'image'
         }
     ];
+
     return (
         <div>
             <AuthForm type="REGISTER" schema={registerSchema} formConfig={registerFormConfig} onSubmit={() => {}} />

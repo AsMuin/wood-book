@@ -2,6 +2,7 @@ import { IBook } from '../../types';
 import Image from 'next/image';
 import { Button } from './ui/button';
 import BookCover from './BookCover';
+
 export default function BookOverview({
     id,
     title,
