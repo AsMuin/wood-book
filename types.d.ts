@@ -11,5 +11,5 @@ export interface IBook {
     coverUrl: string;
     videoUrl: string;
     summary: string;
-    isLoanedBook?: boolean;
+    isLoanedBook: boolean;
 }
