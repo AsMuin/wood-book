@@ -15,6 +15,7 @@ export interface FormItemConfig<T extends FieldValues = FieldValues> {
     type?: 'text' | 'password' | 'email' | 'number' | 'select' | 'date' | 'textarea' | 'checkbox' | 'radio' | 'file' | 'image';
     placeholder?: string;
     defaultValue?: any;
+    description?: string;
     options?: ControllerRenderProps<T>;
 }
 
@@ -44,8 +45,8 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
             <h1 className="text-2xl font-semibold text-white">{isLogin ? '欢迎回来' : '注册属于你的账号'}</h1>
             <p className="text-light-100">{isLogin ? '登录你的账号以访问图书信息' : '请填写下述注册信息并提供有效的身份验证信息'}</p>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    {formConfig?.map(({ key, label, placeholder, options }) => (
+                <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+                    {formConfig?.map(({ key, label, placeholder, options, description }) => (
                         <FormField
                             key={key as string}
                             control={form.control}
@@ -56,14 +57,16 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
                                     <FormControl>
                                         <Input placeholder={placeholder || ''} {...field} {...options} />
                                     </FormControl>
-                                    <FormDescription>This is your public display name.</FormDescription>
+                                    <FormDescription>{description || ''}</FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                     ))}
                     <div className="text-center">
-                        <Button type="submit">Submit</Button>
+                        <Button type="submit" className="text-slate-700">
+                            {isLogin ? '登录' : '注册'}
+                        </Button>
                     </div>
                 </form>
             </Form>
