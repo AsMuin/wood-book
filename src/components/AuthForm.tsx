@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
+import UploadImage from './UploadImage';
 
 export interface FormItemConfig<T extends FieldValues = FieldValues> {
     key: keyof T;
@@ -16,7 +17,11 @@ export interface FormItemConfig<T extends FieldValues = FieldValues> {
     placeholder?: string;
     defaultValue?: any;
     description?: string;
-    options?: ControllerRenderProps<T>;
+    options?: Partial<
+        ControllerRenderProps<T> & {
+            required?: boolean;
+        }
+    >;
 }
 
 export interface AuthFormProps<T extends FieldValues> {
@@ -48,7 +53,7 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
             <p className="text-light-100">{isLogin ? '登录你的账号以访问图书信息' : '请填写下述注册信息并提供有效的身份验证信息'}</p>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-                    {formConfig?.map(({ key, label, placeholder, options, description }) => (
+                    {formConfig?.map(({ key, label, placeholder, options, description, type }) => (
                         <FormField
                             key={key as string}
                             control={form.control}
@@ -57,7 +62,17 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
                                 <FormItem>
                                     <FormLabel className="capitalize">{label}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder={placeholder || ''} {...field} {...options} />
+                                        {type === 'image' ? (
+                                            <UploadImage {...field} {...options} onFileChange={field.onChange} />
+                                        ) : (
+                                            <Input
+                                                type={type || 'text'}
+                                                placeholder={placeholder || ''}
+                                                {...field}
+                                                {...options}
+                                                className="form-input"
+                                            />
+                                        )}
                                     </FormControl>
                                     <FormDescription>{description || ''}</FormDescription>
                                     <FormMessage />
@@ -66,7 +81,7 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
                         />
                     ))}
                     <div className="text-center">
-                        <Button type="submit" className="text-slate-700">
+                        <Button type="submit" className="form-btn">
                             {isLogin ? '登录' : '注册'}
                         </Button>
                     </div>

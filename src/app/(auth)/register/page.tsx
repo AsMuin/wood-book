@@ -7,22 +7,36 @@ export default function Registry() {
         {
             key: 'fullName',
             label: '姓名',
-            placeholder: '请输入姓名'
+            placeholder: '请输入姓名',
+            options: {
+                required: true
+            }
         },
         {
             key: 'email',
             label: '邮箱',
-            placeholder: '请输入邮箱'
+            type: 'email',
+            placeholder: '请输入邮箱',
+            options: {
+                required: true
+            }
         },
         {
             key: 'password',
             label: '密码',
-            placeholder: '请输入密码'
+            type: 'password',
+            placeholder: '请输入密码',
+            options: {
+                required: true
+            }
         },
         {
             key: 'universityId',
             label: '身份标识信息',
-            placeholder: '请输入身份标识信息'
+            placeholder: '请输入身份标识信息',
+            options: {
+                required: true
+            }
         },
         {
             key: 'universityCard',

@@ -13,3 +13,10 @@ export interface IBook {
     summary: string;
     isLoanedBook: boolean;
 }
+
+export interface IResponse<T = any> {
+    success: boolean;
+    message: string;
+    data?: T;
+    token?: string;
+}

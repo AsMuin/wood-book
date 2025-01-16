@@ -7,12 +7,18 @@ export default function SignIn() {
         {
             key: 'email',
             label: '邮箱',
-            placeholder: '请输入邮箱'
+            placeholder: '请输入邮箱',
+            options: {
+                required: true
+            }
         },
         {
             key: 'password',
             label: '密码',
-            placeholder: '请输入密码'
+            placeholder: '请输入密码',
+            options: {
+                required: true
+            }
         }
     ];
 
