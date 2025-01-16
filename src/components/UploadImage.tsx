@@ -68,17 +68,19 @@ export default function UploadImage({ onFileChange }: { onFileChange: (file: Fil
                 </label>
             </div>
             {fileInfo.uploaded && (
-                <div className="mx-auto mt-3 flex w-fit items-center gap-2">
-                    <Image src={fileInfo.url} alt="upload" width={50} height={50} className="rounded-md" />
-                    <p className="text-base text-light-100">{fileInfo.name}</p>
-                    <button
-                        onClick={onReset}
-                        className="ml-2 rounded-full bg-slate-600 p-1 text-white transition-colors hover:bg-red-600"
-                        aria-label="Reset">
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+                <div className="mx-auto mt-3 flex w-fit flex-wrap items-center gap-2">
+                    <Image src={fileInfo.url} alt="upload" width={150} height={100} className="mx-auto rounded" />
+                    <div className="mx-auto flex">
+                        <p className="text-base text-light-100">{fileInfo.name}</p>
+                        <button
+                            onClick={onReset}
+                            className="ml-2 rounded-full bg-slate-600 p-1 text-white transition-colors hover:bg-red-600"
+                            aria-label="Reset">
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
