@@ -70,7 +70,7 @@ export default function UploadImage({ onFileChange }: { onFileChange: (file: Fil
             {fileInfo.uploaded && (
                 <div className="mx-auto mt-3 flex w-fit flex-wrap items-center gap-2">
                     <Image src={fileInfo.url} alt="upload" width={150} height={100} className="mx-auto grow rounded" />
-                    <div className="mx-auto flex grow-0 lg:w-full justify-center">
+                    <div className="mx-auto flex grow-0 justify-center lg:w-full">
                         <p className="text-base text-light-100">{fileInfo.name}</p>
                         <button
                             onClick={onReset}
