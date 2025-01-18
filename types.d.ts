@@ -18,5 +18,12 @@ export interface IResponse<T = any> {
     success: boolean;
     message: string;
     data?: T;
-    token?: string;
+    // token?: string;
+}
+
+export interface AuthCredentials {
+    fullName: string;
+    email: string;
+    password: string;
+    identImage: File;
 }

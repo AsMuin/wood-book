@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+// import { NextResponse } from 'next/server';
 import { IResponse } from '../../types';
 
 function apiResponse<T = any>(success: boolean, message: string, returnInfo?: { data: T; token?: string }) {
@@ -13,7 +13,8 @@ function apiResponse<T = any>(success: boolean, message: string, returnInfo?: { 
         })
     };
 
-    return NextResponse.json(responseBody);
+    // return NextResponse.json(responseBody);
+    return responseBody;
 }
 
 export default apiResponse;

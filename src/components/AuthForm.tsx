@@ -9,6 +9,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import UploadImage from './UploadImage';
+import { IResponse } from '../../types';
 
 export interface FormItemConfig<T extends FieldValues = FieldValues> {
     key: keyof T;
@@ -28,7 +29,7 @@ export interface AuthFormProps<T extends FieldValues> {
     type: 'LOGIN' | 'REGISTER';
     schema: z.Schema<T>;
     formConfig: FormItemConfig<T>[];
-    onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
+    onSubmit: (data: T) => Promise<IResponse> | IResponse;
 }
 
 export default function AuthForm<T extends FieldValues>({ type, schema, formConfig, onSubmit }: AuthFormProps<T>) {
@@ -44,7 +45,13 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
     });
 
     const handleSubmit: SubmitHandler<T> = async data => {
-        console.log(data);
+        try {
+            const result = await onSubmit(data);
+
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (

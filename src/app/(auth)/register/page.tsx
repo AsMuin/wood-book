@@ -1,9 +1,11 @@
 'use client';
 import AuthForm, { FormItemConfig } from '@/components/AuthForm';
 import { registerSchema } from '@/lib/validations';
+import { AuthCredentials } from '../../../../types';
+import { Register } from '@/lib/actions/auth';
 
 export default function Registry() {
-    const registerFormConfig: FormItemConfig[] = [
+    const registerFormConfig: FormItemConfig<AuthCredentials>[] = [
         {
             key: 'fullName',
             label: '姓名',
@@ -31,15 +33,7 @@ export default function Registry() {
             }
         },
         {
-            key: 'universityId',
-            label: '身份标识信息',
-            placeholder: '请输入身份标识信息',
-            options: {
-                required: true
-            }
-        },
-        {
-            key: 'universityCard',
+            key: 'identImage',
             label: '身份证号',
             type: 'image'
         }
@@ -47,7 +41,7 @@ export default function Registry() {
 
     return (
         <div>
-            <AuthForm type="REGISTER" schema={registerSchema} formConfig={registerFormConfig} onSubmit={() => {}} />
+            <AuthForm type="REGISTER" schema={registerSchema} formConfig={registerFormConfig} onSubmit={Register} />
         </div>
     );
 }
