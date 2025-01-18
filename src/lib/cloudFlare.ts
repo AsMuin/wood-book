@@ -1,11 +1,12 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { cloudConfig } from '../../envConfig';
 
 const S3 = new S3Client({
     region: 'auto',
-    endpoint: process.env.CF_R2_ENDPOINT_URL,
+    endpoint: cloudConfig.endpoint,
     credentials: {
-        accessKeyId: process.env.CF_R2_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.CF_R2_SECRET_ACCESS_KEY!
+        accessKeyId: cloudConfig.accessKeyId!,
+        secretAccessKey: cloudConfig.secretAccessKey!
     }
 });
 
@@ -37,8 +38,8 @@ async function uploadFile(buffer: Buffer, fileName: string) {
     try {
         const ContentType = fetContentType(fileName);
         const params = {
-            Bucket: process.env.CF_R2_BUCKET,
-            Key: `${process.env.CF_R2_BUCKET_FOLDER}/${fileName}`,
+            Bucket: cloudConfig.Bucket!,
+            Key: `${cloudConfig.BucketFolder}/${fileName}`,
             Body: buffer,
             ContentType
         };
@@ -47,7 +48,7 @@ async function uploadFile(buffer: Buffer, fileName: string) {
         if (response.$metadata.httpStatusCode !== 200) {
             console.error(response.$metadata.httpStatusCode);
         } else {
-            return `${process.env.CF_R2_RETURN_HOST}/${process.env.CF_R2_BUCKET_FOLDER}/${fileName}`;
+            return `${cloudConfig.ReturnHost}/${cloudConfig.BucketFolder}/${fileName}`;
         }
     } catch (e: any) {
         console.error(e);

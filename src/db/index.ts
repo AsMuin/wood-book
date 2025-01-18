@@ -1,10 +1,11 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import user from './schema/user';
+import { dataBaseConfig } from '../../envConfig';
 
 const db = drizzle({
     connection: {
-        connectionString: process.env.DATABASE_URL!
+        connectionString: dataBaseConfig.url
     },
     schema: {
         user
