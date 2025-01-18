@@ -53,7 +53,7 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
 
             if (result.success) {
                 toast({
-                    title: '操作成功',
+                    title: '成功',
                     description: result.message
                 });
                 router.push('/');
@@ -65,7 +65,7 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
         } catch (error) {
             console.error(error);
             toast({
-                title: '操作失败',
+                title: '失败',
                 description: error instanceof Error ? error.message : '操作失败',
                 variant: 'destructive'
             });
