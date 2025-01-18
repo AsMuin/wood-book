@@ -4,8 +4,10 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import type { Session } from 'next-auth';
 
-export default function Header() {
+export default function Header({ session }: { session: Session }) {
     const pathname = usePathname();
     const navBarList = [
         {
@@ -29,6 +31,14 @@ export default function Header() {
                         </Link>
                     </li>
                 ))}
+                <li>
+                    <Link href="/myProfile">
+                        <Avatar>
+                            <AvatarImage />
+                            <AvatarFallback className="bg-amber-100">{session.user?.name?.slice(0, 2).toUpperCase() || '用户'}</AvatarFallback>
+                        </Avatar>
+                    </Link>
+                </li>
             </ul>
         </header>
     );
