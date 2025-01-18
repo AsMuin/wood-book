@@ -20,8 +20,9 @@ async function Register(params: AuthCredentials) {
             throw new Error('用户已存在');
         }
 
-        const uploadImage = uploadFile(Buffer.from(await identImage.arrayBuffer()), `${Date.now()}-${identImage.name}`);
+        const identImageBuffer = await identImage.arrayBuffer();
         const hashedPassword = hash(password, 10);
+        const uploadImage = uploadFile(Buffer.from(identImageBuffer), `${Date.now()}-${identImage.name}`);
         const asyncLoad = await Promise.all([uploadImage, hashedPassword]);
 
         if (!asyncLoad[0]) {

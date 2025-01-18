@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
 import { Toaster } from '@/components/ui/toaster';
+import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/auth';
+
 const ibmPlexSans = localFont({
     src: [
         {
@@ -42,17 +45,21 @@ export const metadata: Metadata = {
     description: 'WoodBook is a book lending platform that connects readers with book lovers.'
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const session = await auth();
+
     return (
         <html lang="en">
             <head>{process.env.NODE_ENV === 'development' && <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script>}</head>
             <body className={`${ibmPlexSans.className} ${bebasNeue.variable} antialiased`}>
-                {children}
-                <Toaster />
+                <SessionProvider session={session}>
+                    {children}
+                    <Toaster />
+                </SessionProvider>
             </body>
         </html>
     );

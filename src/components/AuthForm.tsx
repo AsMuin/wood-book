@@ -10,6 +10,8 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import UploadImage from './UploadImage';
 import { IResponse } from '../../types';
+import { toast } from '@/hooks/useToast';
+import { useRouter } from 'next/navigation';
 
 export interface FormItemConfig<T extends FieldValues = FieldValues> {
     key: keyof T;
@@ -35,6 +37,7 @@ export interface AuthFormProps<T extends FieldValues> {
 export default function AuthForm<T extends FieldValues>({ type, schema, formConfig, onSubmit }: AuthFormProps<T>) {
     const isLogin = type === 'LOGIN';
     const defaultValues = {} as DefaultValues<T>;
+    const router = useRouter();
 
     formConfig.forEach(item => {
         defaultValues[item.key as keyof DefaultValues<T>] = item.defaultValue;
@@ -48,9 +51,24 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
         try {
             const result = await onSubmit(data);
 
+            if (result.success) {
+                toast({
+                    title: '操作成功',
+                    description: result.message
+                });
+                router.push('/');
+            } else {
+                throw new Error(result.message);
+            }
+
             console.log(result);
         } catch (error) {
             console.error(error);
+            toast({
+                title: '操作失败',
+                description: error instanceof Error ? error.message : '操作失败',
+                variant: 'destructive'
+            });
         }
     };
 
