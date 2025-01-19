@@ -66,7 +66,7 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
             console.error(error);
             toast({
                 title: '失败',
-                description: error instanceof Error ? error.message : '操作失败',
+                description: '操作失败',
                 variant: 'destructive'
             });
         }

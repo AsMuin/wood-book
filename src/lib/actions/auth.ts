@@ -12,14 +12,14 @@ import ratelimit from '../ratelimit';
 import { redirect } from 'next/navigation';
 
 async function Register(params: AuthCredentials) {
+    const ip = (await headers()).get('x-forwarded-for') || (await headers()).get('x-real-ip') || '127.0.0.1';
+    const { success } = await ratelimit.limit(ip);
+
+    if (!success) {
+        redirect('/tooFast');
+    }
+
     try {
-        const ip = (await headers()).get('x-forwarded-for') || (await headers()).get('x-real-ip') || '127.0.0.1';
-        const { success } = await ratelimit.limit(ip);
-
-        if (!success) {
-            return redirect('/tooFast');
-        }
-
         const { fullName, email, password, identImage } = params;
 
         const existingUser = await db.query.user.findFirst({
@@ -50,19 +50,23 @@ async function Register(params: AuthCredentials) {
 
         return apiResponse(true, '注册成功');
     } catch (error) {
+        if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
+            redirect('/tooFast');
+        }
+
         return apiResponse(false, error instanceof Error ? error.message : '注册失败');
     }
 }
 
 async function LoginWithCredentials(credentials: Pick<AuthCredentials, 'email' | 'password'>) {
+    const ip = (await headers()).get('x-forwarded-for') || (await headers()).get('x-real-ip') || '127.0.0.1';
+    const { success } = await ratelimit.limit(ip);
+
+    if (!success) {
+        redirect('/tooFast');
+    }
+
     try {
-        const ip = (await headers()).get('x-forwarded-for') || (await headers()).get('x-real-ip') || '127.0.0.1';
-        const { success } = await ratelimit.limit(ip);
-
-        if (!success) {
-            return redirect('/tooFast');
-        }
-
         const { email, password } = credentials;
         const result = await signIn('credentials', {
             email,
@@ -76,11 +80,7 @@ async function LoginWithCredentials(credentials: Pick<AuthCredentials, 'email' |
 
         return apiResponse(true, '登录成功');
     } catch (error) {
-        if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
-            return redirect('/tooFast');
-        } else {
-            return apiResponse(false, error instanceof Error ? error.message : '登录失败');
-        }
+        return apiResponse(false, error instanceof Error ? error.message : '登录失败');
     }
 }
 

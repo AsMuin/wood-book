@@ -1,5 +1,5 @@
 import db from '@/db';
-import NextAuth, { CredentialsSignin, User } from 'next-auth';
+import NextAuth, { User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcryptjs';
 
@@ -12,7 +12,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             async authorize(credentials: { email?: string; password?: string }) {
                 try {
                     if (!credentials.email || !credentials.password) {
-                        throw new Error('请输入邮箱和密码');
+                        throw new Error('缺少必要的登录信息');
                     }
 
                     const user = await db.query.user.findFirst({
@@ -26,7 +26,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     const isPasswordValid = await compare(credentials.password, user.password);
 
                     if (!isPasswordValid) {
-                        throw new Error('密码不正确');
+                        throw new Error('无效的验证信息');
                     }
 
                     return {
@@ -35,7 +35,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                         name: user.fullName
                     } as User;
                 } catch (error) {
-                    throw new CredentialsSignin(error instanceof Error ? error.message : '登录失败');
+                    console.error(error);
+
+                    return null;
                 }
             }
         })
