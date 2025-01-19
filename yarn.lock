@@ -2033,6 +2033,15 @@
   dependencies:
     "@upstash/redis" "^1.28.3"
 
+"@upstash/qstash@^2.7.20":
+  version "2.7.20"
+  resolved "https://registry.npmmirror.com/@upstash/qstash/-/qstash-2.7.20.tgz#7027829be8f2087d35ab179ec6c9bd9ee5154a64"
+  integrity sha512-fdh5df4BuJwSUhXv33g/Eaj7gG+fu3tBoXyGE5hg4zEZX9fwUY/nuc0uDlLWh54L66JfMdESVOjIaiLa1cgL1Q==
+  dependencies:
+    crypto-js ">=4.2.0"
+    jose "^5.2.3"
+    neverthrow "^7.0.1"
+
 "@upstash/ratelimit@^2.0.5":
   version "2.0.5"
   resolved "https://registry.npmmirror.com/@upstash/ratelimit/-/ratelimit-2.0.5.tgz#0e8e693b79bdcf5d8643c38bebe8b76e7b79b54a"
@@ -2046,6 +2055,13 @@
   integrity sha512-VT25TyODGy/8ljl7GADnJoMmtmJ1F8d84UXfGonRRF8fWYJz7+2J6GzW+a6ETGtk4OyuRTt7FRSvFG5GvrfSdQ==
   dependencies:
     crypto-js "^4.2.0"
+
+"@upstash/workflow@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.npmmirror.com/@upstash/workflow/-/workflow-0.2.4.tgz#c8017c4e326554d0dfa03645bffa563dda17a95b"
+  integrity sha512-ZzjQmktefhPe3NjNS/CKYxceHdvB4H++nDTCUhesdn66c6GD1YQDgvf0yKrX12s9HunLYXX3oSI5c34+4RQ0SQ==
+  dependencies:
+    "@upstash/qstash" "^2.7.20"
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -2414,7 +2430,7 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.6:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-crypto-js@^4.2.0:
+crypto-js@>=4.2.0, crypto-js@^4.2.0:
   version "4.2.0"
   resolved "https://registry.npmmirror.com/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
   integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
@@ -3523,7 +3539,7 @@ jiti@^1.21.6:
   resolved "https://registry.npmmirror.com/jiti/-/jiti-1.21.7.tgz#9dd81043424a3d28458b193d965f0d18a2300ba9"
   integrity sha512-/imKNG4EbWNrVjoNC/1H5/9GFy+tqjGBHCaSsN+P2RnPqjsLmv6UD3Ej+Kj8nBWaRAwyk7kK5ZUc+OEatnTR3A==
 
-jose@^5.9.3:
+jose@^5.2.3, jose@^5.9.3:
   version "5.9.6"
   resolved "https://registry.npmmirror.com/jose/-/jose-5.9.6.tgz#77f1f901d88ebdc405e57cce08d2a91f47521883"
   integrity sha512-AMlnetc9+CV9asI19zHmrgS/WYsWUwCn2R7RzlbJWD7F9eWYUTGyBmU9o6PxngtLGOiDGPRu+Uc4fhKzbpteZQ==
@@ -3703,6 +3719,11 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.npmmirror.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
+
+neverthrow@^7.0.1:
+  version "7.2.0"
+  resolved "https://registry.npmmirror.com/neverthrow/-/neverthrow-7.2.0.tgz#76fa0a6cf1f6d59f0770df461c92b8b270910694"
+  integrity sha512-iGBUfFB7yPczHHtA8dksKTJ9E8TESNTAx1UQWW6TzMF280vo9jdPYpLUXrMN1BCkPdHFdNG3fxOt2CUad8KhAw==
 
 next-auth@^5.0.0-beta.25:
   version "5.0.0-beta.25"
