@@ -11,7 +11,7 @@ import { headers } from 'next/headers';
 import ratelimit from '../ratelimit';
 import { redirect } from 'next/navigation';
 import { workflowClient } from '../workflow';
-import { nextPublicUrl } from '../../../envConfig';
+import { nextProdUrl } from '../../../envConfig';
 
 async function Register(params: AuthCredentials) {
     const getHeaders = await headers();
@@ -50,7 +50,7 @@ async function Register(params: AuthCredentials) {
         });
 
         await workflowClient.trigger({
-            url: `${nextPublicUrl}/api/workflow/onboarding`,
+            url: `${nextProdUrl}/api/workflow/onboarding`,
             body: {
                 email,
                 fullName

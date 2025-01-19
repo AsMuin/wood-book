@@ -11,7 +11,7 @@ const dataBaseConfig = {
     url: process.env.DATABASE_NENO_URL
 };
 
-const nextPublicUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
+const nextProdUrl = process.env.NEXT_PUBLIC_PROD_API_ENDPOINT || 'http://localhost:3000';
 
 const upstashConfig = {
     redis: {
@@ -30,4 +30,4 @@ const resendConfig = {
     token: process.env.RESEND_TOKEN
 };
 
-export { cloudConfig, dataBaseConfig, upstashConfig, resendConfig, nextPublicUrl };
+export { cloudConfig, dataBaseConfig, upstashConfig, resendConfig, nextProdUrl };
