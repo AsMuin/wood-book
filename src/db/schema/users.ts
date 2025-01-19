@@ -4,7 +4,7 @@ export const STATUS_ENUM = pgEnum('status', ['PENDING', 'APPROVED', 'REJECTED'])
 export const ROLE_ENUM = pgEnum('role', ['USER', 'ADMIN']);
 export const BORROW_STATUS_ENUM = pgEnum('BORROW_STATUS', ['BORROWED', 'RETURNED']);
 
-export default pgTable('user', {
+export default pgTable('users', {
     id: uuid('id').notNull().primaryKey().defaultRandom().unique(),
     fullName: varchar('full_name', { length: 255 }).notNull(),
     email: text('email').notNull().unique(),

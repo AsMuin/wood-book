@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
-import user from './schema/user';
+import users from './schema/users';
 import { dataBaseConfig } from '../../envConfig';
 
 const db = drizzle({
@@ -8,7 +8,7 @@ const db = drizzle({
         connectionString: dataBaseConfig.url
     },
     schema: {
-        user
+        users
     }
 });
 

@@ -1,7 +1,7 @@
 const cloudConfig = {
-    endpoint: process.env.CF_R2_ENDPOINT,
-    accessKeyId: process.env.CF_R2_KEY,
-    secretAccessKey: process.env.CF_R2_SECRET,
+    endpoint: process.env.CF_R2_ENDPOINT_URL,
+    accessKeyId: process.env.CF_R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.CF_R2_SECRET_ACCESS_KEY,
     Bucket: process.env.CF_R2_BUCKET,
     BucketFolder: process.env.CF_R2_BUCKET_FOLDER,
     ReturnHost: process.env.CF_R2_RETURN_HOST
@@ -24,4 +24,8 @@ const upstashConfig = {
     }
 };
 
-export { cloudConfig, dataBaseConfig, upstashConfig };
+const resendConfig = {
+    token: process.env.RESEND_TOKEN
+};
+
+export { cloudConfig, dataBaseConfig, upstashConfig, resendConfig };

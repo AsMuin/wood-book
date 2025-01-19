@@ -4,12 +4,13 @@ import db from '@/db';
 import { AuthCredentials } from '../../../types';
 import apiResponse from '../response';
 import { hash } from 'bcryptjs';
-import user from '@/db/schema/user';
+import users from '@/db/schema/users';
 import uploadFile from '../cloudFlare';
 import { signIn } from '@/lib/auth';
 import { headers } from 'next/headers';
 import ratelimit from '../ratelimit';
 import { redirect } from 'next/navigation';
+import { workflowClient } from '../workflow';
 
 async function Register(params: AuthCredentials) {
     const getHeaders = await headers();
@@ -23,8 +24,8 @@ async function Register(params: AuthCredentials) {
     try {
         const { fullName, email, password, identImage } = params;
 
-        const existingUser = await db.query.user.findFirst({
-            where: (user, { eq }) => eq(user.email, email)
+        const existingUser = await db.query.users.findFirst({
+            where: (users, { eq }) => eq(users.email, email)
         });
 
         if (existingUser) {
@@ -40,11 +41,20 @@ async function Register(params: AuthCredentials) {
             throw new Error('图片上传失败');
         }
 
-        await db.insert(user).values({
+        await db.insert(users).values({
             fullName,
             email,
             password: asyncLoad[1],
             identImage: asyncLoad[0]
+        });
+
+        await workflowClient.trigger({
+            //TODO
+            url: `/api/workflow/onboarding`,
+            body: {
+                email,
+                fullName
+            }
         });
 
         await LoginWithCredentials({ email, password });

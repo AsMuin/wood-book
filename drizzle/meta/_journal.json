@@ -15,6 +15,13 @@
       "when": 1737188931818,
       "tag": "0001_youthful_millenium_guard",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737299667540,
+      "tag": "0002_aspiring_blacklash",
+      "breakpoints": true
     }
   ]
 }

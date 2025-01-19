@@ -15,8 +15,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                         throw new Error('缺少必要的登录信息');
                     }
 
-                    const user = await db.query.user.findFirst({
-                        where: (user, { eq }) => eq(user.email, credentials.email || '')
+                    const user = await db.query.users.findFirst({
+                        where: (users, { eq }) => eq(users.email, credentials.email!)
                     });
 
                     if (!user) {
