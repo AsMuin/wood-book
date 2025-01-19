@@ -1,4 +1,4 @@
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import Header from '@/components/Header';
 import { redirect } from 'next/navigation';
 

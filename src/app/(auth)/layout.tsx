@@ -1,4 +1,4 @@
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 

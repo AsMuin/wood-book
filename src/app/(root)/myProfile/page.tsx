@@ -1,4 +1,4 @@
-import { signOut } from '@/auth';
+import { signOut } from '@/lib/auth';
 import BookList from '@/components/BookList';
 import { Button } from '@/components/ui/button';
 import { sampleBooks } from '@/constants';

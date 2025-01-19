@@ -27,3 +27,5 @@ export interface AuthCredentials {
     password: string;
     identImage: File;
 }
+
+export type MiddlewareFactory = (middleware: NextMiddleware) => NextMiddleware;

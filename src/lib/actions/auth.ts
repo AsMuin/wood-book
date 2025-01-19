@@ -6,13 +6,14 @@ import apiResponse from '../response';
 import { hash } from 'bcryptjs';
 import user from '@/db/schema/user';
 import uploadFile from '../cloudFlare';
-import { signIn } from '@/auth';
+import { signIn } from '@/lib/auth';
 import { headers } from 'next/headers';
 import ratelimit from '../ratelimit';
 import { redirect } from 'next/navigation';
 
 async function Register(params: AuthCredentials) {
-    const ip = (await headers()).get('x-forwarded-for') || (await headers()).get('x-real-ip') || '127.0.0.1';
+    const getHeaders = await headers();
+    const ip = getHeaders.get('x-forwarded-for') || getHeaders.get('x-real-ip') || '127.0.0.1';
     const { success } = await ratelimit.limit(ip);
 
     if (!success) {
@@ -59,7 +60,8 @@ async function Register(params: AuthCredentials) {
 }
 
 async function LoginWithCredentials(credentials: Pick<AuthCredentials, 'email' | 'password'>) {
-    const ip = (await headers()).get('x-forwarded-for') || (await headers()).get('x-real-ip') || '127.0.0.1';
+    const getHeaders = await headers();
+    const ip = getHeaders.get('x-forwarded-for') || getHeaders.get('x-real-ip') || '127.0.0.1';
     const { success } = await ratelimit.limit(ip);
 
     if (!success) {
