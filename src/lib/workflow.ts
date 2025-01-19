@@ -24,7 +24,7 @@ async function sendEmail({ email, subject, message }: SendEmailProps) {
             provider: resend({ token: resendConfig.token! })
         },
         body: {
-            from: 'AsMuin <email.asmuin.top>',
+            from: 'AsMuin <email@woodBook.com>',
             to: [email],
             subject,
             html: `<p>${message}</p>`
