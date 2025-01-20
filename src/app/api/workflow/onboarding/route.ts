@@ -15,6 +15,7 @@ const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 const THREE_DAYS_IN_MS = ONE_DAY_IN_MS * 3;
 const ONE_MONTH_IN_MS = ONE_DAY_IN_MS * 30;
 
+//获取当前用户的状态
 async function getUserState(email: string): Promise<UserState> {
     const user = await db.query.users.findFirst({
         where: eq(users.email, email)
@@ -66,7 +67,7 @@ export const { POST } = serve<InitialData>(async context => {
             await context.run('send-email-active', async () => {
                 await sendEmail({
                     email,
-                    subject: '我们又见面了',
+                    subject: '这些天我们又见面了',
                     message: `${fullName}，感谢你的信任！`
                 });
             });

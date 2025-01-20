@@ -16,27 +16,27 @@ export const adminSideBarLinks = [
     {
         img: '/icons/admin/home.svg',
         route: '/admin',
-        text: 'Home'
+        text: '首页'
     },
     {
         img: '/icons/admin/users.svg',
         route: '/admin/users',
-        text: 'All Users'
+        text: '所有用户'
     },
     {
         img: '/icons/admin/book.svg',
         route: '/admin/books',
-        text: 'All Books'
+        text: '所有书籍'
     },
     {
         img: '/icons/admin/bookmark.svg',
         route: '/admin/borrow-records',
-        text: 'Borrow Records'
+        text: '借阅记录'
     },
     {
         img: '/icons/admin/user.svg',
         route: '/admin/account-requests',
-        text: 'Account Requests'
+        text: '账户申请'
     }
 ];
 
