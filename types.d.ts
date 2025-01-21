@@ -28,4 +28,16 @@ export interface AuthCredentials {
     identImage: File;
 }
 
-export type MiddlewareFactory = (middleware: NextMiddleware) => NextMiddleware;
+export interface FormItemConfig<T extends FieldValues = FieldValues> {
+    key: keyof T;
+    label: string;
+    type?: 'text' | 'password' | 'email' | 'number' | 'select' | 'date' | 'textarea' | 'checkbox' | 'radio' | 'file' | 'image';
+    placeholder?: string;
+    defaultValue?: any;
+    description?: string;
+    options?: Partial<
+        ControllerRenderProps<T> & {
+            required?: boolean;
+        }
+    >;
+}

@@ -1,8 +1,8 @@
 'use client';
-import AuthForm, { FormItemConfig } from '@/components/AuthForm';
+import AuthForm from '@/components/AuthForm';
 import { loginSchema } from '@/lib/validations';
 import { LoginWithCredentials } from '@/lib/actions/auth';
-import { AuthCredentials } from '../../../../types';
+import { AuthCredentials, FormItemConfig } from '../../../../types';
 
 export default function SignIn() {
     const loginFormConfig: FormItemConfig<Pick<AuthCredentials, 'email' | 'password'>>[] = [

@@ -1,7 +1,7 @@
 'use client';
-import AuthForm, { FormItemConfig } from '@/components/AuthForm';
+import AuthForm from '@/components/AuthForm';
 import { registerSchema } from '@/lib/validations';
-import { AuthCredentials } from '../../../../types';
+import { AuthCredentials, FormItemConfig } from '../../../../types';
 import { Register } from '@/lib/actions/auth';
 
 export default function Registry() {
