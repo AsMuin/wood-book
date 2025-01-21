@@ -17,6 +17,7 @@ export default function SignIn() {
         {
             key: 'password',
             label: '密码',
+            type: 'password',
             placeholder: '请输入密码',
             options: {
                 required: true

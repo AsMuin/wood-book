@@ -1,5 +1,4 @@
 'use server';
-
 import db from '@/db';
 import { AuthCredentials } from '../../../types';
 import apiResponse from '../response';
