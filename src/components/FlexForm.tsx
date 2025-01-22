@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import UploadImage from './UploadImage';
 import { FormItemConfig, IResponse } from '../../types';
 import { cn } from '@/lib/utils';
+import { Textarea } from './ui/textarea';
 
 export interface FlexFormProps<T extends FieldValues> {
     schema: z.Schema<T>;
@@ -50,7 +51,7 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
                                         }
 
                                         case 'textarea': {
-                                            return <textarea {...Field} {...Options}></textarea>;
+                                            return <Textarea {...Field} {...Options}></Textarea>;
                                         }
 
                                         default: {
