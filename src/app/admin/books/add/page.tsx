@@ -7,11 +7,10 @@ import BookForm from '../../forms/BookForm';
 export default function AddBookPage() {
     return (
         <>
-            <Button asChild className="back-btn">
+            <Button asChild className="back-btn rounded-sm">
                 <Link href="/admin/books">返回</Link>
             </Button>
             <section className="w-full max-w-2xl">
-                <p>Book Form</p>
                 <BookForm type="CREATE" />
             </section>
         </>
