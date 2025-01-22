@@ -1,35 +1,26 @@
 'use client';
-import { ControllerRenderProps, DefaultValues, FieldValues, Path, UseFormReturn } from 'react-hook-form';
+import { DefaultValues, FieldValues, Path, UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import UploadImage from './UploadImage';
-import { IResponse } from '../../types';
-
-export interface FormItemConfig<T extends FieldValues = FieldValues> {
-    key: keyof T;
-    label: string;
-    type?: 'text' | 'password' | 'email' | 'number' | 'select' | 'date' | 'textarea' | 'checkbox' | 'radio' | 'file' | 'image';
-    placeholder?: string;
-    defaultValue?: any;
-    description?: string;
-    options?: Partial<
-        ControllerRenderProps<T> & {
-            required?: boolean;
-        }
-    >;
-}
+import { FormItemConfig, IResponse } from '../../types';
+import { cn } from '@/lib/utils';
 
 export interface FlexFormProps<T extends FieldValues> {
     schema: z.Schema<T>;
     formConfig: FormItemConfig<T>[];
     onSubmit: (data: T) => Promise<IResponse> | IResponse;
+    parentClass?: string;
+    formItemClass?: string;
+    formLabelClass?: string;
+    formInputClass?: string;
     button?: SubmitButtonProps;
 }
 
-export default function FlexForm<T extends FieldValues>({ schema, formConfig, button, onSubmit }: FlexFormProps<T>) {
+export default function FlexForm<T extends FieldValues>({ schema, formConfig, button, onSubmit, ...formClass }: FlexFormProps<T>) {
     const defaultValues = {} as DefaultValues<T>;
 
     formConfig.forEach(item => {
@@ -42,26 +33,51 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                {formConfig?.map(({ key, label, placeholder, options, description, type }) => (
+            <form onSubmit={form.handleSubmit(onSubmit)} className={cn(formClass?.parentClass)}>
+                {formConfig?.map(({ key, label, options, description, type, slot }) => (
                     <FormField
                         key={key as string}
                         control={form.control}
-                        name={key as Path<T>}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="capitalize">{label}</FormLabel>
-                                <FormControl>
-                                    {type === 'image' ? (
-                                        <UploadImage {...field} {...options} onFileChange={field.onChange} />
-                                    ) : (
-                                        <Input type={type || 'text'} placeholder={placeholder || ''} {...field} {...options} className="form-input" />
-                                    )}
-                                </FormControl>
-                                <FormDescription>{description || ''}</FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                        name={key as keyof T as Path<T>}
+                        render={({ field }) => {
+                            const renderFormItem = (Field: typeof field, Options: typeof options) => {
+                                if (slot) {
+                                    return slot(Field, Options);
+                                } else {
+                                    switch (type) {
+                                        case 'image': {
+                                            return <UploadImage {...Field} {...Options} onFileChange={field.onChange} />;
+                                        }
+
+                                        case 'textarea': {
+                                            return <textarea {...Field} {...Options}></textarea>;
+                                        }
+
+                                        default: {
+                                            return (
+                                                <Input
+                                                    type={type || 'text'}
+                                                    {...Field}
+                                                    {...Options}
+                                                    className={cn(formClass?.formInputClass ? formClass?.formInputClass : 'form-input')}
+                                                />
+                                            );
+                                        }
+                                    }
+                                }
+                            };
+
+                            return (
+                                <FormItem className={cn(formClass?.formItemClass)}>
+                                    <FormLabel className={cn(formClass?.formLabelClass ? formClass?.formLabelClass : 'capitalize')}>
+                                        {label}
+                                    </FormLabel>
+                                    <FormControl>{renderFormItem(field, options)}</FormControl>
+                                    <FormDescription>{description || ''}</FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            );
+                        }}
                     />
                 ))}
                 <div className="text-center">
