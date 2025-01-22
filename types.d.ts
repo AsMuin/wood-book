@@ -1,3 +1,6 @@
+import React from 'react';
+import { ControllerRenderProps } from 'react-hook-form';
+
 export interface IBook {
     id: number;
     title: string;
@@ -28,4 +31,21 @@ export interface AuthCredentials {
     identImage: File;
 }
 
-export type MiddlewareFactory = (middleware: NextMiddleware) => NextMiddleware;
+type formItemConfigOptions<T> = Partial<
+    ControllerRenderProps<T> & {
+        placeholder?: string;
+        required?: boolean;
+        step: number;
+        min: number;
+        max: number;
+    }
+>;
+export interface FormItemConfig<T extends FieldValues = FieldValues> {
+    key: keyof T;
+    label: string;
+    type?: 'text' | 'password' | 'email' | 'number' | 'select' | 'date' | 'textarea' | 'checkbox' | 'radio' | 'file' | 'image';
+    defaultValue?: any;
+    description?: string;
+    slot?: (filed: ControllerRenderProps<T, Path<T>>, options?: formItemConfigOptions<T>) => React.ReactNode;
+    options?: formItemConfigOptions<T>;
+}

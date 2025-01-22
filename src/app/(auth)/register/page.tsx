@@ -1,7 +1,7 @@
 'use client';
-import AuthForm, { FormItemConfig } from '@/components/AuthForm';
+import AuthForm from '@/components/AuthForm';
 import { registerSchema } from '@/lib/validations';
-import { AuthCredentials } from '../../../../types';
+import { AuthCredentials, FormItemConfig } from '../../../../types';
 import { Register } from '@/lib/actions/auth';
 
 export default function Registry() {
@@ -9,8 +9,8 @@ export default function Registry() {
         {
             key: 'fullName',
             label: '姓名',
-            placeholder: '请输入姓名',
             options: {
+                placeholder: '请输入姓名',
                 required: true
             }
         },
@@ -18,8 +18,8 @@ export default function Registry() {
             key: 'email',
             label: '邮箱',
             type: 'email',
-            placeholder: '请输入邮箱',
             options: {
+                placeholder: '请输入邮箱',
                 required: true
             }
         },
@@ -27,8 +27,8 @@ export default function Registry() {
             key: 'password',
             label: '密码',
             type: 'password',
-            placeholder: '请输入密码',
             options: {
+                placeholder: '请输入密码',
                 required: true
             }
         },

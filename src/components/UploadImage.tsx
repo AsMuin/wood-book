@@ -3,7 +3,7 @@ import { Input } from './ui/input';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-export default function UploadImage({ onFileChange }: { onFileChange: (file: File | null) => void }) {
+export default function UploadImage({ onFileChange, ...props }: { onFileChange: (file: File | null) => void }) {
     const [fileInfo, setFileInfo] = useState({
         uploaded: false,
         url: '',
@@ -46,7 +46,7 @@ export default function UploadImage({ onFileChange }: { onFileChange: (file: Fil
             <div className={cn('rounded-md p-4', fileInfo.uploaded ? 'border-2 border-green-500 bg-green-100' : 'bg-slate-700')}>
                 <div className="flex items-center justify-center"></div>
                 <label className="upload-btn cursor-pointer">
-                    <Input type="file" hidden onChange={selectFile} accept="image/*" />
+                    <Input {...props} type="file" hidden onChange={selectFile} accept="image/*" />
                     {fileInfo.uploaded ? (
                         <>
                             <svg
