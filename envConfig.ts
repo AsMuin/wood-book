@@ -13,6 +13,8 @@ const dataBaseConfig = {
 
 const nextProdUrl = process.env.NEXT_PUBLIC_PROD_API_ENDPOINT || 'http://localhost:3000';
 
+const baseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_PROD_API_ENDPOINT;
+
 const upstashConfig = {
     redis: {
         url: process.env.UPSTASH_REDIS_REST_URL,
@@ -30,4 +32,4 @@ const resendConfig = {
     token: process.env.RESEND_TOKEN
 };
 
-export { cloudConfig, dataBaseConfig, upstashConfig, resendConfig, nextProdUrl };
+export { cloudConfig, dataBaseConfig, upstashConfig, resendConfig, nextProdUrl, baseUrl };

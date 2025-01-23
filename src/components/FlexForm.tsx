@@ -6,14 +6,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import UploadImage from './UploadImage';
-import { FormItemConfig, IResponse } from '../../types';
+import { FormItemConfig } from '../../types';
 import { cn } from '@/lib/utils';
 import { Textarea } from './ui/textarea';
 
 export interface FlexFormProps<T extends FieldValues> {
     schema: z.ZodType<T>;
     formConfig: FormItemConfig<T>[];
-    onSubmit: (data: T) => Promise<IResponse> | IResponse;
+    onSubmit: (data: T) => any;
     parentClass?: string;
     formItemClass?: string;
     formLabelClass?: string;
@@ -25,7 +25,7 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
     const defaultValues = {} as DefaultValues<T>;
 
     formConfig.forEach(item => {
-        defaultValues[item.key as keyof DefaultValues<T>] = item.defaultValue;
+        defaultValues[item.key as keyof DefaultValues<T>] = item.defaultValue || '';
     });
     const form: UseFormReturn<T> = useForm({
         resolver: zodResolver(schema),

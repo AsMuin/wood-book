@@ -67,7 +67,7 @@ export const sampleBooks = [
         description:
             'A dazzling novel about all the choices that go into a life well lived, The Midnight Library tells the story of Nora Seed as she finds herself between life and death.',
         coverColor: '#1c1f40',
-        coverUrl: 'https://cloud.asmuin.top/wookBookImage/81J6APjwxlL.jpg',
+        coverUrl: 'https://cloud.asmuin.top/woodBookImage/81J6APjwxlL.jpg',
         videoUrl: '/sample-video.mp4?updatedAt=1722593504152',
         summary:
             'A dazzling novel about all the choices that go into a life well lived, The Midnight Library tells the story of Nora Seed as she finds herself between life and death. A dazzling novel about all the choices that go into a life well lived, The Midnight Library tells the story of Nora Seed as she finds herself between life and death.',
@@ -83,7 +83,7 @@ export const sampleBooks = [
         availableCopies: 50,
         description: 'A revolutionary guide to making good habits, breaking bad ones, and getting 1% better every day.',
         coverColor: '#fffdf6',
-        coverUrl: 'https://cloud.asmuin.top/wookBookImage/81F90H7hnML.jpg',
+        coverUrl: 'https://cloud.asmuin.top/woodBookImage/81F90H7hnML.jpg',
         videoUrl: '/sample-video.mp4?updatedAt=1722593504152',
         summary: 'A revolutionary guide to making good habits, breaking bad ones, and getting 1% better every day.',
         isLoanedBook: false
@@ -98,7 +98,7 @@ export const sampleBooks = [
         availableCopies: 5,
         description: 'An essential guide to understanding the core mechanisms of JavaScript, focusing on scope and closures.',
         coverColor: '#f8e036',
-        coverUrl: 'https://cloud.asmuin.top/wookBookImage/7186YfjgHHL._AC_UF1000,1000_QL80_.jpg',
+        coverUrl: 'https://cloud.asmuin.top/woodBookImage/7186YfjgHHL._AC_UF1000,1000_QL80_.jpg',
         videoUrl: '/sample-video.mp4?updatedAt=1722593504152',
         summary: 'An essential guide to understanding the core mechanisms of JavaScript, focusing on scope and closures.',
         isLoanedBook: false
@@ -113,7 +113,7 @@ export const sampleBooks = [
         availableCopies: 50,
         description: 'A magical tale of Santiago, an Andalusian shepherd boy, who embarks on a journey to find a worldly treasure.',
         coverColor: '#ed6322',
-        coverUrl: 'https://cloud.asmuin.top/wookBookImage/61HAE8zahLL._AC_UF1000,1000_QL80_.jpg',
+        coverUrl: 'https://cloud.asmuin.top/woodBookImage/61HAE8zahLL._AC_UF1000,1000_QL80_.jpg',
         videoUrl: '/sample-video.mp4?updatedAt=1722593504152',
         summary: 'A magical tale of Santiago, an Andalusian shepherd boy, who embarks on a journey to find a worldly treasure.',
         isLoanedBook: false
@@ -128,7 +128,7 @@ export const sampleBooks = [
         availableCopies: 23,
         description: 'Rules for focused success in a distracted world, teaching how to cultivate deep focus to achieve peak productivity.',
         coverColor: '#ffffff',
-        coverUrl: 'https://cloud.asmuin.top/wookBookImage/81JJ7fyyKyS.jpg',
+        coverUrl: 'https://cloud.asmuin.top/woodBookImage/81JJ7fyyKyS.jpg',
         videoUrl: '/sample-video.mp4?updatedAt=1722593504152',
         summary: 'Rules for focused success in a distracted world, teaching how to cultivate deep focus to achieve peak productivity.',
         isLoanedBook: false
@@ -143,7 +143,7 @@ export const sampleBooks = [
         availableCopies: 56,
         description: 'A handbook of agile software craftsmanship, offering best practices and principles for writing clean and maintainable code.',
         coverColor: '#080c0d',
-        coverUrl: 'https://cloud.asmuin.top/wookBookImage/71T7aD3EOTL._UF1000,1000_QL80_.jpg',
+        coverUrl: 'https://cloud.asmuin.top/woodBookImage/71T7aD3EOTL._UF1000,1000_QL80_.jpg',
         videoUrl: '/sample-video.mp4?updatedAt=1722593504152',
         summary: 'A handbook of agile software craftsmanship, offering best practices and principles for writing clean and maintainable code.',
         isLoanedBook: false
@@ -158,7 +158,7 @@ export const sampleBooks = [
         availableCopies: 3,
         description: 'A timeless guide for developers to hone their skills and improve their programming practices.',
         coverColor: '#100f15',
-        coverUrl: 'https://cloud.asmuin.top/wookBookImage/71VStSjZmpL._AC_UF1000,1000_QL80_.jpg',
+        coverUrl: 'https://cloud.asmuin.top/woodBookImage/71VStSjZmpL._AC_UF1000,1000_QL80_.jpg',
         videoUrl: '/sample-video.mp4?updatedAt=1722593504152',
         summary: 'A timeless guide for developers to hone their skills and improve their programming practices.',
         isLoanedBook: false
@@ -173,7 +173,7 @@ export const sampleBooks = [
         availableCopies: 5,
         description: 'Morgan Housel explores the unique behaviors and mindsets that shape financial success and decision-making.',
         coverColor: '#ffffff',
-        coverUrl: 'https://cloud.asmuin.top/wookBookImage/81Dky+tD+pL._AC_UF1000,1000_QL80_.jpg',
+        coverUrl: 'https://cloud.asmuin.top/woodBookImage/81Dky+tD+pL._AC_UF1000,1000_QL80_.jpg',
         videoUrl: '/sample-video.mp4?updatedAt=1722593504152',
         summary: 'Morgan Housel explores the unique behaviors and mindsets that shape financial success and decision-making.',
         isLoanedBook: false

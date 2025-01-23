@@ -14,31 +14,21 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             key: 'title',
             label: '书名',
             options: {
-                placeholder: '请输入书名',
-                required: true
+                placeholder: '请输入书名'
             }
         },
-        {
-            key: 'description',
-            label: '描述',
-            options: {
-                placeholder: '请输入描述',
-                required: true
-            }
-        },
+
         {
             key: 'author',
             label: '作者',
             options: {
-                placeholder: '请输入作者',
-                required: true
+                placeholder: '请输入作者'
             }
         },
         {
             key: 'genre',
             label: '分类',
             options: {
-                required: true,
                 placeholder: '请输入分类'
             }
         },
@@ -51,7 +41,6 @@ export default function BookForm({ type, ...book }: BookFormProps) {
                 step: 0.1,
                 min: 1,
                 max: 5,
-                required: true,
                 placeholder: '请输入评分'
             }
         },
@@ -63,16 +52,14 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             options: {
                 placeholder: '请输入总册数',
                 min: 0,
-                step: 1,
-                required: true
+                step: 1
             }
         },
         {
             key: 'coverColor',
             label: '封面颜色',
             options: {
-                placeholder: '请输入封面颜色',
-                required: true
+                placeholder: '请输入封面颜色'
             }
         },
         {
@@ -80,16 +67,22 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             label: '封面',
             type: 'image',
             options: {
-                placeholder: '请输入封面',
-                required: true
+                placeholder: '请输入封面'
             }
         },
         {
             key: 'videoUrl',
             label: '视频',
             options: {
-                placeholder: '请输入视频链接',
-                required: true
+                placeholder: '请输入视频链接'
+            }
+        },
+        {
+            key: 'description',
+            label: '描述',
+            type: 'textarea',
+            options: {
+                placeholder: '请输入描述'
             }
         },
         {
@@ -97,8 +90,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             label: '摘要',
             type: 'textarea',
             options: {
-                placeholder: '请输入摘要',
-                required: true
+                placeholder: '请输入摘要'
             }
         }
     ];

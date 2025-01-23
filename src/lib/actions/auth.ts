@@ -4,7 +4,7 @@ import { AuthCredentials } from '../../../types';
 import apiResponse from '../response';
 import { hash } from 'bcryptjs';
 import users from '@/db/schema/users';
-import uploadFile from '../cloudFlare';
+import { uploadFile } from '../cloudFlare';
 import { signIn } from '@/lib/auth';
 import { headers } from 'next/headers';
 import ratelimit from '../ratelimit';

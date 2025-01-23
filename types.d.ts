@@ -17,11 +17,10 @@ export interface IBook {
     isLoanedBook: boolean;
 }
 
-export interface IResponse<T = any> {
+export interface IResponse<T = unknown> {
     success: boolean;
     message: string;
-    data?: T;
-    // token?: string;
+    data: T;
 }
 
 export interface AuthCredentials {
@@ -34,7 +33,6 @@ export interface AuthCredentials {
 type formItemConfigOptions<T> = Partial<
     ControllerRenderProps<T> & {
         placeholder?: string;
-        required?: boolean;
         step: number;
         min: number;
         max: number;

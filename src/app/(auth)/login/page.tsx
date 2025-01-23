@@ -10,8 +10,7 @@ export default function SignIn() {
             key: 'email',
             label: '邮箱',
             options: {
-                placeholder: '请输入邮箱',
-                required: true
+                placeholder: '请输入邮箱'
             }
         },
         {
@@ -19,8 +18,7 @@ export default function SignIn() {
             label: '密码',
             type: 'password',
             options: {
-                placeholder: '请输入密码',
-                required: true
+                placeholder: '请输入密码'
             }
         }
     ];

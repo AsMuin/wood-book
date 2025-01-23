@@ -1,23 +1,18 @@
-import uploadFile from '@/lib/cloudFlare';
+import { generatePresignedUrl } from '@/lib/cloudFlare';
 import apiResponse from '@/lib/response';
 
 export async function POST(request: Request) {
     try {
-        const formData = await request.formData();
-        const image = formData.get('image');
+        const { fileName, fileType } = await request.json();
 
-        if (!image || typeof image === 'string') {
-            return apiResponse(false, 'Image is required and must be a file');
-        }
+        const { presignedUrl, publicUrl } = await generatePresignedUrl(fileName, fileType);
 
-        const imageBuffer = Buffer.from(await image.arrayBuffer());
-        const imageUrl = await uploadFile(imageBuffer, `${Date.now()}-${image.name}`);
-
-        if (!imageUrl) {
-            return apiResponse(false, 'Image upload failed');
-        }
-
-        return apiResponse(true, 'Image uploaded successfully', { data: imageUrl });
+        return apiResponse(true, 'Image uploadUrl returned', {
+            data: {
+                uploadUrl: presignedUrl,
+                publicUrl
+            }
+        });
     } catch (e) {
         return apiResponse(false, e instanceof Error ? e.message : 'Image upload failed');
     }
