@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { Textarea } from './ui/textarea';
 
 export interface FlexFormProps<T extends FieldValues> {
-    schema: z.Schema<T>;
+    schema: z.ZodType<T>;
     formConfig: FormItemConfig<T>[];
     onSubmit: (data: T) => Promise<IResponse> | IResponse;
     parentClass?: string;
