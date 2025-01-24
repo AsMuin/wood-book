@@ -23,12 +23,7 @@ export interface IResponse<T = unknown> {
     data: T;
 }
 
-export interface AuthCredentials {
-    fullName: string;
-    email: string;
-    password: string;
-    identImage: File;
-}
+export type AuthCredentials = z.infer<typeof registerSchema>;
 
 type formItemConfigOptions<T> = Partial<
     ControllerRenderProps<T> & {

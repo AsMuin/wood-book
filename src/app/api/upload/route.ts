@@ -1,5 +1,6 @@
 import { generatePresignedUrl } from '@/lib/cloudFlare';
-import apiResponse from '@/lib/response';
+import responseBody from '@/lib/response';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
     try {
@@ -7,13 +8,15 @@ export async function POST(request: Request) {
 
         const { presignedUrl, publicUrl } = await generatePresignedUrl(fileName, fileType);
 
-        return apiResponse(true, 'Image uploadUrl returned', {
-            data: {
-                uploadUrl: presignedUrl,
-                publicUrl
-            }
-        });
+        return NextResponse.json(
+            responseBody(true, '图片上传成功', {
+                data: {
+                    uploadUrl: presignedUrl,
+                    publicUrl
+                }
+            })
+        );
     } catch (e) {
-        return apiResponse(false, e instanceof Error ? e.message : 'Image upload failed');
+        return NextResponse.json(responseBody(false, e instanceof Error ? e.message : '图片上传失败'));
     }
 }

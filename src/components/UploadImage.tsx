@@ -1,32 +1,54 @@
 import Image from 'next/image';
 import { Input } from './ui/input';
 import { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn, uploadFileByUrl } from '@/lib/utils';
+import { toast } from '@/hooks/useToast';
 
-export default function UploadImage({ onFileChange }: { onFileChange: (file: File | null) => void }) {
-    const [fileInfo, setFileInfo] = useState({
+export default function UploadImage({ onFileChange }: { onFileChange: (fileUrl: string | null) => void }) {
+    const [fileController, setFileController] = useState({
         uploaded: false,
         url: '',
+        disabled: false,
         name: ''
     });
 
     async function selectFile(e: React.ChangeEvent<HTMLInputElement>) {
-        if (!e.target.files) return;
+        try {
+            if (!e.target.files) {
+                return;
+            }
 
-        const file = e.target.files[0];
+            const file = e.target.files[0];
 
-        setFileInfo({
-            uploaded: true,
-            name: file.name,
-            url: URL.createObjectURL(file)
-        });
+            setFileController(prev => ({ ...prev, disabled: true }));
+            const publicUrl = await uploadFileByUrl(file);
 
-        onFileChange(file);
+            if (!publicUrl) {
+                throw new Error('文件上传失败');
+            }
+
+            setFileController({
+                uploaded: true,
+                name: file.name,
+                disabled: false,
+                url: publicUrl
+            });
+
+            onFileChange(publicUrl);
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: '失败',
+                description: error instanceof Error ? error.message : '文件上传失败',
+                variant: 'destructive'
+            });
+        }
     }
 
     async function onReset() {
-        setFileInfo({
+        setFileController({
             uploaded: false,
+            disabled: false,
             url: '',
             name: ''
         });
@@ -35,19 +57,19 @@ export default function UploadImage({ onFileChange }: { onFileChange: (file: Fil
 
     useEffect(() => {
         return () => {
-            if (fileInfo.uploaded) {
-                URL.revokeObjectURL(fileInfo.url);
+            if (fileController.uploaded) {
+                URL.revokeObjectURL(fileController.url);
             }
         };
-    }, [fileInfo]);
+    }, [fileController]);
 
     return (
         <div>
-            <div className={cn('rounded-md p-4', fileInfo.uploaded ? 'border-2 border-green-500 bg-green-100' : 'bg-slate-700')}>
+            <div className={cn('rounded-md p-4', fileController.uploaded ? 'border-2 border-green-500 bg-green-100' : 'bg-slate-700')}>
                 <div className="flex items-center justify-center"></div>
                 <label className="upload-btn cursor-pointer">
-                    <Input type="file" hidden onChange={selectFile} accept="image/*" />
-                    {fileInfo.uploaded ? (
+                    <Input type="file" hidden onChange={selectFile} disabled={fileController.disabled} accept="image/*" />
+                    {fileController.uploaded ? (
                         <>
                             <svg
                                 className="mr-2 h-6 w-6 text-green-500"
@@ -67,11 +89,11 @@ export default function UploadImage({ onFileChange }: { onFileChange: (file: Fil
                     )}
                 </label>
             </div>
-            {fileInfo.uploaded && (
+            {fileController.uploaded && (
                 <div className="mx-auto mt-3 flex w-fit flex-wrap items-center gap-2">
-                    <Image src={fileInfo.url} alt="upload" width={150} height={100} className="mx-auto grow rounded" />
+                    <Image src={fileController.url} alt="upload" width={150} height={100} className="mx-auto grow rounded" />
                     <div className="mx-auto flex grow-0 justify-center lg:w-full">
-                        <p className="text-base text-light-100">{fileInfo.name}</p>
+                        <p className="text-base text-light-100">{fileController.name}</p>
                         <button
                             onClick={onReset}
                             className="ml-2 rounded-full bg-slate-600 p-1 text-white transition-colors hover:bg-red-600"

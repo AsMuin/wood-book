@@ -9,9 +9,7 @@ export const registerSchema = z.object({
     fullName: z.string().min(3),
     email: z.string().email(),
     password: z.string().min(8, '密码长度不少于8位'),
-    identImage: z.instanceof(File, {
-        message: '身份认证图片是必须的'
-    })
+    identImage: z.string().nonempty('请上传图片')
 });
 
 export const bookSchema = z.object({
