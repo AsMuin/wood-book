@@ -42,6 +42,7 @@ export default function UploadImage({ onFileChange }: { onFileChange: (fileUrl: 
                 description: error instanceof Error ? error.message : '文件上传失败',
                 variant: 'destructive'
             });
+            setFileController(prev => ({ ...prev, disabled: false }));
         }
     }
 
