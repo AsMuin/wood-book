@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import UploadImage from './UploadImage';
+import UploadFile from './UploadFile';
 import { FormItemConfig } from '../../types';
 import { cn } from '@/lib/utils';
 import { Textarea } from './ui/textarea';
@@ -47,7 +47,27 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
                                 } else {
                                     switch (type) {
                                         case 'image': {
-                                            return <UploadImage {...Field} {...Options} onFileChange={field.onChange} />;
+                                            return (
+                                                <UploadFile
+                                                    variant={formClass?.formInputClass?.includes('dark') ? 'dark' : 'light'}
+                                                    type={type}
+                                                    {...Field}
+                                                    {...Options}
+                                                    onFileChange={field.onChange}
+                                                />
+                                            );
+                                        }
+
+                                        case 'file': {
+                                            return (
+                                                <UploadFile
+                                                    variant={formClass?.formInputClass?.includes('dark') ? 'dark' : 'light'}
+                                                    type={type}
+                                                    {...Field}
+                                                    {...Options}
+                                                    onFileChange={field.onChange}
+                                                />
+                                            );
                                         }
 
                                         case 'textarea': {
@@ -60,7 +80,7 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
                                                     type={type || 'text'}
                                                     {...Field}
                                                     {...Options}
-                                                    className={cn(formClass?.formInputClass ? formClass?.formInputClass : 'form-input')}
+                                                    className={cn('form-input', formClass?.formInputClass)}
                                                 />
                                             );
                                         }

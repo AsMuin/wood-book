@@ -4,13 +4,25 @@ import { useEffect, useState } from 'react';
 import { cn, uploadFileByUrl } from '@/lib/utils';
 import { toast } from '@/hooks/useToast';
 
-export default function UploadImage({ onFileChange }: { onFileChange: (fileUrl: string | null) => void }) {
+interface UploadVideoProps {
+    type: 'image' | 'file';
+    variant?: 'dark' | 'light';
+    placeholder?: string;
+    onFileChange: (fileUrl: string | null) => void;
+}
+
+export default function UploadFile({ onFileChange, placeholder, type, variant }: UploadVideoProps) {
     const [fileController, setFileController] = useState({
         uploaded: false,
         url: '',
         disabled: false,
         name: ''
     });
+    const styles = {
+        button: variant === 'dark' ? 'bg-dark-300' : 'bg-light-600 border-gray-100 border',
+        placeholder: variant === 'dark' ? 'text-light-100' : 'text-slate-500',
+        text: variant === 'dark' ? 'text-light-200' : 'text-dark-500'
+    };
 
     async function selectFile(e: React.ChangeEvent<HTMLInputElement>) {
         try {
@@ -66,10 +78,16 @@ export default function UploadImage({ onFileChange }: { onFileChange: (fileUrl: 
 
     return (
         <div>
-            <div className={cn('rounded-md p-4', fileController.uploaded ? 'border-2 border-green-500 bg-green-100' : 'bg-slate-700')}>
+            <div className={cn('rounded-md p-1.5', fileController.uploaded ? 'border-2 border-green-500 bg-green-100' : styles.button)}>
                 <div className="flex items-center justify-center"></div>
                 <label className="upload-btn cursor-pointer">
-                    <Input type="file" hidden onChange={selectFile} disabled={fileController.disabled} accept="image/*" />
+                    <Input
+                        type="file"
+                        hidden
+                        onChange={selectFile}
+                        disabled={fileController.disabled}
+                        accept={type === 'image' ? 'image/*' : 'video/*'}
+                    />
                     {fileController.uploaded ? (
                         <>
                             <svg
@@ -80,21 +98,21 @@ export default function UploadImage({ onFileChange }: { onFileChange: (fileUrl: 
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
-                            <span className="font-medium text-green-700">文件选择成功</span>
+                            <span className="font-medium text-green-700">文件上传成功</span>
                         </>
                     ) : (
                         <>
                             <Image src="/icons/upload.svg" alt="upload" width={20} height={20} className="object-contain" />
-                            <p className="text-base text-light-100">上传图片</p>
+                            <p className={cn('text-base', styles.placeholder)}>{placeholder || '上传文件'}</p>
                         </>
                     )}
                 </label>
             </div>
             {fileController.uploaded && (
                 <div className="mx-auto mt-3 flex w-fit flex-wrap items-center gap-2">
-                    <Image src={fileController.url} alt="upload" width={150} height={100} className="mx-auto grow rounded" />
+                    {type === 'image' && <Image src={fileController.url} alt="upload" width={150} height={100} className="mx-auto grow rounded" />}
                     <div className="mx-auto flex grow-0 justify-center lg:w-full">
-                        <p className="text-base text-light-100">{fileController.name}</p>
+                        <p className={cn('text-base', styles.text)}>{fileController.name}</p>
                         <button
                             onClick={onReset}
                             className="ml-2 rounded-full bg-slate-600 p-1 text-white transition-colors hover:bg-red-600"
