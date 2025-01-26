@@ -14,8 +14,8 @@ interface UploadVideoProps {
 export default function UploadFile({ onFileChange, placeholder, type, variant }: UploadVideoProps) {
     const [fileController, setFileController] = useState({
         uploaded: false,
-        url: '',
         disabled: false,
+        url: '',
         name: ''
     });
     const styles = {
@@ -41,8 +41,8 @@ export default function UploadFile({ onFileChange, placeholder, type, variant }:
 
             setFileController({
                 uploaded: true,
-                name: file.name,
                 disabled: false,
+                name: file.name,
                 url: publicUrl
             });
 
@@ -102,8 +102,23 @@ export default function UploadFile({ onFileChange, placeholder, type, variant }:
                         </>
                     ) : (
                         <>
-                            <Image src="/icons/upload.svg" alt="upload" width={20} height={20} className="object-contain" />
-                            <p className={cn('text-base', styles.placeholder)}>{placeholder || '上传文件'}</p>
+                            {fileController.disabled ? (
+                                <>
+                                    <div
+                                        className={cn(
+                                            'h-3 w-3 animate-spin rounded-full border-b-2',
+                                            variant === 'dark' ? 'border-white' : 'border-slate-500'
+                                        )}
+                                        role="status"
+                                        aria-label="loading"></div>
+                                    <span>上传中...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Image src="/icons/upload.svg" alt="upload" width={20} height={20} className="object-contain" />
+                                    <p className={cn('text-base', styles.placeholder)}>{placeholder || '上传文件'}</p>
+                                </>
+                            )}
                         </>
                     )}
                 </label>
