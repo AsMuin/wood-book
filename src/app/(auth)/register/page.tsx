@@ -31,7 +31,7 @@ export default function Registry() {
         },
         {
             key: 'identImage',
-            label: '身份证号',
+            label: '认证照片',
             type: 'image'
         }
     ];

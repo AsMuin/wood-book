@@ -67,14 +67,15 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             label: '封面',
             type: 'image',
             options: {
-                placeholder: '请输入封面'
+                placeholder: '请上传封面'
             }
         },
         {
             key: 'videoUrl',
             label: '视频',
+            type: 'file',
             options: {
-                placeholder: '请输入视频链接'
+                placeholder: '请上传视频'
             }
         },
         {
@@ -108,7 +109,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
                 formConfig={bookFormConfig}
                 onSubmit={onSubmit}
                 parentClass="flex flex-col gap-2"
-                formInputClass="book-form_input"
+                formInputClass="book-form_input light"
                 formItemClass="flex flex-col gap-1"
                 formLabelClass="text-base font-normal text-dark-500"
             />

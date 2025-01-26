@@ -80,7 +80,10 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
                                                     type={type || 'text'}
                                                     {...Field}
                                                     {...Options}
-                                                    className={cn('form-input', formClass?.formInputClass)}
+                                                    className={cn(
+                                                        formClass?.formInputClass?.includes('dark') && 'form-input',
+                                                        formClass?.formInputClass
+                                                    )}
                                                 />
                                             );
                                         }
