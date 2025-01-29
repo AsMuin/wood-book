@@ -51,6 +51,7 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
             <h1 className="text-2xl font-semibold text-white">{isLogin ? '欢迎回来' : '注册属于你的账号'}</h1>
             <p className="text-light-100">{isLogin ? '登录你的账号以访问图书信息' : '请填写下述注册信息并提供有效的身份验证信息'}</p>
             <FlexForm
+                formInputClass="dark"
                 schema={schema}
                 formConfig={formConfig}
                 onSubmit={handleSubmit}

@@ -1,29 +1,36 @@
 import db from '@/db';
 import NextAuth, { User } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import credentials from 'next-auth/providers/credentials';
 import { compare } from 'bcryptjs';
+import { loginSchema } from './validations';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     session: {
-        strategy: 'jwt'
+        strategy: 'jwt',
+        updateAge: 60 * 60 * 3,
+        maxAge: 60 * 60 * 24
+    },
+    jwt: {
+        maxAge: 60 * 60 * 24
     },
     providers: [
-        CredentialsProvider({
-            async authorize(credentials: { email?: string; password?: string }) {
+        credentials({
+            credentials: {
+                email: { label: '邮箱', type: 'email' },
+                password: { label: '密码', type: 'password' }
+            },
+            async authorize(credentials) {
                 try {
-                    if (!credentials.email || !credentials.password) {
-                        throw new Error('缺少必要的登录信息');
-                    }
-
+                    const { email, password } = loginSchema.parse(credentials);
                     const user = await db.query.users.findFirst({
-                        where: (users, { eq }) => eq(users.email, credentials.email!)
+                        where: (users, { eq }) => eq(users.email, email)
                     });
 
                     if (!user) {
                         throw new Error('用户不存在');
                     }
 
-                    const isPasswordValid = await compare(credentials.password, user.password);
+                    const isPasswordValid = await compare(password, user.password);
 
                     if (!isPasswordValid) {
                         throw new Error('无效的验证信息');
@@ -50,6 +57,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             if (user) {
                 token.id = user.id;
                 token.email = user.email;
+                token.name = user.name;
             }
 
             return token;

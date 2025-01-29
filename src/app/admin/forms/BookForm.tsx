@@ -2,6 +2,10 @@ import { bookSchema } from '@/lib/validations';
 import { FormItemConfig, IBook } from '../../../../types';
 import FlexForm from '@/components/FlexForm';
 import { z } from 'zod';
+import ColorPicker from '@/components/admin/ColorPicker';
+import { createBook } from '@/lib/admin/actions/book';
+import { toast } from '@/hooks/useToast';
+import { useRouter } from 'next/navigation';
 
 interface BookFormProps extends Partial<IBook> {
     type: 'CREATE' | 'UPDATE';
@@ -13,32 +17,25 @@ export default function BookForm({ type, ...book }: BookFormProps) {
         {
             key: 'title',
             label: '书名',
+            defaultValue: book.title || '',
             options: {
-                placeholder: '请输入书名',
-                required: true
+                placeholder: '请输入书名'
             }
         },
-        {
-            key: 'description',
-            label: '描述',
-            options: {
-                placeholder: '请输入描述',
-                required: true
-            }
-        },
+
         {
             key: 'author',
             label: '作者',
+            defaultValue: book.author || '',
             options: {
-                placeholder: '请输入作者',
-                required: true
+                placeholder: '请输入作者'
             }
         },
         {
             key: 'genre',
             label: '分类',
+            defaultValue: book.genre || '',
             options: {
-                required: true,
                 placeholder: '请输入分类'
             }
         },
@@ -46,12 +43,11 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             key: 'rating',
             label: '评分',
             type: 'number',
-            defaultValue: 1,
+            defaultValue: book.rating || 1,
             options: {
                 step: 0.1,
                 min: 1,
                 max: 5,
-                required: true,
                 placeholder: '请输入评分'
             }
         },
@@ -59,37 +55,48 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             key: 'totalCopies',
             label: '总册数',
             type: 'number',
-            defaultValue: 1,
+            defaultValue: book.totalCopies || 0,
             options: {
                 placeholder: '请输入总册数',
                 min: 0,
-                step: 1,
-                required: true
+                step: 1
             }
         },
         {
             key: 'coverColor',
             label: '封面颜色',
+            defaultValue: book.coverColor || '',
             options: {
-                placeholder: '请输入封面颜色',
-                required: true
+                placeholder: '请输入封面颜色'
+            },
+            slot: field => {
+                return <ColorPicker value={field.value} onPickChange={field.onChange} />;
             }
         },
         {
             key: 'coverUrl',
             label: '封面',
             type: 'image',
+            defaultValue: book.coverUrl || '',
             options: {
-                placeholder: '请输入封面',
-                required: true
+                placeholder: '请上传封面'
             }
         },
         {
             key: 'videoUrl',
             label: '视频',
+            type: 'file',
+            defaultValue: book.videoUrl || '',
             options: {
-                placeholder: '请输入视频链接',
-                required: true
+                placeholder: '请上传视频'
+            }
+        },
+        {
+            key: 'description',
+            label: '描述',
+            type: 'textarea',
+            options: {
+                placeholder: '请输入描述'
             }
         },
         {
@@ -97,16 +104,33 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             label: '摘要',
             type: 'textarea',
             options: {
-                placeholder: '请输入摘要',
-                required: true
+                placeholder: '请输入摘要'
             }
         }
     ];
+    const router = useRouter();
 
-    function onSubmit(data: bookFormParams) {
-        console.log(data);
+    async function onSubmit(data: bookFormParams) {
+        try {
+            const res = await createBook(data);
 
-        return Promise.resolve({ success: true, message: 'success' });
+            if (!res.success) {
+                throw new Error(res.message);
+            }
+
+            toast({
+                title: '成功',
+                description: '添加成功'
+            });
+            router.push(`/admin/books/${res.data?.id}`);
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: '失败',
+                description: error instanceof Error ? error.message : '添加失败',
+                variant: 'destructive'
+            });
+        }
     }
 
     return (
@@ -116,7 +140,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
                 formConfig={bookFormConfig}
                 onSubmit={onSubmit}
                 parentClass="flex flex-col gap-2"
-                formInputClass="book-form_input"
+                formInputClass="book-form_input light"
                 formItemClass="flex flex-col gap-1"
                 formLabelClass="text-base font-normal text-dark-500"
             />

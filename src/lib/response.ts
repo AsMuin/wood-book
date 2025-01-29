@@ -1,20 +1,14 @@
 // import { NextResponse } from 'next/server';
 import { IResponse } from '../../types';
 
-function apiResponse<T = any>(success: boolean, message: string, returnInfo?: { data: T; token?: string }) {
-    const responseBody: IResponse<T> = {
+function responseBody<T = undefined>(success: boolean, message: string, returnInfo?: { data: T }) {
+    const responseBody = {
         success,
         message,
-        ...(returnInfo?.data && {
-            data: returnInfo.data
-        }),
-        ...(returnInfo?.token && {
-            token: returnInfo.token
-        })
+        data: returnInfo?.data
     };
 
-    // return NextResponse.json(responseBody);
-    return responseBody;
+    return responseBody as IResponse<T>;
 }
 
-export default apiResponse;
+export default responseBody;

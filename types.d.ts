@@ -2,7 +2,7 @@ import React from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 
 export interface IBook {
-    id: number;
+    id: string;
     title: string;
     author: string;
     genre: string;
@@ -14,27 +14,20 @@ export interface IBook {
     coverUrl: string;
     videoUrl: string;
     summary: string;
-    isLoanedBook: boolean;
+    createdAt: Date | null;
 }
 
-export interface IResponse<T = any> {
+export interface IResponse<T = unknown> {
     success: boolean;
     message: string;
-    data?: T;
-    // token?: string;
+    data: T;
 }
 
-export interface AuthCredentials {
-    fullName: string;
-    email: string;
-    password: string;
-    identImage: File;
-}
+export type AuthCredentials = z.infer<typeof registerSchema>;
 
 type formItemConfigOptions<T> = Partial<
     ControllerRenderProps<T> & {
         placeholder?: string;
-        required?: boolean;
         step: number;
         min: number;
         max: number;
