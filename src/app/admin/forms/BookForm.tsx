@@ -3,6 +3,9 @@ import { FormItemConfig, IBook } from '../../../../types';
 import FlexForm from '@/components/FlexForm';
 import { z } from 'zod';
 import ColorPicker from '@/components/admin/ColorPicker';
+import { createBook } from '@/lib/admin/actions/book';
+import { toast } from '@/hooks/useToast';
+import { useRouter } from 'next/navigation';
 
 interface BookFormProps extends Partial<IBook> {
     type: 'CREATE' | 'UPDATE';
@@ -105,11 +108,29 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             }
         }
     ];
+    const router = useRouter();
 
-    function onSubmit(data: bookFormParams) {
-        console.log(data);
+    async function onSubmit(data: bookFormParams) {
+        try {
+            const res = await createBook(data);
 
-        return Promise.resolve({ success: true, message: 'success' });
+            if (!res.success) {
+                throw new Error(res.message);
+            }
+
+            toast({
+                title: '成功',
+                description: '添加成功'
+            });
+            router.push(`/admin/books/${res.data?.id}`);
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: '失败',
+                description: error instanceof Error ? error.message : '添加失败',
+                variant: 'destructive'
+            });
+        }
     }
 
     return (

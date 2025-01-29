@@ -32,9 +32,25 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
         defaultValues: defaultValues
     });
 
+    async function onSubmitHandler(data: T) {
+        try {
+            const res = await onSubmit(data);
+
+            if (!res.success) {
+                throw new Error(res.message);
+            }
+
+            form.reset();
+
+            return res;
+        } catch (error) {
+            return error;
+        }
+    }
+
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className={cn(formClass?.parentClass)}>
+            <form onSubmit={form.handleSubmit(onSubmitHandler)} className={cn(formClass?.parentClass)}>
                 {formConfig?.map(({ key, label, options, description, type, slot }) => (
                     <FormField
                         key={key as string}
