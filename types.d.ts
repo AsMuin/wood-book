@@ -2,11 +2,11 @@ import React from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 
 export interface IBook {
-    id: number;
+    id: string;
     title: string;
     author: string;
     genre: string;
-    rating: number;
+    rating: number | string;
     totalCopies: number;
     availableCopies: number;
     description: string;
@@ -14,7 +14,7 @@ export interface IBook {
     coverUrl: string;
     videoUrl: string;
     summary: string;
-    isLoanedBook: boolean;
+    createdAt: Date | null;
 }
 
 export interface IResponse<T = unknown> {

@@ -3,12 +3,23 @@ import { redirect } from 'next/navigation';
 import '@/styles/admin.css';
 import Sidebar from '@/components/admin/Sidebar';
 import Header from '@/components/admin/Header';
+import db from '@/db';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
     const session = await auth();
 
     if (!session?.user?.id) {
         redirect('/login');
+    }
+
+    const user = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.id, session?.user?.id as string)
+    });
+
+    const isAdmin = user?.role === 'ADMIN';
+
+    if (!isAdmin) {
+        redirect('/');
     }
 
     return (

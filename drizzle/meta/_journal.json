@@ -29,6 +29,13 @@
       "when": 1738135159156,
       "tag": "0003_dusty_bushwacker",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1738141216231,
+      "tag": "0004_strange_maggott",
+      "breakpoints": true
     }
   ]
 }

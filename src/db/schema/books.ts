@@ -1,4 +1,4 @@
-import { integer, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { integer, numeric, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
 export default pgTable('books', {
     id: uuid('id').primaryKey().defaultRandom().notNull().unique(),
@@ -7,7 +7,7 @@ export default pgTable('books', {
     genre: text('genre').notNull(),
     coverColor: varchar('cover_color', { length: 7 }).notNull(),
     coverUrl: text('cover_url').notNull(),
-    rating: integer('rating').notNull(),
+    rating: numeric('rating', { precision: 1 }).notNull(),
     description: text('description').notNull(),
     totalCopies: integer('total_copies').notNull().default(1),
     availableCopies: integer('available_copies').notNull().default(0),

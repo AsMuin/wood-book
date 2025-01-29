@@ -4,7 +4,6 @@ import { Button } from './ui/button';
 import BookCover from './BookCover';
 
 export default function BookOverview({
-    id,
     title,
     author,
     genre,
@@ -13,9 +12,7 @@ export default function BookOverview({
     availableCopies,
     description,
     coverColor,
-    coverUrl,
-    videoUrl,
-    summary
+    coverUrl
 }: Omit<IBook, 'isLoanedBook'>) {
     return (
         <section className="book-overview">

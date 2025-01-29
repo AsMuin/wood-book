@@ -5,12 +5,13 @@ import { IBook } from '../../../../types';
 import db from '@/db';
 import books from '@/db/schema/books';
 
-async function createBook(bookParams: Omit<IBook, 'id' | 'isLoanedBook' | 'availableCopies'>) {
+async function createBook(bookParams: Omit<IBook, 'id' | 'availableCopies' | 'createdAt'>) {
     try {
         const newBook = await db
             .insert(books)
             .values({
                 ...bookParams,
+                rating: bookParams.rating as string,
                 availableCopies: bookParams.totalCopies
             })
             .returning();
