@@ -2,6 +2,7 @@ import { bookSchema } from '@/lib/validations';
 import { FormItemConfig, IBook } from '../../../../types';
 import FlexForm from '@/components/FlexForm';
 import { z } from 'zod';
+import ColorPicker from '@/components/admin/ColorPicker';
 
 interface BookFormProps extends Partial<IBook> {
     type: 'CREATE' | 'UPDATE';
@@ -13,6 +14,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
         {
             key: 'title',
             label: '书名',
+            defaultValue: book.title || '',
             options: {
                 placeholder: '请输入书名'
             }
@@ -21,6 +23,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
         {
             key: 'author',
             label: '作者',
+            defaultValue: book.author || '',
             options: {
                 placeholder: '请输入作者'
             }
@@ -28,6 +31,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
         {
             key: 'genre',
             label: '分类',
+            defaultValue: book.genre || '',
             options: {
                 placeholder: '请输入分类'
             }
@@ -36,7 +40,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             key: 'rating',
             label: '评分',
             type: 'number',
-            defaultValue: 1,
+            defaultValue: book.rating || 1,
             options: {
                 step: 0.1,
                 min: 1,
@@ -48,7 +52,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             key: 'totalCopies',
             label: '总册数',
             type: 'number',
-            defaultValue: 1,
+            defaultValue: book.totalCopies || 0,
             options: {
                 placeholder: '请输入总册数',
                 min: 0,
@@ -58,14 +62,19 @@ export default function BookForm({ type, ...book }: BookFormProps) {
         {
             key: 'coverColor',
             label: '封面颜色',
+            defaultValue: book.coverColor || '',
             options: {
                 placeholder: '请输入封面颜色'
+            },
+            slot: field => {
+                return <ColorPicker value={field.value} onPickChange={field.onChange} />;
             }
         },
         {
             key: 'coverUrl',
             label: '封面',
             type: 'image',
+            defaultValue: book.coverUrl || '',
             options: {
                 placeholder: '请上传封面'
             }
@@ -74,6 +83,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             key: 'videoUrl',
             label: '视频',
             type: 'file',
+            defaultValue: book.videoUrl || '',
             options: {
                 placeholder: '请上传视频'
             }

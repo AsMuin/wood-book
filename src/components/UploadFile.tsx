@@ -9,14 +9,15 @@ interface UploadVideoProps {
     variant?: 'dark' | 'light';
     placeholder?: string;
     onFileChange: (fileUrl: string | null) => void;
+    value: string | null;
 }
 
-export default function UploadFile({ onFileChange, placeholder, type, variant }: UploadVideoProps) {
+export default function UploadFile({ onFileChange, placeholder, type, variant, value }: UploadVideoProps) {
     const [fileController, setFileController] = useState({
-        uploaded: false,
+        uploaded: value ? true : false,
         disabled: false,
-        url: '',
-        name: ''
+        url: value || '',
+        name: value ? '已上传文件' : ''
     });
     const styles = {
         button: variant === 'dark' ? 'bg-dark-300' : 'bg-light-600 border-gray-100 border',
