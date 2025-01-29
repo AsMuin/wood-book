@@ -11,7 +11,6 @@ async function createBook(bookParams: Omit<IBook, 'id' | 'availableCopies' | 'cr
             .insert(books)
             .values({
                 ...bookParams,
-                rating: bookParams.rating as string,
                 availableCopies: bookParams.totalCopies
             })
             .returning();

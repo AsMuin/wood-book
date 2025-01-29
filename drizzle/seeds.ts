@@ -26,7 +26,6 @@ async function seed() {
                 .insert(books)
                 .values({
                     ...addBook,
-                    rating: addBook.rating.toString(),
                     availableCopies: addBook.totalCopies
                 })
                 .returning();
