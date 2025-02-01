@@ -42,3 +42,8 @@ export interface FormItemConfig<T extends FieldValues = FieldValues> {
     slot?: (filed: ControllerRenderProps<T, Path<T>>, options?: formItemConfigOptions<T>) => React.ReactNode;
     options?: formItemConfigOptions<T>;
 }
+
+export interface borrowBookParams {
+    bookId: string;
+    userId: string;
+}

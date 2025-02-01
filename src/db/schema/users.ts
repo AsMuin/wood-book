@@ -2,7 +2,6 @@ import { text, pgTable, uuid, varchar, pgEnum, date, timestamp } from 'drizzle-o
 
 export const STATUS_ENUM = pgEnum('status', ['PENDING', 'APPROVED', 'REJECTED']);
 export const ROLE_ENUM = pgEnum('role', ['USER', 'ADMIN']);
-export const BORROW_STATUS_ENUM = pgEnum('BORROW_STATUS', ['BORROWED', 'RETURNED']);
 
 export default pgTable('users', {
     id: uuid('id').notNull().primaryKey().defaultRandom().unique(),

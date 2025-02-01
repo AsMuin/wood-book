@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Session } from 'next-auth';
+import { Button } from './ui/button';
+import { signOut } from '@/lib/actions/auth';
 
 export default function Header({ session }: { session: Session }) {
     const pathname = usePathname();
@@ -38,6 +40,11 @@ export default function Header({ session }: { session: Session }) {
                             <AvatarFallback className="bg-amber-100">{session.user?.name?.slice(0, 2).toUpperCase() || '用户'}</AvatarFallback>
                         </Avatar>
                     </Link>
+                </li>
+                <li>
+                    <form action={signOut}>
+                        <Button>登出</Button>
+                    </form>
                 </li>
             </ul>
         </header>
