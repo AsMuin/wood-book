@@ -3,7 +3,7 @@ import db from '@/db';
 import responseBody from '../response';
 import { hash } from 'bcryptjs';
 import users from '@/db/schema/users';
-import { signIn } from '@/lib/auth';
+import { signIn, signOut as onSignOut } from '@/lib/auth';
 import { headers } from 'next/headers';
 import ratelimit from '../ratelimit';
 import { redirect } from 'next/navigation';
@@ -87,4 +87,8 @@ async function LoginWithCredentials(credentials: Pick<AuthCredentials, 'email' |
     }
 }
 
-export { Register, LoginWithCredentials };
+async function signOut() {
+    await onSignOut();
+}
+
+export { Register, LoginWithCredentials, signOut };

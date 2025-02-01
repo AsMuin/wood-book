@@ -1,12 +1,17 @@
 import BookOverview from '@/components/BookOverview';
 import BookVideo from '@/components/BookVideo';
 import db from '@/db';
-import { auth } from '@/lib/auth';
+import { auth, signOut } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
 export default async function BookPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const session = await auth();
+    const userId = session?.user?.id;
+
+    if (!userId) {
+        signOut();
+    }
 
     const bookDetail = await db.query.books.findFirst({
         where: (books, { eq }) => eq(books.id, id)
@@ -20,7 +25,7 @@ export default async function BookPage({ params }: { params: Promise<{ id: strin
 
     return (
         <div>
-            <BookOverview {...bookDetail} userId={session?.user?.id} />
+            <BookOverview {...bookDetail} userId={userId!} />
             <div className="book-details">
                 <section className="flex flex-col gap-7">
                     <h3>视频</h3>

@@ -37,6 +37,7 @@ export default function BorrowBook({ userId, bookId, borrowInfo }: BorrowBookPro
                     title: '成功',
                     description: '借阅成功'
                 });
+                router.push('/myProfile');
             }
         } catch (error) {
             toast({
