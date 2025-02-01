@@ -1,9 +1,14 @@
 import { IBook } from '../../types';
 import Image from 'next/image';
-import { Button } from './ui/button';
 import BookCover from './BookCover';
+import db from '@/db';
+import BorrowBook from './BorrowBook';
 
-export default function BookOverview({
+interface BookOverviewProps extends Omit<IBook, 'isLoanedBook'> {
+    userId: string;
+}
+
+export default async function BookOverview({
     title,
     author,
     genre,
@@ -12,8 +17,23 @@ export default function BookOverview({
     availableCopies,
     description,
     coverColor,
-    coverUrl
-}: Omit<IBook, 'isLoanedBook'>) {
+    coverUrl,
+    userId,
+    id: bookId
+}: BookOverviewProps) {
+    const user = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.id, userId)
+    });
+
+    if (!user) {
+        return null;
+    }
+
+    const borrowInfo = {
+        ableBorrow: availableCopies > 0 && user.status === 'APPROVED',
+        message: availableCopies <= 0 ? '书籍不可借阅' : '你没有权限借阅'
+    };
+
     return (
         <section className="book-overview">
             <div className="flex flex-1 flex-col gap-5">
@@ -39,10 +59,11 @@ export default function BookOverview({
                     </p>
                 </div>
                 <p className="book-description">{description}</p>
-                <Button className="book-overview_btn">
+                {/* <Button className="book-overview_btn">
                     <Image src="/icons/book.svg" alt="book" width={20} height={20} />
                     <p className="font-bebas-neue text-xl text-dark-100">借阅</p>
-                </Button>
+                </Button> */}
+                <BorrowBook borrowInfo={borrowInfo} userId={userId} bookId={bookId} />
             </div>
             <div className="relative flex flex-1 justify-center">
                 <div className="relative">

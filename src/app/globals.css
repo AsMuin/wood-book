@@ -262,7 +262,7 @@
 
     /* Book Details */
     .book-details {
-        @apply mb-20 mt-16 flex flex-col gap-16 lg:mt-36 lg:flex-row;
+        @apply mb-20 mt-16 flex flex-col gap-16 lg:mt-36;
     }
 
     .book-details h3 {
