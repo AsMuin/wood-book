@@ -5,6 +5,7 @@ import { after } from 'next/server';
 import users from '@/db/schema/users';
 import db from '@/db';
 import { eq } from 'drizzle-orm';
+import { SessionProvider } from 'next-auth/react';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
     const session = await auth();
@@ -35,11 +36,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     });
 
     return (
-        <main className="root-container">
-            <div className="mx-auto max-w-7xl">
-                <Header session={session} />
-                <div className="mt-20 pb-20">{children}</div>
-            </div>
-        </main>
+        <SessionProvider session={session}>
+            <main className="root-container">
+                <div className="mx-auto max-w-7xl">
+                    <Header session={session} />
+                    <div className="mt-20 pb-20">{children}</div>
+                </div>
+            </main>
+        </SessionProvider>
     );
 }

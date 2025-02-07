@@ -5,14 +5,13 @@ import books from '@/db/schema/books';
 import { auth } from '@/lib/auth';
 import { desc } from 'drizzle-orm';
 
-
 export default async function Home() {
     const session = await auth();
 
     const latestBooks = await db.query.books.findMany({
-      limit: 10,
-      orderBy: desc(books.createdAt)
-  });
+        limit: 10,
+        orderBy: desc(books.createdAt)
+    });
 
     return (
         <>
