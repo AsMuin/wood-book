@@ -4,14 +4,23 @@ import db from '@/db';
 import books from '@/db/schema/books';
 import { auth } from '@/lib/auth';
 import { desc } from 'drizzle-orm';
+import { unstable_cache } from 'next/cache';
+
+const getLatestBooks = unstable_cache(
+    async () => {
+      return await  db.query.books.findMany({
+        limit: 10,
+        orderBy: desc(books.createdAt)
+    });
+    },
+    ['latestBooks'],
+    { revalidate: 3600, tags: ['latestBooks'] }
+  )
 
 export default async function Home() {
     const session = await auth();
 
-    const latestBooks = await db.query.books.findMany({
-        limit: 10,
-        orderBy: desc(books.createdAt)
-    });
+    const latestBooks = await getLatestBooks()
 
     return (
         <>
