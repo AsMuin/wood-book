@@ -49,8 +49,8 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
     }
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmitHandler)} className={cn(formClass?.parentClass)}>
+        <Form {...form} onSubmit={form.handleSubmit(onSubmitHandler)} className={cn(formClass?.parentClass)} >
+            {/* <form onSubmit={form.handleSubmit(onSubmitHandler)} className={cn(formClass?.parentClass)}> */}
                 {formConfig?.map(({ key, label, options, description, type, slot }) => (
                     <FormField
                         key={key as string}
@@ -123,7 +123,7 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
                 <div className="text-center">
                     <FlexForm.SubmitButton {...button} />
                 </div>
-            </form>
+            {/* </form> */}
         </Form>
     );
 }
