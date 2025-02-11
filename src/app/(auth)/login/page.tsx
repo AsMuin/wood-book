@@ -9,6 +9,7 @@ export default function SignIn() {
         {
             key: 'email',
             label: '邮箱',
+            type: 'email',
             options: {
                 placeholder: '请输入邮箱'
             }

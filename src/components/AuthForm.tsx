@@ -9,14 +9,14 @@ import { useRouter } from 'next/navigation';
 import FlexForm from './FlexForm';
 
 export interface AuthFormProps<T extends FieldValues> {
-    type: 'LOGIN' | 'REGISTER';
+    type: 'LOGIN' | 'REGISTER' | 'LOGIN_EMAIL';
     schema: z.Schema<T>;
     formConfig: FormItemConfig<T>[];
     onSubmit: (data: T) => Promise<IResponse> | IResponse;
 }
 
 export default function AuthForm<T extends FieldValues>({ type, schema, formConfig, onSubmit }: AuthFormProps<T>) {
-    const isLogin = type === 'LOGIN';
+    const isLogin = type === 'LOGIN' || type === 'LOGIN_EMAIL';
     const router = useRouter();
 
     async function handleSubmit(data: T) {
@@ -28,7 +28,10 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
                     title: '成功',
                     description: result.message
                 });
-                router.push('/');
+
+                if(type === 'LOGIN'){
+                    router.push('/');
+                }
 
                 return result;
             } else {
@@ -38,7 +41,7 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
             console.error(error);
             toast({
                 title: '失败',
-                description: type === 'LOGIN' ? '登录失败' : '注册失败',
+                description: error instanceof Error ? error.message : isLogin? '登录失败' : '注册失败',
                 variant: 'destructive'
             });
 
@@ -64,6 +67,15 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
                     {isLogin ? '注册' : '登录'}
                 </Link>
             </p>
+            {
+                isLogin &&(
+                    <p className="text-center text-base font-medium">
+                    <Link className="font-bold text-primary" href={isLogin ? '/loginWithEmail' : '/login'}>
+                        {type==='LOGIN' ? '邮箱验证登录' : '账号密码登录'}
+                    </Link>
+                </p>
+                )
+            }
         </div>
     );
 }

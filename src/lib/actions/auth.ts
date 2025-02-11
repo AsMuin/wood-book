@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation';
 import { workflowClient } from '../workflow';
 import { nextProdUrl } from '../../../envConfig';
 import { AuthCredentials } from '../../../types';
+import { AtSignIcon } from 'lucide-react';
 
 async function Register(params: AuthCredentials) {
     const getHeaders = await headers();
@@ -87,8 +88,31 @@ async function LoginWithCredentials(credentials: Pick<AuthCredentials, 'email' |
     }
 }
 
+async function LoginWithEmail(credentials: Pick<AuthCredentials, 'email'>){
+    const getHeaders = await headers();
+    const ip = getHeaders.get('x-forwarded-for') || getHeaders.get('x-real-ip') || '127.0.0.1';
+    const { success } = await ratelimit.limit(ip);
+    if (!success) {
+        redirect('/tooFast');
+    }
+    try {
+        const isExist = await db.query.users.findFirst({
+            where:(users,{eq})=>eq(users.email,credentials.email)
+        })
+
+        if(!isExist){
+            throw new Error('用户不存在')
+        }
+        await signIn('resend',credentials);
+
+        return responseBody(true, '发送成功, 请前往邮箱查看链接并登录');
+    } catch (error) {
+        return responseBody(false, error instanceof Error? error.message : '发送失败')
+    }
+}
+
 async function signOut() {
     await onSignOut();
 }
 
-export { Register, LoginWithCredentials, signOut };
+export { Register, LoginWithCredentials, signOut, LoginWithEmail };

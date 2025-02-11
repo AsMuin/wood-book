@@ -1,6 +1,7 @@
 import db from '@/db';
 import NextAuth, { User } from 'next-auth';
 import credentials from 'next-auth/providers/credentials';
+import Resend from 'next-auth/providers/resend'
 import { compare } from 'bcryptjs';
 import { loginSchema } from './validations';
 
@@ -47,7 +48,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     return null;
                 }
             }
-        })
+        }),
+        Resend
     ],
     pages: {
         signIn: '/login'
