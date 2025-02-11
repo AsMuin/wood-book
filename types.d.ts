@@ -39,7 +39,7 @@ export interface FormItemConfig<T extends FieldValues = FieldValues> {
     key: keyof T;
     label: string;
     type?: 'text' | 'password' | 'email' | 'number' | 'select' | 'date' | 'textarea' | 'checkbox' | 'radio' | 'file' | 'image';
-    defaultValue?: any;
+    value?: any;
     description?: string;
     slot?: (filed: ControllerRenderProps<T, Path<T>>, options?: formItemConfigOptions<T>) => React.ReactNode;
     options?: formItemConfigOptions<T>;

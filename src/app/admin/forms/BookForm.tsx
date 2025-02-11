@@ -17,7 +17,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
         {
             key: 'title',
             label: '书名',
-            defaultValue: book.title || '',
+            value: book.title || '',
             options: {
                 placeholder: '请输入书名'
             }
@@ -26,7 +26,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
         {
             key: 'author',
             label: '作者',
-            defaultValue: book.author || '',
+            value: book.author || '',
             options: {
                 placeholder: '请输入作者'
             }
@@ -34,7 +34,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
         {
             key: 'genre',
             label: '分类',
-            defaultValue: book.genre || '',
+            value: book.genre || '',
             options: {
                 placeholder: '请输入分类'
             }
@@ -43,7 +43,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             key: 'rating',
             label: '评分',
             type: 'number',
-            defaultValue: book.rating || 1,
+            value: book.rating || 1,
             options: {
                 step: 0.1,
                 min: 1,
@@ -55,7 +55,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             key: 'totalCopies',
             label: '总册数',
             type: 'number',
-            defaultValue: book.totalCopies || 0,
+            value: book.totalCopies || 0,
             options: {
                 placeholder: '请输入总册数',
                 min: 0,
@@ -65,7 +65,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
         {
             key: 'coverColor',
             label: '封面颜色',
-            defaultValue: book.coverColor || '',
+            value: book.coverColor || '',
             options: {
                 placeholder: '请输入封面颜色'
             },
@@ -77,7 +77,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             key: 'coverUrl',
             label: '封面',
             type: 'image',
-            defaultValue: book.coverUrl || '',
+            value: book.coverUrl || '',
             options: {
                 placeholder: '请上传封面'
             }
@@ -86,7 +86,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
             key: 'videoUrl',
             label: '视频',
             type: 'file',
-            defaultValue: book.videoUrl || '',
+            value: book.videoUrl || '',
             options: {
                 placeholder: '请上传视频'
             }

@@ -25,7 +25,7 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
     const defaultValues = {} as DefaultValues<T>;
 
     formConfig.forEach(item => {
-        defaultValues[item.key as keyof DefaultValues<T>] = item?.defaultValue;
+        defaultValues[item.key as keyof DefaultValues<T>] = item?.value || '';
     });
     const form: UseFormReturn<T> = useForm({
         resolver: zodResolver(schema),
