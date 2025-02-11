@@ -25,7 +25,7 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
     const defaultValues = {} as DefaultValues<T>;
 
     formConfig.forEach(item => {
-        defaultValues[item.key as keyof DefaultValues<T>] = item?.defaultValue ;
+        defaultValues[item.key as keyof DefaultValues<T>] = item?.defaultValue;
     });
     const form: UseFormReturn<T> = useForm({
         resolver: zodResolver(schema),
@@ -34,96 +34,83 @@ export default function FlexForm<T extends FieldValues>({ schema, formConfig, bu
 
     async function onSubmitHandler(data: T) {
         try {
-            const res = await onSubmit(data);
-
-            if (!res.success) {
-                throw new Error(res.message);
-            }
+            await onSubmit(data);
 
             form.reset();
-
-            return res;
         } catch (error) {
-            return error;
+            console.error(error);
         }
     }
 
     return (
-        <Form {...form} onSubmit={form.handleSubmit(onSubmitHandler)} className={cn(formClass?.parentClass)} >
-            {/* <form onSubmit={form.handleSubmit(onSubmitHandler)} className={cn(formClass?.parentClass)}> */}
-                {formConfig?.map(({ key, label, options, description, type, slot }) => (
-                    <FormField
-                        key={key as string}
-                        control={form.control}
-                        name={key as keyof T as Path<T>}
-                        render={({ field }) => {
-                            const renderFormItem = (Field: typeof field, Options: typeof options) => {
-                                if (slot) {
-                                    return slot(Field, Options);
-                                } else {
-                                    switch (type) {
-                                        case 'image': {
-                                            return (
-                                                <UploadFile
-                                                    variant={formClass?.formInputClass?.includes('dark') ? 'dark' : 'light'}
-                                                    type={type}
-                                                    {...Field}
-                                                    {...Options}
-                                                    onFileChange={field.onChange}
-                                                />
-                                            );
-                                        }
+        <Form {...form} onSubmit={form.handleSubmit(onSubmitHandler)} className={cn(formClass?.parentClass)}>
+            {formConfig?.map(({ key, label, options, description, type, slot }) => (
+                <FormField
+                    key={key as string}
+                    control={form.control}
+                    name={key as keyof T as Path<T>}
+                    render={({ field }) => {
+                        const renderFormItem = (Field: typeof field, Options: typeof options) => {
+                            if (slot) {
+                                return slot(Field, Options);
+                            } else {
+                                switch (type) {
+                                    case 'image': {
+                                        return (
+                                            <UploadFile
+                                                variant={formClass?.formInputClass?.includes('dark') ? 'dark' : 'light'}
+                                                type={type}
+                                                {...Field}
+                                                {...Options}
+                                                onFileChange={field.onChange}
+                                            />
+                                        );
+                                    }
 
-                                        case 'file': {
-                                            return (
-                                                <UploadFile
-                                                    variant={formClass?.formInputClass?.includes('dark') ? 'dark' : 'light'}
-                                                    type={type}
-                                                    {...Field}
-                                                    {...Options}
-                                                    onFileChange={field.onChange}
-                                                />
-                                            );
-                                        }
+                                    case 'file': {
+                                        return (
+                                            <UploadFile
+                                                variant={formClass?.formInputClass?.includes('dark') ? 'dark' : 'light'}
+                                                type={type}
+                                                {...Field}
+                                                {...Options}
+                                                onFileChange={field.onChange}
+                                            />
+                                        );
+                                    }
 
-                                        case 'textarea': {
-                                            return <Textarea {...Field} {...Options}></Textarea>;
-                                        }
+                                    case 'textarea': {
+                                        return <Textarea {...Field} {...Options}></Textarea>;
+                                    }
 
-                                        default: {
-                                            return (
-                                                <Input
-                                                    type={type || 'text'}
-                                                    {...Field}
-                                                    {...Options}
-                                                    className={cn(
-                                                        formClass?.formInputClass?.includes('dark') && 'form-input',
-                                                        formClass?.formInputClass
-                                                    )}
-                                                />
-                                            );
-                                        }
+                                    default: {
+                                        return (
+                                            <Input
+                                                type={type || 'text'}
+                                                {...Field}
+                                                {...Options}
+                                                className={cn(formClass?.formInputClass?.includes('dark') && 'form-input', formClass?.formInputClass)}
+                                            />
+                                        );
                                     }
                                 }
-                            };
+                            }
+                        };
 
-                            return (
-                                <FormItem className={cn(formClass?.formItemClass)}>
-                                    <FormLabel className={cn(formClass?.formLabelClass ? formClass?.formLabelClass : 'capitalize')}>
-                                        {label}
-                                    </FormLabel>
-                                    <FormControl>{renderFormItem(field, options)}</FormControl>
-                                    <FormDescription>{description || ''}</FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            );
-                        }}
-                    />
-                ))}
-                <div className="text-center">
-                    <FlexForm.SubmitButton {...button} />
-                </div>
-            {/* </form> */}
+                        return (
+                            <FormItem className={cn(formClass?.formItemClass)}>
+                                <FormLabel className={cn(formClass?.formLabelClass ? formClass?.formLabelClass : 'capitalize')}>{label}</FormLabel>
+                                <FormControl>{renderFormItem(field, options)}</FormControl>
+                                <FormDescription>{description || ''}</FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        );
+                    }}
+                />
+            ))}
+            <div className="text-center">
+                <FlexForm.SubmitButton {...button} />
+            </div>
         </Form>
     );
 }

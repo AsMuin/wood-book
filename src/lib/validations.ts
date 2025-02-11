@@ -6,14 +6,14 @@ export const loginSchema = z.object({
 });
 
 export const loginWithEmailSchema = z.object({
-    email:z.string().email()
-})
+    email: z.string().email()
+});
 
 export const registerSchema = z.object({
-    fullName: z.string().min(3),
+    name: z.string().min(3),
     email: z.string().email(),
     password: z.string().min(8, '密码长度不少于8位'),
-    identImage: z.string().nonempty('请上传图片')
+    image: z.string().nonempty('请上传图片')
 });
 
 export const bookSchema = z.object({

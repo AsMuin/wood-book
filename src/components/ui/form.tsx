@@ -8,15 +8,20 @@ import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 import { FormEventHandler } from 'react';
 
-const Form = <TFieldValues extends FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined>({onSubmit,children,className,...props}: FormProviderProps<TFieldValues, TContext, TTransformedValues> & {onSubmit:FormEventHandler<HTMLFormElement>,className?:string} ) =>{
+const Form = <TFieldValues extends FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined>({
+    onSubmit,
+    children,
+    className,
+    ...props
+}: FormProviderProps<TFieldValues, TContext, TTransformedValues> & { onSubmit: FormEventHandler<HTMLFormElement>; className?: string }) => {
     return (
         <FormProvider {...props}>
             <form onSubmit={onSubmit} className={className}>
                 {children}
             </form>
         </FormProvider>
-    )
-}
+    );
+};
 
 type FormFieldContextValue<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = {
     name: TName;

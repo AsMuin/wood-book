@@ -10,7 +10,6 @@ import { redirect } from 'next/navigation';
 import { workflowClient } from '../workflow';
 import { nextProdUrl } from '../../../envConfig';
 import { AuthCredentials } from '../../../types';
-import { AtSignIcon } from 'lucide-react';
 
 async function Register(params: AuthCredentials) {
     const getHeaders = await headers();
@@ -18,11 +17,11 @@ async function Register(params: AuthCredentials) {
     const { success } = await ratelimit.limit(ip);
 
     if (!success) {
-        redirect('/tooFast');
+        return redirect('/tooFast');
     }
 
     try {
-        const { fullName, email, password, identImage } = params;
+        const { name, email, password, image } = params;
 
         const existingUser = await db.query.users.findFirst({
             where: (users, { eq }) => eq(users.email, email)
@@ -35,17 +34,17 @@ async function Register(params: AuthCredentials) {
         const hashedPassword = await hash(password, 10);
 
         await db.insert(users).values({
-            fullName,
+            name,
             email,
             password: hashedPassword,
-            identImage
+            image
         });
 
         await workflowClient.trigger({
             url: `${nextProdUrl}/api/workflow/onboarding`,
             body: {
                 email,
-                fullName
+                fullName: name
             }
         });
 
@@ -53,10 +52,6 @@ async function Register(params: AuthCredentials) {
 
         return responseBody(true, '注册成功');
     } catch (error) {
-        if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
-            redirect('/tooFast');
-        }
-
         return responseBody(false, error instanceof Error ? error.message : '注册失败');
     }
 }
@@ -67,7 +62,7 @@ async function LoginWithCredentials(credentials: Pick<AuthCredentials, 'email' |
     const { success } = await ratelimit.limit(ip);
 
     if (!success) {
-        redirect('/tooFast');
+        return redirect('/tooFast');
     }
 
     try {
@@ -88,26 +83,27 @@ async function LoginWithCredentials(credentials: Pick<AuthCredentials, 'email' |
     }
 }
 
-async function LoginWithEmail(credentials: Pick<AuthCredentials, 'email'>){
+async function LoginWithEmail(credentials: Pick<AuthCredentials, 'email'>) {
     const getHeaders = await headers();
     const ip = getHeaders.get('x-forwarded-for') || getHeaders.get('x-real-ip') || '127.0.0.1';
     const { success } = await ratelimit.limit(ip);
+
     if (!success) {
-        redirect('/tooFast');
+        return redirect('/tooFast');
     }
+
     try {
         const isExist = await db.query.users.findFirst({
-            where:(users,{eq})=>eq(users.email,credentials.email)
-        })
+            where: (users, { eq }) => eq(users.email, credentials.email)
+        });
 
-        if(!isExist){
-            throw new Error('用户不存在')
+        if (!isExist) {
+            throw new Error('用户不存在');
         }
-        await signIn('resend',credentials);
 
-        return responseBody(true, '发送成功, 请前往邮箱查看链接并登录');
+        return signIn('resend', credentials);
     } catch (error) {
-        return responseBody(false, error instanceof Error? error.message : '发送失败')
+        return responseBody(false, error instanceof Error ? error.message : '发送失败');
     }
 }
 

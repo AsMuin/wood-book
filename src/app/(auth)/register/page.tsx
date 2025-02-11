@@ -7,7 +7,7 @@ import { Register } from '@/lib/actions/auth';
 export default function Registry() {
     const registerFormConfig: FormItemConfig<AuthCredentials>[] = [
         {
-            key: 'fullName',
+            key: 'name',
             label: '姓名',
             options: {
                 placeholder: '请输入姓名'
@@ -30,7 +30,7 @@ export default function Registry() {
             }
         },
         {
-            key: 'identImage',
+            key: 'image',
             label: '认证照片',
             type: 'image'
         }

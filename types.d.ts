@@ -1,5 +1,7 @@
 import React from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
+import { z } from 'zod';
+import { registerSchema } from '@/lib/validations';
 
 export interface IBook {
     id: string;

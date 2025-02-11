@@ -29,23 +29,18 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
                     description: result.message
                 });
 
-                if(type === 'LOGIN'){
+                if (type === 'LOGIN') {
                     router.push('/');
                 }
-
-                return result;
             } else {
                 throw new Error(result.message);
             }
         } catch (error) {
-            console.error(error);
             toast({
                 title: '失败',
-                description: error instanceof Error ? error.message : isLogin? '登录失败' : '注册失败',
+                description: error instanceof Error ? error.message : isLogin ? '登录失败' : '注册失败',
                 variant: 'destructive'
             });
-
-            return Promise.reject(error);
         }
     }
 
@@ -67,15 +62,13 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
                     {isLogin ? '注册' : '登录'}
                 </Link>
             </p>
-            {
-                isLogin &&(
-                    <p className="text-center text-base font-medium">
-                    <Link className="font-bold text-primary" href={isLogin ? '/loginWithEmail' : '/login'}>
-                        {type==='LOGIN' ? '邮箱验证登录' : '账号密码登录'}
+            {isLogin && (
+                <p className="text-center text-base font-medium">
+                    <Link className="font-bold text-primary" href={type === 'LOGIN' ? '/loginWithEmail' : '/login'}>
+                        {type === 'LOGIN' ? '邮箱验证登录' : '账号密码登录'}
                     </Link>
                 </p>
-                )
-            }
+            )}
         </div>
     );
 }

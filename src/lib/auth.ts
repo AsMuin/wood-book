@@ -1,9 +1,14 @@
 import db from '@/db';
 import NextAuth, { User } from 'next-auth';
 import credentials from 'next-auth/providers/credentials';
-import Resend from 'next-auth/providers/resend'
+import Resend from 'next-auth/providers/resend';
 import { compare } from 'bcryptjs';
 import { loginSchema } from './validations';
+import { DrizzleAdapter } from '@auth/drizzle-adapter';
+import users from '@/db/schema/users';
+import authenticators from '@/db/schema/authenticators';
+import accounts from '@/db/schema/accounts';
+import verificationTokens from '@/db/schema/verificationTokens';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     session: {
@@ -14,6 +19,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt: {
         maxAge: 60 * 60 * 24
     },
+    adapter: DrizzleAdapter(db, {
+        usersTable: users,
+        authenticatorsTable: authenticators,
+        accountsTable: accounts,
+        verificationTokensTable: verificationTokens
+    }),
     providers: [
         credentials({
             credentials: {
@@ -40,7 +51,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     return {
                         id: user.id,
                         email: user.email,
-                        name: user.fullName
+                        name: user.name
                     } as User;
                 } catch (error) {
                     console.error(error);
@@ -49,7 +60,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 }
             }
         }),
-        Resend
+        Resend({
+            apiKey: process.env.RESEND_TOKEN,
+            from: 'AsMuin <woodBook@email.asmuin.top>'
+        })
     ],
     pages: {
         signIn: '/login'
