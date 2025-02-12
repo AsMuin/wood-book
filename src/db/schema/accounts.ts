@@ -19,11 +19,5 @@ export default pgTable(
         id_token: text('id_token'),
         session_state: text('session_state')
     },
-    account => [
-        
-            primaryKey({ name:'compoundKey',
-                columns: [account.provider, account.providerAccountId]
-            })
-        
-    ]
+    account => [primaryKey({ name: 'compoundKey', columns: [account.provider, account.providerAccountId] })]
 );

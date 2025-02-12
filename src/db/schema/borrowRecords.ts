@@ -2,7 +2,7 @@ import { date, pgEnum, pgTable, timestamp, uuid } from 'drizzle-orm/pg-core';
 import books from './books';
 import users from './users';
 
-export const BORROW_STATUS_ENUM = pgEnum('BORROW_STATUS', ['BORROWED', 'RETURNED']);
+export const BORROW_STATUS_ENUM = pgEnum('borrow_status', ['BORROWED', 'RETURNED']);
 
 export default pgTable('borrow_records', {
     id: uuid('id').notNull().primaryKey().defaultRandom().unique(),

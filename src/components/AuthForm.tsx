@@ -23,18 +23,16 @@ export default function AuthForm<T extends FieldValues>({ type, schema, formConf
         try {
             const result = await onSubmit(data);
 
-            if (type !== 'LOGIN_EMAIL') {
-                if (result.success) {
-                    toast({
-                        title: '成功',
-                        description: result.message
-                    });
+            if (result?.success === false) {
+                throw new Error(result.message);
+            } else if (result?.success === true) {
+                toast({
+                    title: '成功',
+                    description: result.message
+                });
 
-                    if (type === 'LOGIN') {
-                        router.push('/');
-                    }
-                } else {
-                    throw new Error(result.message);
+                if (type !== 'LOGIN_EMAIL') {
+                    router.push('/');
                 }
             }
         } catch (error) {

@@ -6,7 +6,6 @@ import { compare } from 'bcryptjs';
 import { loginSchema } from './validations';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import users from '@/db/schema/users';
-import authenticators from '@/db/schema/authenticators';
 import accounts from '@/db/schema/accounts';
 import verificationTokens from '@/db/schema/verificationTokens';
 
@@ -21,7 +20,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     adapter: DrizzleAdapter(db, {
         usersTable: users,
-        authenticatorsTable: authenticators,
         accountsTable: accounts,
         verificationTokensTable: verificationTokens
     }),

@@ -1,0 +1,1 @@
+ALTER TYPE "public"."BORROW_STATUS" RENAME TO "borrow_status";

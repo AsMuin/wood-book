@@ -7,9 +7,5 @@ export default pgTable(
         token: text('token').notNull(),
         expires: timestamp('expires', { mode: 'date' }).notNull()
     },
-    verificationToken => [
-            primaryKey({name:'compositePk',
-                columns: [verificationToken.identifier, verificationToken.token]
-            })
-    ]
+    verificationToken => [primaryKey({ name: 'compositePk', columns: [verificationToken.identifier, verificationToken.token] })]
 );

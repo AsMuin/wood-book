@@ -9,7 +9,7 @@ config({ path: '.env.local' });
 const dev_DataBase = process.env.DATABASE_NENO_DEV_URL;
 const prod_DataBase = process.env.DATABASE_NENO_URL;
 
-const sql = neon(dev_DataBase!);
+const sql = neon(prod_DataBase!);
 const db = drizzle(sql);
 
 async function seed() {
