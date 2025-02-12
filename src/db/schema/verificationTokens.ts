@@ -8,10 +8,8 @@ export default pgTable(
         expires: timestamp('expires', { mode: 'date' }).notNull()
     },
     verificationToken => [
-        {
-            compositePk: primaryKey({
+            primaryKey({name:'compositePk',
                 columns: [verificationToken.identifier, verificationToken.token]
             })
-        }
     ]
 );

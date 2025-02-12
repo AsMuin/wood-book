@@ -20,10 +20,10 @@ export default pgTable(
         session_state: text('session_state')
     },
     account => [
-        {
-            compoundKey: primaryKey({
+        
+            primaryKey({ name:'compoundKey',
                 columns: [account.provider, account.providerAccountId]
             })
-        }
+        
     ]
 );

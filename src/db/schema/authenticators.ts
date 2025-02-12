@@ -16,10 +16,10 @@ export default pgTable(
         transports: text('transports')
     },
     authenticator => [
-        {
-            compositePK: primaryKey({
+        
+             primaryKey({ name:'compositePK',
                 columns: [authenticator.userId, authenticator.credentialID]
             })
-        }
+        
     ]
 );
