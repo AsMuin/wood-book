@@ -1,40 +1,10 @@
-import db from '@/db';
-import users from '@/db/schema/users';
+import { getUserState } from '@/lib/actions/utils';
 import { sendEmail } from '@/lib/workflow';
 import { serve } from '@upstash/workflow/nextjs';
-import { eq } from 'drizzle-orm';
-
-type UserState = 'non-active' | 'active';
 
 interface InitialData {
     email: string;
     fullName: string;
-}
-
-const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
-const THREE_DAYS_IN_MS = ONE_DAY_IN_MS * 3;
-const ONE_MONTH_IN_MS = ONE_DAY_IN_MS * 30;
-
-//获取当前用户的状态
-async function getUserState(email: string): Promise<UserState> {
-    const user = await db.query.users.findFirst({
-        where: eq(users.email, email)
-    });
-
-    if (!user) {
-        return 'non-active';
-    }
-
-    const lastActivityDate = new Date(user.lastActivityDate || user.createAt!);
-
-    const now = new Date();
-    const timeDifference = now.getTime() - lastActivityDate.getTime();
-
-    if (timeDifference > THREE_DAYS_IN_MS && timeDifference <= ONE_MONTH_IN_MS) {
-        return 'non-active';
-    }
-
-    return 'active';
 }
 
 export const { POST } = serve<InitialData>(async context => {

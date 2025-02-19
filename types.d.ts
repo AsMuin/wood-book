@@ -48,4 +48,10 @@ export interface FormItemConfig<T extends FieldValues = FieldValues> {
 export interface borrowBookParams {
     bookId: string;
     userId: string;
+    day: number;
+}
+
+export interface returnBookParams {
+    recordId: string;
+    userId: string;
 }
