@@ -28,7 +28,7 @@ export default function BorrowBook({ userId, bookId, borrowInfo }: BorrowBookPro
                 throw new Error(borrowInfo.message);
             }
 
-            const res = await borrowBook({ bookId, userId });
+            const res = await borrowBook({ bookId, userId, day:7 });
 
             if (!res.success) {
                 throw new Error(res.message);
