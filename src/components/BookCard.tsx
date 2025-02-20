@@ -14,6 +14,7 @@ export interface IBookCardProps extends IBook {
 
 export default function BookCard({ id, title, genre, coverColor, coverUrl, returnDueDay = 0, userId, borrowRecordId }: IBookCardProps) {
     const day = Math.abs(returnDueDay);
+
     return (
         <li className={cn(returnDueDay && 'w-full xs:w-52')}>
             <Link href={`/book/${id}`} className={cn(returnDueDay && 'flex w-full flex-col items-center')}>
