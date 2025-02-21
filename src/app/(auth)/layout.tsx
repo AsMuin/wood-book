@@ -14,7 +14,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
             <section className="auth-form">
                 <div className="auth-box">
                     <div className="flex gap-3">
-                        <Image src="/icons/logo.svg" alt="logo" width={37} height={37} />
+                        <Image src="/icons/logo.svg" style={{ width: 'auto', height: 'auto' }} alt="logo" width={37} height={37} />
                         <h1 className="text-2xl font-semibold text-white">WoodBook</h1>
                     </div>
                     <div>{children}</div>

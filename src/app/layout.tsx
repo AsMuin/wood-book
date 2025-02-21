@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
+import Script from 'next/script';
 
 const ibmPlexSans = localFont({
     src: [
@@ -50,7 +51,7 @@ export default async function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <head>{process.env.NODE_ENV === 'development' && <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script>}</head>
+            <head>{process.env.NODE_ENV === 'development' && <Script src="https://unpkg.com/react-scan/dist/auto.global.js"></Script>}</head>
             <body className={`${ibmPlexSans.className} ${bebasNeue.variable} antialiased`}>
                 {children}
                 <Toaster />

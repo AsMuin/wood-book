@@ -33,7 +33,14 @@ export default function BookCard({ id, title, genre, coverColor, coverUrl, retur
             {returnDueDay && (
                 <div className="mt-3 w-full">
                     <div className="book-loaned justify-center gap-1">
-                        <Image src="/icons/calendar.svg" alt="calendar" width={18} height={18} className="object-contain" />
+                        <Image
+                            src="/icons/calendar.svg"
+                            alt="calendar"
+                            style={{ width: 'auto', height: 'auto' }}
+                            width={18}
+                            height={18}
+                            className="object-contain"
+                        />
                         {returnDueDay > 0 ? <p className="text-light-100">{day}天后归还</p> : <p className="text-light-100">已逾期{day}天</p>}
                     </div>
                     <form action={handleReturnBook}>

@@ -22,7 +22,7 @@ export default async function BookOverview({
     userId,
     id: bookId
 }: BookOverviewProps) {
-    const user = await selectUserById(userId)
+    const user = await selectUserById(userId);
 
     if (!user) {
         return null;
@@ -45,7 +45,7 @@ export default async function BookOverview({
                         类别：<span className="font-semibold text-light-200">{genre}</span>
                     </p>
                     <div className="flex gap-1">
-                        <Image src="/icons/star.svg" width={22} height={22} alt="star" />
+                        <Image src="/icons/star.svg" style={{ width: 'auto', height: 'auto' }} width={22} height={22} alt="star" />
                         <p>{rating}</p>
                     </div>
                 </div>

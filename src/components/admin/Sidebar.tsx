@@ -18,7 +18,7 @@ export default function Sidebar({ session }: SidebarProps) {
     return (
         <div className="admin-sidebar">
             <div className="logo">
-                <Image src="/icons/admin/logo.svg" alt="logo" height={37} width={37} />
+                <Image src="/icons/admin/logo.svg" style={{ width: 'auto', height: 'auto' }} alt="logo" height={37} width={37} />
                 <h1>WoodBook</h1>
             </div>
             <div className="mt-10 flex flex-col gap-5">

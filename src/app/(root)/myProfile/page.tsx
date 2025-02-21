@@ -19,7 +19,6 @@ export default async function MyProfilePage() {
             return list;
         } else {
             const returnDueDay = dayjs(record.dueDate).diff(nowDay, 'day');
-
             const displayBook = {
                 ...record.book,
                 returnDueDay: returnDueDay,

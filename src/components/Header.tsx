@@ -21,7 +21,7 @@ export default function Header({ session }: { session: Session }) {
     return (
         <header className="my-10 flex justify-between gap-5">
             <Link href="/">
-                <Image src="/icons/logo.svg" width={40} height={40} alt="logo" />
+                <Image src="/icons/logo.svg" style={{ width: 'auto', height: 'auto' }} width={40} height={40} alt="logo" />
             </Link>
             <ul className="flex flex-row items-center gap-8">
                 {navBarList.map(item => (
