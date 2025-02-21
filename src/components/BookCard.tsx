@@ -3,9 +3,7 @@ import { IBook } from '../../types';
 import BookCover from './BookCover';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { Button } from './ui/button';
-import { returnBook } from '@/lib/actions/book';
-import { redirect } from 'next/navigation';
+import ReturnBook from './ReturnBook';
 
 export interface IBookCardProps extends IBook {
     returnDueDay?: number;
@@ -15,11 +13,6 @@ export interface IBookCardProps extends IBook {
 
 export default function BookCard({ id, title, genre, coverColor, coverUrl, returnDueDay = 0, userId, borrowRecordId }: IBookCardProps) {
     const day = Math.abs(returnDueDay);
-    async function handleReturnBook() {
-        'use server';
-        await returnBook({ userId: userId as string, recordId: borrowRecordId as string });
-        redirect('/myProfile');
-    }
 
     return (
         <li className={cn(returnDueDay && 'w-full xs:w-52')}>
@@ -43,13 +36,7 @@ export default function BookCard({ id, title, genre, coverColor, coverUrl, retur
                         />
                         {returnDueDay > 0 ? <p className="text-light-100">{day}天后归还</p> : <p className="text-light-100">已逾期{day}天</p>}
                     </div>
-                    <form action={handleReturnBook}>
-                        <input type="hidden" name="userId" value={userId} />
-                        <input type="hidden" name="recordId" value={borrowRecordId} />
-                        <Button className="book-btn bg-dark-600 hover:bg-dark-100" type="submit">
-                            还书
-                        </Button>
-                    </form>
+                    <ReturnBook userId={userId!} recordId={borrowRecordId!}/>
                     {/* <Button className="book-btn bg-dark-600 hover:bg-dark-100">下载收据</Button> */}
                 </div>
             )}

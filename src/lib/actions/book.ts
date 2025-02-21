@@ -11,6 +11,7 @@ import { nextProdUrl } from '../../../envConfig';
 import { selectUserById } from '@/db/utils/users';
 import { selectBookById } from '@/db/utils/books';
 import { returnBorrowBook, borrowBookAddRecord } from '@/db/utils/borrowRecord';
+import dayjs from 'dayjs';
 
 async function borrowBook({ bookId, userId, day = 7 }: borrowBookParams) {
     try {
@@ -38,7 +39,7 @@ async function borrowBook({ bookId, userId, day = 7 }: borrowBookParams) {
             })
             .where(eq(books.id, bookId));
 
-        await workflowClient.trigger({
+        workflowClient.trigger({
             url: `${nextProdUrl}/api/workflow/onBorrow`,
             body: {
                 email: user?.email,
@@ -48,17 +49,6 @@ async function borrowBook({ bookId, userId, day = 7 }: borrowBookParams) {
                 recordId: addRecord[0].id
             }
         });
-
-        workflowClient.trigger({
-            url: `${nextProdUrl}/api/workflow/onBorrow`,
-            body: {
-                email: user?.email,
-                fullName: user?.name,
-                bookName: book.title,
-                recordId: addRecord[0].id,
-                day
-            }
-        })
         return responseBody(true, '借阅成功');
     } catch (error) {
         return responseBody(false, error instanceof Error ? error.message : '借阅失败');
@@ -73,19 +63,21 @@ async function returnBook({ recordId, userId }: returnBookParams) {
                 user: {
                     columns: {
                         id: true,
-                        role: true
+                        role: true,
+                        email: true,
+                        name: true
                     }
                 },
                 book: {
                     columns: {
                         id: true,
-                        availableCopies: true
+                        availableCopies: true,
+                        title: true
                     }
                 }
             }
         });
         const operator = await selectUserById(userId);
-
         const isAdmin = operator?.role === 'ADMIN';
 
         if (selectedRecord?.user.id !== userId && !isAdmin) {
@@ -108,7 +100,17 @@ async function returnBook({ recordId, userId }: returnBookParams) {
                 availableCopies: selectedRecord.book.availableCopies + 1
             })
             .where(eq(books.id, selectedRecord.book.id));
-
+        const dueDay = dayjs().diff(selectedRecord.createdAt, 'day');
+        workflowClient.trigger({
+            url: `${nextProdUrl}/api/workflow/onReturn`,
+            body: {
+                email: selectedRecord.user.email,
+                fullName: selectedRecord.user.name,
+                bookName: selectedRecord.book.title,
+                recordId: selectedRecord.id,
+                day: dueDay
+            }
+        });
         return responseBody(true, '还书成功');
     } catch (error) {
         return responseBody(false, error instanceof Error ? error.message : '还书失败');
