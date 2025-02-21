@@ -1,4 +1,5 @@
 'use client';
+
 import AuthForm from '@/components/AuthForm';
 import { loginSchema } from '@/lib/validations';
 import { LoginWithCredentials } from '@/lib/actions/auth';
@@ -23,7 +24,6 @@ export default function SignIn() {
             }
         }
     ];
-
     return (
         <div>
             <AuthForm type="LOGIN" schema={loginSchema} formConfig={loginFormConfig} onSubmit={LoginWithCredentials} />

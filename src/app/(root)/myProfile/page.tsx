@@ -1,18 +1,12 @@
 import BookList from '@/components/BookList';
 import db from '@/db';
-import { auth, signOut } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import dayjs from 'dayjs';
 import { IBook } from '../../../../types';
-import { redirect } from 'next/navigation';
 
 export default async function MyProfilePage() {
     const session = await auth();
     const userId = session?.user?.id as string;
-
-    if (!userId) {
-        redirect('/login');
-    }
-
     const borrowedBooks = await db.query.borrowRecords.findMany({
         where: (table, { eq }) => eq(table.userId, userId),
         with: {
@@ -20,7 +14,6 @@ export default async function MyProfilePage() {
         }
     });
     const nowDay = dayjs();
-
     const displayBookList = borrowedBooks.reduce((list, record) => {
         if (record.status === 'RETURNED') {
             return list;
@@ -32,7 +25,7 @@ export default async function MyProfilePage() {
                 returnDueDay: returnDueDay,
                 borrowRecordId: record.id
             };
-            
+
             return list.concat(displayBook);
         }
     }, [] as IBook[]);

@@ -53,3 +53,12 @@ export async function uploadFileByUrl(file: File) {
         });
     }
 }
+
+export function isServer() {
+    if(typeof window == 'undefined') {
+        console.log("server component")
+    }
+    else {
+        console.log("client component")
+    }
+}

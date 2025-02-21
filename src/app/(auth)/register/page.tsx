@@ -1,4 +1,5 @@
 'use client';
+
 import AuthForm from '@/components/AuthForm';
 import { registerSchema } from '@/lib/validations';
 import { AuthCredentials, FormItemConfig } from '../../../../types';

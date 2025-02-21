@@ -18,7 +18,6 @@ export interface AuthFormProps<T extends FieldValues> {
 export default function AuthForm<T extends FieldValues>({ type, schema, formConfig, onSubmit }: AuthFormProps<T>) {
     const isLogin = type === 'LOGIN' || type === 'LOGIN_EMAIL';
     const router = useRouter();
-
     async function handleSubmit(data: T) {
         try {
             const result = await onSubmit(data);

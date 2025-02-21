@@ -1,23 +1,16 @@
 import BookOverview from '@/components/BookOverview';
 import BookVideo from '@/components/BookVideo';
 import db from '@/db';
-import { auth, signOut } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
 export default async function BookPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const session = await auth();
     const userId = session?.user?.id;
-
-    if (!userId) {
-        redirect('/login');
-    }
-
     const bookDetail = await db.query.books.findFirst({
         where: (books, { eq }) => eq(books.id, id)
     });
-
-    console.log(bookDetail);
 
     if (!bookDetail) {
         redirect('/404');

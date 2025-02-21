@@ -20,7 +20,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             return;
         }
 
-        const user = await selectUserById(session?.user?.id)
+        const user = await selectUserById(session?.user?.id);
 
         const dateStamp = new Date().toISOString().slice(0, 10);
 
@@ -39,9 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <main className="root-container">
                 <div className="mx-auto max-w-7xl">
                     <Header session={session} />
-                    <div className="mt-20 pb-20">
-                      {children}
-                    </div>
+                    <div className="mt-20 pb-20">{children}</div>
                 </div>
             </main>
         </SessionProvider>
