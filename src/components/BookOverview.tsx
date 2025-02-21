@@ -1,7 +1,6 @@
 import { IBook } from '../../types';
 import Image from 'next/image';
 import BookCover from './BookCover';
-import db from '@/db';
 import BorrowBook from './BorrowBook';
 import { selectUserById } from '@/db/utils/users';
 
