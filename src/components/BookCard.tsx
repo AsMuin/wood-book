@@ -36,7 +36,7 @@ export default function BookCard({ id, title, genre, coverColor, coverUrl, retur
                         />
                         {returnDueDay > 0 ? <p className="text-light-100">{day}天后归还</p> : <p className="text-light-100">已逾期{day}天</p>}
                     </div>
-                    <ReturnBook userId={userId!} recordId={borrowRecordId!}/>
+                    <ReturnBook userId={userId!} recordId={borrowRecordId!} />
                     {/* <Button className="book-btn bg-dark-600 hover:bg-dark-100">下载收据</Button> */}
                 </div>
             )}

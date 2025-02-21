@@ -1,7 +1,7 @@
 import BookList from '@/components/BookList';
 import BookOverview from '@/components/BookOverview';
 import { selectLatestBooks } from '@/db/utils/books';
-import { auth, signOut } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 
 export default async function Home() {
     const session = await auth();

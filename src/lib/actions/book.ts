@@ -49,6 +49,7 @@ async function borrowBook({ bookId, userId, day = 7 }: borrowBookParams) {
                 recordId: addRecord[0].id
             }
         });
+
         return responseBody(true, '借阅成功');
     } catch (error) {
         return responseBody(false, error instanceof Error ? error.message : '借阅失败');
@@ -101,6 +102,7 @@ async function returnBook({ recordId, userId }: returnBookParams) {
             })
             .where(eq(books.id, selectedRecord.book.id));
         const dueDay = dayjs().diff(selectedRecord.createdAt, 'day');
+
         workflowClient.trigger({
             url: `${nextProdUrl}/api/workflow/onReturn`,
             body: {
@@ -111,6 +113,7 @@ async function returnBook({ recordId, userId }: returnBookParams) {
                 day: dueDay
             }
         });
+
         return responseBody(true, '还书成功');
     } catch (error) {
         return responseBody(false, error instanceof Error ? error.message : '还书失败');

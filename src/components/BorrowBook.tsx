@@ -22,6 +22,7 @@ export default function BorrowBook({ userId, bookId, borrowInfo }: BorrowBookPro
 
     async function onBorrow() {
         setIsLoading(true);
+
         try {
             if (!borrowInfo.ableBorrow) {
                 throw new Error(borrowInfo.message);

@@ -92,7 +92,7 @@ async function LoginWithEmail(credentials: Pick<AuthCredentials, 'email'>) {
     }
 
     try {
-        const isExist = await selectUserByEmail(credentials.email)
+        const isExist = await selectUserByEmail(credentials.email);
 
         if (!isExist) {
             throw new Error('用户不存在');

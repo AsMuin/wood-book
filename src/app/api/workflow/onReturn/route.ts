@@ -1,4 +1,3 @@
-import { getBorrowState } from '@/lib/actions/utils';
 import { sendEmail } from '@/lib/workflow';
 import { serve } from '@upstash/workflow/nextjs';
 

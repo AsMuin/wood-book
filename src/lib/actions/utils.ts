@@ -1,9 +1,7 @@
 'use server';
 
 import db from '@/db';
-import users from '@/db/schema/users';
 import { selectUserByEmail } from '@/db/utils/users';
-import { eq } from 'drizzle-orm';
 
 type UserState = 'non-active' | 'active';
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
