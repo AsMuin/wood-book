@@ -3,6 +3,7 @@ import Image from 'next/image';
 import BookCover from './BookCover';
 import db from '@/db';
 import BorrowBook from './BorrowBook';
+import { selectUserById } from '@/db/utils/users';
 
 interface BookOverviewProps extends Omit<IBook, 'isLoanedBook'> {
     userId: string;
@@ -21,9 +22,7 @@ export default async function BookOverview({
     userId,
     id: bookId
 }: BookOverviewProps) {
-    const user = await db.query.users.findFirst({
-        where: (users, { eq }) => eq(users.id, userId)
-    });
+    const user = await selectUserById(userId)
 
     if (!user) {
         return null;

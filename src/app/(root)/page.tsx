@@ -2,21 +2,25 @@ import BookList from '@/components/BookList';
 import BookOverview from '@/components/BookOverview';
 import db from '@/db';
 import books from '@/db/schema/books';
-import { auth } from '@/lib/auth';
+import { selectLatestBooks } from '@/db/utils/books';
+import { auth, signOut } from '@/lib/auth';
 import { desc } from 'drizzle-orm';
 
 export default async function Home() {
     const session = await auth();
 
-    const latestBooks = await db.query.books.findMany({
-        limit: 10,
-        orderBy: desc(books.createdAt)
-    });
+    const userId = session?.user?.id;
+
+    if(!userId){
+        signOut();
+    }
+
+    const latestBooks = await selectLatestBooks(10)
 
     return (
         <>
-            <BookOverview {...latestBooks[0]} userId={session?.user?.id} />
-            <BookList title="最受欢迎书籍" books={latestBooks.slice(1)} containerClassName="mt-28" />
+            <BookOverview {...latestBooks[0]} userId={userId as string}  />
+            <BookList userId={userId as string} title="最受欢迎书籍" books={latestBooks.slice(1)} containerClassName="mt-28" />
         </>
     );
 }

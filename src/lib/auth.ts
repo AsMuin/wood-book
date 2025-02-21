@@ -8,6 +8,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import users from '@/db/schema/users';
 import accounts from '@/db/schema/accounts';
 import verificationTokens from '@/db/schema/verificationTokens';
+import { selectUserByEmail } from '@/db/utils/users';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     session: {
@@ -32,9 +33,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             async authorize(credentials) {
                 try {
                     const { email, password } = loginSchema.parse(credentials);
-                    const user = await db.query.users.findFirst({
-                        where: (users, { eq }) => eq(users.email, email)
-                    });
+                    const user = await selectUserByEmail(email);
 
                     if (!user) {
                         throw new Error('用户不存在');

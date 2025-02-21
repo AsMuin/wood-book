@@ -1,9 +1,9 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import '@/styles/admin.css';
 import Sidebar from '@/components/admin/Sidebar';
 import Header from '@/components/admin/Header';
-import db from '@/db';
+import { selectUserById } from '@/db/utils/users';
+import '@/styles/admin.css';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
     const session = await auth();
@@ -12,9 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         redirect('/login');
     }
 
-    const user = await db.query.users.findFirst({
-        where: (users, { eq }) => eq(users.id, session?.user?.id as string)
-    });
+    const user = await selectUserById(session?.user?.id)
 
     const isAdmin = user?.role === 'ADMIN';
 

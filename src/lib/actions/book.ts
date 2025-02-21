@@ -3,22 +3,20 @@
 import db from '@/db';
 import { borrowBookParams, returnBookParams } from '../../../types';
 import responseBody from '../response';
-import dayjs from 'dayjs';
 import borrowRecords from '@/db/schema/borrowRecords';
 import books from '@/db/schema/books';
 import { eq } from 'drizzle-orm';
 import { workflowClient } from '../workflow';
 import { nextProdUrl } from '../../../envConfig';
+import { selectUserById } from '@/db/utils/users';
+import { selectBookById } from '@/db/utils/books';
+import { returnBorrowBook, borrowBookAddRecord } from '@/db/utils/borrowRecord';
 
 async function borrowBook({ bookId, userId, day = 7 }: borrowBookParams) {
     try {
-        const bookPromise = db.query.books.findFirst({
-            where: (books, { eq }) => eq(books.id, bookId)
-        });
+        const bookPromise = selectBookById(bookId);
 
-        const userPromise = db.query.users.findFirst({
-            where: (users, { eq }) => eq(users.id, userId)
-        });
+        const userPromise = selectUserById(userId);
         const [book, user] = await Promise.all([bookPromise, userPromise]);
 
         if (!user) {
@@ -29,17 +27,9 @@ async function borrowBook({ bookId, userId, day = 7 }: borrowBookParams) {
             throw new Error('无法借阅');
         }
 
-        const dueDate = dayjs().add(day, 'day').toDate().toDateString();
-
-        const addRecord = await db
-            .insert(borrowRecords)
-            .values({
-                userId,
-                bookId,
-                dueDate,
-                status: 'BORROWED'
-            })
-            .returning({ id: borrowRecords.id });
+        const addRecord = await borrowBookAddRecord({ bookId, userId, day }).returning({
+            id: borrowRecords.id
+        });
 
         await db
             .update(books)
@@ -84,9 +74,7 @@ async function returnBook({ recordId, userId }: returnBookParams) {
                 }
             }
         });
-        const operator = await db.query.users.findFirst({
-            where: (users, { eq }) => eq(users.id, userId)
-        });
+        const operator = await selectUserById(userId);
 
         const isAdmin = operator?.role === 'ADMIN';
 
@@ -102,15 +90,7 @@ async function returnBook({ recordId, userId }: returnBookParams) {
             throw new Error('该书已归还');
         }
 
-        const nowDate = dayjs().toDate().toDateString();
-
-        await db
-            .update(borrowRecords)
-            .set({
-                status: 'RETURNED',
-                returnDate: nowDate
-            })
-            .where(eq(borrowRecords.id, recordId));
+        await returnBorrowBook(recordId);
 
         await db
             .update(books)

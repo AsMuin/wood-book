@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation';
 import { workflowClient } from '../workflow';
 import { nextProdUrl } from '../../../envConfig';
 import { AuthCredentials } from '../../../types';
+import { selectUserByEmail } from '@/db/utils/users';
 
 async function Register(params: AuthCredentials) {
     const getHeaders = await headers();
@@ -23,9 +24,7 @@ async function Register(params: AuthCredentials) {
     try {
         const { name, email, password, image } = params;
 
-        const existingUser = await db.query.users.findFirst({
-            where: (users, { eq }) => eq(users.email, email)
-        });
+        const existingUser = await selectUserByEmail(email);
 
         if (existingUser) {
             throw new Error('用户已存在');
@@ -93,9 +92,7 @@ async function LoginWithEmail(credentials: Pick<AuthCredentials, 'email'>) {
     }
 
     try {
-        const isExist = await db.query.users.findFirst({
-            where: (users, { eq }) => eq(users.email, credentials.email)
-        });
+        const isExist = await selectUserByEmail(credentials.email)
 
         if (!isExist) {
             throw new Error('用户不存在');

@@ -6,6 +6,7 @@ import users from '@/db/schema/users';
 import db from '@/db';
 import { eq } from 'drizzle-orm';
 import { SessionProvider } from 'next-auth/react';
+import { selectUserById } from '@/db/utils/users';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
     const session = await auth();
@@ -19,9 +20,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             return;
         }
 
-        const user = await db.query.users.findFirst({
-            where: eq(users.id, session?.user?.id)
-        });
+        const user = await selectUserById(session?.user?.id)
 
         const dateStamp = new Date().toISOString().slice(0, 10);
 

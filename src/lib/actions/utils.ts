@@ -2,6 +2,7 @@
 
 import db from '@/db';
 import users from '@/db/schema/users';
+import { selectUserByEmail } from '@/db/utils/users';
 import { eq } from 'drizzle-orm';
 
 type UserState = 'non-active' | 'active';
@@ -11,9 +12,7 @@ const ONE_MONTH_IN_MS = ONE_DAY_IN_MS * 30;
 
 //获取当前用户的状态
 async function getUserState(email: string): Promise<UserState> {
-    const user = await db.query.users.findFirst({
-        where: eq(users.email, email)
-    });
+    const user = await selectUserByEmail(email);
 
     if (!user) {
         return 'non-active';
