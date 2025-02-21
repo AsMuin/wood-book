@@ -11,7 +11,7 @@ interface InitialData {
 export const { POST } = serve<InitialData>(async context => {
     const { email, fullName, bookName, day } = context.requestPayload;
 
-    await context.run('borrowBook', async () => {
+    await context.run('returnBook', async () => {
         await sendEmail({
             email,
             subject: '归还记录',
