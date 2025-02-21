@@ -10,7 +10,7 @@ export default async function BookPage({ params }: { params: Promise<{ id: strin
     const userId = session?.user?.id;
 
     if (!userId) {
-        signOut();
+        redirect('/login');
     }
 
     const bookDetail = await db.query.books.findFirst({

@@ -4,7 +4,7 @@ import db from '@/db';
 import books from '@/db/schema/books';
 import { selectLatestBooks } from '@/db/utils/books';
 import { auth, signOut } from '@/lib/auth';
-import { desc } from 'drizzle-orm';
+import { redirect } from 'next/navigation';
 
 export default async function Home() {
     const session = await auth();
@@ -12,7 +12,7 @@ export default async function Home() {
     const userId = session?.user?.id;
 
     if(!userId){
-        signOut();
+        redirect('/login');
     }
 
     const latestBooks = await selectLatestBooks(10)

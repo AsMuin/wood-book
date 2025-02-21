@@ -3,13 +3,14 @@ import db from '@/db';
 import { auth, signOut } from '@/lib/auth';
 import dayjs from 'dayjs';
 import { IBook } from '../../../../types';
+import { redirect } from 'next/navigation';
 
 export default async function MyProfilePage() {
     const session = await auth();
     const userId = session?.user?.id as string;
 
     if (!userId) {
-        signOut();
+        redirect('/login');
     }
 
     const borrowedBooks = await db.query.borrowRecords.findMany({
