@@ -33,9 +33,9 @@ export default async function BookPage({ params }: { params: Promise<{ id: strin
                 </section>
                 <section className="mt-10 flex flex-col gap-7">
                     <h3>摘要</h3>
-                    <p className="space-y-5 text-xl text-light-100">
+                    <div className="space-y-5 text-xl text-light-100">
                         {bookDetail?.summary.split('\n').map((line, index) => <p key={index}>{line}</p>)}
-                    </p>
+                    </div>
                 </section>
             </div>
         </div>

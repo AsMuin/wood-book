@@ -2,6 +2,7 @@ import BookList from '@/components/BookList';
 import db from '@/db';
 import { auth, signOut } from '@/lib/auth';
 import dayjs from 'dayjs';
+import { IBook } from '../../../../types';
 
 export default async function MyProfilePage() {
     const session = await auth();
@@ -18,11 +19,22 @@ export default async function MyProfilePage() {
         }
     });
     const nowDay = dayjs();
-    const displayBookList = borrowedBooks.map(borrowedRecord => ({
-        ...borrowedRecord.book,
-        returnDueDay: borrowedRecord.status === 'BORROWED' ? dayjs(borrowedRecord.dueDate).diff(nowDay, 'day') : 0,
-        borrowRecordId: borrowedRecord.id
-    }));
+
+    const displayBookList = borrowedBooks.reduce((list, record) => {
+        if (record.status === 'RETURNED') {
+            return list;
+        } else {
+            const returnDueDay = dayjs(record.dueDate).diff(nowDay, 'day');
+
+            const displayBook = {
+                ...record.book,
+                returnDueDay: returnDueDay,
+                borrowRecordId: record.id
+            };
+            
+            return list.concat(displayBook);
+        }
+    }, [] as IBook[]);
 
     return (
         <div>

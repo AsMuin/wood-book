@@ -3,7 +3,7 @@ import BookCard from './BookCard';
 
 export interface BookListProps {
     title: string;
-    books: Partial<{ borrowRecordId: string; returnDueDay: number }> & IBook[];
+    books: IBook[];
     containerClassName?: string;
     userId: string;
 }
@@ -15,8 +15,8 @@ export default function BookList({ title, books, containerClassName, userId }: B
         <section className={containerClassName}>
             <h2 className="font-bebas-neue text-4xl text-light-100">{title}</h2>
             <ul className="book-list">
-                {books.map(book => (
-                    <BookCard key={book.id} {...book} userId={userId} />
+                {books.map((book, index) => (
+                    <BookCard key={index} {...book} userId={userId} />
                 ))}
             </ul>
         </section>

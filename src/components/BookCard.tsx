@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { Button } from './ui/button';
 import { returnBook } from '@/lib/actions/book';
+import { redirect } from 'next/navigation';
 
 export interface IBookCardProps extends IBook {
     returnDueDay?: number;
@@ -14,6 +15,11 @@ export interface IBookCardProps extends IBook {
 
 export default function BookCard({ id, title, genre, coverColor, coverUrl, returnDueDay = 0, userId, borrowRecordId }: IBookCardProps) {
     const day = Math.abs(returnDueDay);
+    async function handleReturnBook() {
+        'use server';
+        await returnBook({ userId: userId as string, recordId: borrowRecordId as string });
+        redirect('/myProfile');
+    }
 
     return (
         <li className={cn(returnDueDay && 'w-full xs:w-52')}>
@@ -23,23 +29,23 @@ export default function BookCard({ id, title, genre, coverColor, coverUrl, retur
                     <p className="book-title text-center">{title}</p>
                     <p className="book-genre">{genre}</p>
                 </div>
-                {returnDueDay && (
-                    <div className="mt-3 w-full">
-                        <div className="book-loaned justify-center gap-1">
-                            <Image src="/icons/calendar.svg" alt="calendar" width={18} height={18} className="object-contain" />
-                            {returnDueDay > 0 ? <p className="text-light-100">{day}天后归还</p> : <p className="text-light-100">已逾期{day}天</p>}
-                        </div>
-                        <Button
-                            className="book-btn bg-dark-600 hover:bg-dark-100"
-                            formAction={() => {
-                                returnBook({ userId: userId as string, recordId: borrowRecordId as string });
-                            }}>
+            </Link>
+            {returnDueDay && (
+                <div className="mt-3 w-full">
+                    <div className="book-loaned justify-center gap-1">
+                        <Image src="/icons/calendar.svg" alt="calendar" width={18} height={18} className="object-contain" />
+                        {returnDueDay > 0 ? <p className="text-light-100">{day}天后归还</p> : <p className="text-light-100">已逾期{day}天</p>}
+                    </div>
+                    <form action={handleReturnBook}>
+                        <input type="hidden" name="userId" value={userId} />
+                        <input type="hidden" name="recordId" value={borrowRecordId} />
+                        <Button className="book-btn bg-dark-600 hover:bg-dark-100" type="submit">
                             还书
                         </Button>
-                        {/* <Button className="book-btn bg-dark-600 hover:bg-dark-100">下载收据</Button> */}
-                    </div>
-                )}
-            </Link>
+                    </form>
+                    {/* <Button className="book-btn bg-dark-600 hover:bg-dark-100">下载收据</Button> */}
+                </div>
+            )}
         </li>
     );
 }

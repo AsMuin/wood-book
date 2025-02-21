@@ -17,6 +17,8 @@ export interface IBook {
     videoUrl: string;
     summary: string;
     createdAt: Date | null;
+    borrowRecordId?: string;
+    returnDueDay?: number;
 }
 
 export interface IResponse<T = unknown> {

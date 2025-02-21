@@ -49,6 +49,16 @@ async function borrowBook({ bookId, userId, day = 7 }: borrowBookParams) {
             }
         });
 
+        workflowClient.trigger({
+            url: `${nextProdUrl}/api/workflow/onBorrow`,
+            body: {
+                email: user?.email,
+                fullName: user?.name,
+                bookName: book.title,
+                recordId: addRecord[0].id,
+                day
+            }
+        })
         return responseBody(true, '借阅成功');
     } catch (error) {
         return responseBody(false, error instanceof Error ? error.message : '借阅失败');
