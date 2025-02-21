@@ -12,7 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         redirect('/login');
     }
 
-    const user = await selectUserById(session?.user?.id)
+    const user = await selectUserById(session?.user?.id);
 
     const isAdmin = user?.role === 'ADMIN';
 

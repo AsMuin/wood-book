@@ -7,6 +7,7 @@ function selectBookById(bookId: string) {
         where: (table, { eq }) => eq(table.id, bookId)
     });
 }
+
 function selectLatestBooks(limit: number = 10) {
     return db.query.books.findMany({
         limit,

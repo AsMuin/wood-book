@@ -12,7 +12,7 @@ interface BookFormProps extends Partial<IBook> {
 }
 type bookFormParams = z.infer<typeof bookSchema>;
 
-export default function BookForm({ type, ...book }: BookFormProps) {
+export default function BookForm({ ...book }: BookFormProps) {
     const bookFormConfig: FormItemConfig<bookFormParams>[] = [
         {
             key: 'title',

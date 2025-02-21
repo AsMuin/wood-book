@@ -8,6 +8,7 @@ interface borrowBookParams {
     userId: string;
     day?: number;
 }
+
 function borrowBookAddRecord({ bookId, userId, day = 7 }: borrowBookParams) {
     const dueDate = dayjs().add(day, 'day').toDate().toDateString();
 

@@ -24,6 +24,7 @@ export default function SignIn() {
             }
         }
     ];
+
     return (
         <div>
             <AuthForm type="LOGIN" schema={loginSchema} formConfig={loginFormConfig} onSubmit={LoginWithCredentials} />
