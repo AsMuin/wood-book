@@ -1,5 +1,5 @@
 import { bookSchema } from '@/lib/validations';
-import { FormItemConfig, IBook } from '../../../../types';
+import { FormItemConfig, IBook } from '../../../types';
 import FlexForm from '@/components/FlexForm';
 import { z } from 'zod';
 import ColorPicker from '@/components/admin/ColorPicker';

@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 import { z } from 'zod';
 import { registerSchema } from '@/lib/validations';
@@ -57,3 +57,11 @@ export interface returnBookParams {
     recordId: string;
     userId: string;
 }
+
+export type TableColumns<T extends Record<string, any>> = {
+    [key in keyof T]: {
+        header: ReactNode;
+        render?: (value: T[key], rowData: T) => ReactNode;
+    };
+};
+export type TableColumnsConfig<T> = Partial<TableColumns<T>>;

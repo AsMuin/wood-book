@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import BookForm from '../../forms/BookForm';
+import BookForm from '../../../../components/admin/BookForm';
 
 export default function AddBookPage() {
     return (

@@ -19,12 +19,7 @@ const variantStyles: Record<BookCoverVariant, string> = {
     wide: 'book-cover_wide'
 };
 
-export default function BookCover({
-    className,
-    variant = 'regular',
-    coverColor = '#012B48',
-    coverImage = 'https://cloud.asmuin.top/wookBookImage/7186YfjgHHL._AC_UF1000,1000_QL80_.jpg'
-}: IBookCoverProps) {
+export default function BookCover({ className, variant = 'regular', coverColor, coverImage }: IBookCoverProps) {
     return (
         <div className={cn('relative transition-all duration-300 ease-in-out', variantStyles[variant], className)}>
             <BookCoverSvg coverColor={coverColor} />

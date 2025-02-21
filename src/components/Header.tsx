@@ -9,7 +9,7 @@ import type { Session } from 'next-auth';
 import { Button } from './ui/button';
 import { signOut } from '@/lib/actions/auth';
 
-export default function Header({ session }: { session: Session }) {
+export default function Header({ session }: { session?: Session }) {
     const pathname = usePathname();
     const navBarList = [
         {
@@ -37,7 +37,7 @@ export default function Header({ session }: { session: Session }) {
                     <Link href="/myProfile">
                         <Avatar>
                             <AvatarImage />
-                            <AvatarFallback className="bg-amber-100">{session.user?.name?.slice(0, 2).toUpperCase() || '用户'}</AvatarFallback>
+                            <AvatarFallback className="bg-amber-100">{session?.user?.name?.slice(0, 2).toUpperCase() || '游客'}</AvatarFallback>
                         </Avatar>
                     </Link>
                 </li>

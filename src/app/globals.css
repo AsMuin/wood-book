@@ -85,7 +85,7 @@
 
     /* Book List */
     .book-list {
-        @apply mt-10 flex flex-wrap gap-5 max-xs:justify-between xs:gap-10 justify-center;
+        @apply mt-10 flex flex-wrap justify-center gap-5 max-xs:justify-between xs:gap-10;
     }
 
     /* Book Overview */
@@ -336,5 +336,14 @@
         --chart-3: 30 80% 55%;
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
     }
 }
