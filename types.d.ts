@@ -49,6 +49,9 @@ export interface IResponse<T = unknown> {
     success: boolean;
     message: string;
     data: T;
+    total?: number;
+    pageIndex?: number;
+    limit?: number;
 }
 
 export type AuthCredentials = z.infer<typeof registerSchema>;
@@ -91,10 +94,3 @@ export type TableColumns<T extends Record<string, any>> = {
 export type TableColumnsConfig<T> = Partial<TableColumns<T>>;
 
 export type ModelMap = 'User' | 'Book' | 'BorrowRecord';
-
-export type TableQueryData<T> = {
-    data: T[];
-    count: number;
-    pageIndex: number;
-    limit: number;
-};

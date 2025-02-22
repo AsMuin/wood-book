@@ -121,14 +121,18 @@ async function returnBook({ recordId, userId }: returnBookParams) {
 }
 
 async function tableQueryBook(limit: number, pageIndex: number) {
-    const [data, total] = await Promise.all([queryBook(limit, pageIndex), db.$count(books)]);
+    try {
+        const [data, total] = await Promise.all([queryBook(limit, pageIndex), db.$count(books)]);
 
-    return responseBody(true, '查询成功', {
-        data,
-        pageIndex,
-        limit,
-        total
-    });
+        return responseBody(true, '查询成功', {
+            data,
+            pageIndex,
+            limit,
+            total
+        });
+    } catch (error) {
+        return responseBody(false, error instanceof Error ? error.message : '查询失败');
+    }
 }
 
 export { borrowBook, returnBook, tableQueryBook };

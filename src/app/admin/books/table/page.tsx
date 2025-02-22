@@ -2,9 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { IBook, TableColumnsConfig } from '../../../../../types';
+import { IBook, IResponse, TableColumnsConfig } from '../../../../../types';
 import AdminTable from '@/components/admin/AdminTable';
-import { tableQueryBook } from '@/lib/actions/book';
 
 export default function AddBookPage() {
     const tableColumns: TableColumnsConfig<IBook> = {
@@ -21,6 +20,12 @@ export default function AddBookPage() {
             header: '描述'
         }
     };
+
+    async function tableQueryBook(limit: number, pageIndex: number) {
+        const result = await fetch(`/api/query/book?limit=${limit}&pageIndex=${pageIndex}`);
+
+        return (await result.json()) as IResponse<IBook[]>;
+    }
 
     return (
         <>

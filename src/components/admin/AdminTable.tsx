@@ -1,8 +1,9 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { IResponse, TableColumns } from '../../../types';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../ui/pagination';
 import { cn } from '@/lib/utils';
+import { toast } from '@/hooks/useToast';
 
 interface AdminTableProps<T extends Record<string, any>> {
     title: ReactNode;
@@ -12,13 +13,41 @@ interface AdminTableProps<T extends Record<string, any>> {
     operations?: (rowData: T) => ReactNode;
 }
 
-function AdminTable<T extends Record<string, any>>({ columns, title, operations }: AdminTableProps<T>) {
+function AdminTable<T extends Record<string, any>>({ columns, title, operations, query }: AdminTableProps<T>) {
     const [data, setData] = useState<T[]>([]);
     const [pageIndex, setPageIndex] = useState(0);
+    const [total, setTotal] = useState(0);
+
+    const [loading, setLoading] = useState(false);
     const renderColumns = Object.entries(columns).map(([key, column]) => ({
         key,
         ...column
     }));
+
+    useEffect(() => {
+        setLoading(true);
+        query(10, pageIndex)
+            .then(result => {
+                if (result.success) {
+                    setData(result.data);
+                    setTotal(result.total || 0);
+                } else {
+                    toast({
+                        title: '失败',
+                        description: result.message,
+                        variant: 'destructive'
+                    });
+                }
+            })
+            .catch((error: Error) => {
+                toast({
+                    title: '失败',
+                    description: error instanceof Error ? error.message : '查询失败',
+                    variant: 'destructive'
+                });
+            })
+            .finally(() => setLoading(false));
+    }, [pageIndex, query]);
 
     return (
         <>
@@ -58,7 +87,7 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations 
                     </TableRow>
                 </TableFooter> */}
             </Table>
-            <AdminTable.Pagination pageIndex={pageIndex} setPageIndex={setPageIndex} limit={10} count={21} />
+            <AdminTable.Pagination pageIndex={pageIndex} setPageIndex={setPageIndex} limit={10} total={total} />
         </>
     );
 }
@@ -74,12 +103,12 @@ AdminTable.Operations = function AdminTableOperations({ children }: OperationsPr
 interface PaginationProps {
     pageIndex: number;
     limit: number;
-    count: number;
+    total: number;
     setPageIndex: (pageIndex: number) => void;
 }
 
-AdminTable.Pagination = function AdminTablePagination({ pageIndex, limit, count, setPageIndex }: PaginationProps) {
-    const pageCount = Math.ceil(count / limit);
+AdminTable.Pagination = function AdminTablePagination({ pageIndex, limit, total, setPageIndex }: PaginationProps) {
+    const pageCount = Math.ceil(total / limit) || 1;
 
     function prevPageIndex() {
         if (pageIndex > 0) {
