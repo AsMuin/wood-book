@@ -1,12 +1,12 @@
 import BookList from '@/components/BookList';
 import BookOverview from '@/components/BookOverview';
-import { selectLatestBooks } from '@/db/utils/books';
+import { queryBook } from '@/db/utils/books';
 import { auth } from '@/lib/auth';
 
 export default async function Home() {
     const session = await auth();
     const userId = session?.user?.id;
-    const latestBooks = await selectLatestBooks(10);
+    const latestBooks = await queryBook(10, 0);
 
     return (
         <>

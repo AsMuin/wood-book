@@ -1,4 +1,6 @@
+import { desc } from 'drizzle-orm';
 import db from '..';
+import { users } from '../schema';
 
 function selectUserById(userId: string) {
     return db.query.users.findFirst({
@@ -12,4 +14,12 @@ function selectUserByEmail(email: string) {
     });
 }
 
-export { selectUserById, selectUserByEmail };
+function queryUser(limit: number = 10, pageIndex: number = 0) {
+    return db.query.users.findMany({
+        limit,
+        offset: pageIndex * limit,
+        orderBy: desc(users.createAt)
+    });
+}
+
+export { selectUserById, selectUserByEmail, queryUser };

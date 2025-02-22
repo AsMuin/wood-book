@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import db from '..';
 import { borrowRecords } from '../schema';
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 
 interface borrowBookParams {
     bookId: string;
@@ -32,4 +32,12 @@ function returnBorrowBook(borrowRecordId: string) {
         .where(eq(borrowRecords.id, borrowRecordId));
 }
 
-export { returnBorrowBook, borrowBookAddRecord };
+function queryBorrowRecord(limit: number = 10, pageIndex: number = 0) {
+    return db.query.borrowRecords.findMany({
+        limit,
+        offset: pageIndex * limit,
+        orderBy: desc(borrowRecords.createdAt)
+    });
+}
+
+export { returnBorrowBook, borrowBookAddRecord, queryBorrowRecord };

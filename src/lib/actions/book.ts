@@ -9,7 +9,7 @@ import { eq } from 'drizzle-orm';
 import { workflowClient } from '../workflow';
 import { nextProdUrl } from '../../../envConfig';
 import { selectUserById } from '@/db/utils/users';
-import { selectBookById } from '@/db/utils/books';
+import { queryBook, selectBookById } from '@/db/utils/books';
 import { returnBorrowBook, borrowBookAddRecord } from '@/db/utils/borrowRecord';
 import dayjs from 'dayjs';
 
@@ -120,4 +120,15 @@ async function returnBook({ recordId, userId }: returnBookParams) {
     }
 }
 
-export { borrowBook, returnBook };
+async function tableQueryBook(limit: number, pageIndex: number) {
+    const [data, total] = await Promise.all([queryBook(limit, pageIndex), db.$count(books)]);
+
+    return responseBody(true, '查询成功', {
+        data,
+        pageIndex,
+        limit,
+        total
+    });
+}
+
+export { borrowBook, returnBook, tableQueryBook };

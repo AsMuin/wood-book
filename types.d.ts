@@ -21,6 +21,30 @@ export interface IBook {
     returnDueDay?: number;
 }
 
+export interface IBorrowRecord {
+    id: string;
+    userId: string;
+    bookId: string;
+    borrowDate: Date;
+    dueDate: Date;
+    returnDate: Date | null;
+    status: 'BORROWED' | 'RETURNED';
+    createdAt: Date;
+}
+
+export interface IUser {
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+    image: string;
+    status: 'PENDING' | 'APPROVED' | 'REJECTED';
+    emailVerified: Date | null;
+    role: 'USER' | 'ADMIN';
+    lastActivityDate: Date | null;
+    createAt: Date;
+}
+
 export interface IResponse<T = unknown> {
     success: boolean;
     message: string;
@@ -65,3 +89,12 @@ export type TableColumns<T extends Record<string, any>> = {
     };
 };
 export type TableColumnsConfig<T> = Partial<TableColumns<T>>;
+
+export type ModelMap = 'User' | 'Book' | 'BorrowRecord';
+
+export type TableQueryData<T> = {
+    data: T[];
+    count: number;
+    pageIndex: number;
+    limit: number;
+};

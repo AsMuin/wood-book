@@ -8,11 +8,12 @@ function selectBookById(bookId: string) {
     });
 }
 
-function selectLatestBooks(limit: number = 10) {
+function queryBook(limit: number = 10, pageIndex: number = 0) {
     return db.query.books.findMany({
         limit,
+        offset: pageIndex * limit,
         orderBy: desc(books.createdAt)
     });
 }
 
-export { selectLatestBooks, selectBookById };
+export { selectBookById, queryBook };
