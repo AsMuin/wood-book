@@ -1,9 +1,11 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { IResponse, TableColumns } from '../../../types';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../ui/pagination';
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/useToast';
+import { Skeleton } from '../ui/skeleton';
+import { Button } from '../ui/button';
 
 interface AdminTableProps<T extends Record<string, any>> {
     title: ReactNode;
@@ -11,47 +13,66 @@ interface AdminTableProps<T extends Record<string, any>> {
     // data: T[];
     columns: Partial<TableColumns<T>>;
     operations?: (rowData: T) => ReactNode;
+    limit?: number;
 }
 
-function AdminTable<T extends Record<string, any>>({ columns, title, operations, query }: AdminTableProps<T>) {
-    const [data, setData] = useState<T[]>([]);
-    const [pageIndex, setPageIndex] = useState(0);
-    const [total, setTotal] = useState(0);
+interface TableModel<T extends Record<string, any>> {
+    data: T[];
+    total: number;
+}
 
+function AdminTable<T extends Record<string, any>>({ columns, title, operations, query, limit = 10 }: AdminTableProps<T>) {
+    const [tableModel, setTableModel] = useState<TableModel<T>>({
+        data: [],
+        total: 0
+    });
+    const [pageIndex, setPageIndex] = useState(0);
     const [loading, setLoading] = useState(false);
     const renderColumns = Object.entries(columns).map(([key, column]) => ({
         key,
         ...column
     }));
 
-    useEffect(() => {
-        setLoading(true);
-        query(10, pageIndex)
-            .then(result => {
-                if (result.success) {
-                    setData(result.data);
-                    setTotal(result.total || 0);
+    const onQuery = useCallback(
+        async (pageIndex: number, limit: number) => {
+            setLoading(true);
+
+            try {
+                const result = await query(limit, pageIndex);
+
+                if (!result.success) {
+                    throw new Error(result.message);
                 } else {
-                    toast({
-                        title: '失败',
-                        description: result.message,
-                        variant: 'destructive'
+                    setTableModel({
+                        data: result.data,
+                        total: result.total || 0
                     });
                 }
-            })
-            .catch((error: Error) => {
+            } catch (error) {
                 toast({
                     title: '失败',
-                    description: error instanceof Error ? error.message : '查询失败',
+                    description: (error as Error).message,
                     variant: 'destructive'
                 });
-            })
-            .finally(() => setLoading(false));
-    }, [pageIndex, query]);
+            }
+
+            setLoading(false);
+        },
+        [query]
+    );
+
+    useEffect(() => {
+        onQuery(pageIndex, limit);
+    }, [onQuery, pageIndex, limit]);
 
     return (
         <>
-            <h3 className="mb-2 border-b-2 pb-2 font-bebas-neue text-3xl">{title}</h3>
+            <div className="mb-2 flex justify-between border-b-2 px-4 pb-2 font-bebas-neue text-3xl">
+                <h3>{title}</h3>
+                <Button className="bg-light-100" disabled={loading} onClick={() => onQuery(pageIndex, limit)}>
+                    查询
+                </Button>
+            </div>
             <Table>
                 {/* <TableCaption>{title}</TableCaption> */}
                 <TableHeader>
@@ -63,22 +84,37 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations,
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data.map(rowData => (
-                        <TableRow key={rowData.invoice}>
-                            {renderColumns.map(column => (
-                                <TableCell key={column.key}>
-                                    {column.render && typeof column.render === 'function'
-                                        ? column.render(rowData[column.key], rowData)
-                                        : rowData[column.key]}
-                                </TableCell>
-                            ))}
-                            {operations && (
-                                <TableCell>
-                                    <AdminTable.Operations>{operations(rowData)}</AdminTable.Operations>
-                                </TableCell>
-                            )}
-                        </TableRow>
-                    ))}
+                    {loading
+                        ? Array.from({ length: limit }).map((_, index) => (
+                              <TableRow key={index}>
+                                  {renderColumns.map(column => (
+                                      <TableCell key={column.key}>
+                                          <Skeleton className="h-8 bg-slate-200" />
+                                      </TableCell>
+                                  ))}
+                                  {operations && (
+                                      <TableCell>
+                                          <Skeleton className="h-8 bg-slate-200" />
+                                      </TableCell>
+                                  )}
+                              </TableRow>
+                          ))
+                        : tableModel.data.map(rowData => (
+                              <TableRow key={rowData.invoice}>
+                                  {renderColumns.map(column => (
+                                      <TableCell key={column.key}>
+                                          {column.render && typeof column.render === 'function'
+                                              ? column.render(rowData[column.key], rowData)
+                                              : rowData[column.key]}
+                                      </TableCell>
+                                  ))}
+                                  {operations && (
+                                      <TableCell>
+                                          <AdminTable.Operations>{operations(rowData)}</AdminTable.Operations>
+                                      </TableCell>
+                                  )}
+                              </TableRow>
+                          ))}
                 </TableBody>
                 {/* <TableFooter>
                     <TableRow>
@@ -87,7 +123,7 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations,
                     </TableRow>
                 </TableFooter> */}
             </Table>
-            <AdminTable.Pagination pageIndex={pageIndex} setPageIndex={setPageIndex} limit={10} total={total} />
+            <AdminTable.Pagination pageIndex={pageIndex} setPageIndex={setPageIndex} limit={10} total={tableModel.total} />
         </>
     );
 }
