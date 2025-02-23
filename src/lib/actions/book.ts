@@ -135,4 +135,20 @@ async function tableQueryBook(limit: number, pageIndex: number) {
     }
 }
 
-export { borrowBook, returnBook, tableQueryBook };
+async function deleteBook(id: string, userId: string) {
+    try {
+        const user = await selectUserById(userId);
+
+        if (user?.role !== 'ADMIN') {
+            throw new Error('你无权进行该操作');
+        }
+
+        await db.delete(books).where(eq(books.id, id));
+
+        return responseBody(true, '删除成功');
+    } catch (error) {
+        return responseBody(false, error instanceof Error ? error.message : '删除失败');
+    }
+}
+
+export { borrowBook, returnBook, tableQueryBook, deleteBook };

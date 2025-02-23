@@ -5,8 +5,15 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { IBook, IResponse, TableColumnsConfig } from '../../../../types';
+import { useSession } from 'next-auth/react';
+import { deleteBook } from '@/lib/actions/book';
+import { toast } from '@/hooks/useToast';
+import { useRef } from 'react';
 
 export default function BooksPage() {
+    const { data: session } = useSession();
+    const userId = session?.user?.id || '';
+    const tableRef = useRef<{ reQuery: () => Promise<void> } | null>(null);
     const tableColumns: TableColumnsConfig<IBook> = {
         title: {
             header: '书名',
@@ -26,6 +33,40 @@ export default function BooksPage() {
         }
     };
 
+    async function onDelete(id: string) {
+        try {
+            const result = await deleteBook(id, userId);
+
+            if (!result.success) {
+                throw new Error(result.message);
+            }
+
+            toast({
+                title: '成功',
+                description: '删除成功'
+            });
+
+            tableRef.current?.reQuery();
+        } catch (error) {
+            toast({
+                title: '失败',
+                description: error instanceof Error ? error.message : '删除失败',
+                variant: 'destructive'
+            });
+        }
+    }
+
+    const operations = (rowData: IBook) => (
+        <div className="flex flex-col gap-2">
+            <Button variant={'link'} className="text-primary">
+                编辑
+            </Button>
+            <Button variant={'link'} className="text-red-600" onClick={() => onDelete(rowData.id)}>
+                删除
+            </Button>
+        </div>
+    );
+
     async function tableQueryBook(limit: number, pageIndex: number) {
         const result = await fetch(`/api/query/book?limit=${limit}&pageIndex=${pageIndex}`);
 
@@ -43,7 +84,7 @@ export default function BooksPage() {
                 </Button>
             </div>
             <div className="mt-7 w-full overflow-hidden">
-                <AdminTable query={tableQueryBook} columns={tableColumns} title="所有书籍" />
+                <AdminTable ref={tableRef} query={tableQueryBook} columns={tableColumns} title="所有书籍" operations={operations} />
             </div>
         </section>
     );

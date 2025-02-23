@@ -1,7 +1,7 @@
 'use client';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useImperativeHandle, useState, type ReactNode } from 'react';
 import { IResponse, TableColumns } from '../../../types';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../ui/pagination';
 import { cn } from '@/lib/utils';
@@ -16,6 +16,7 @@ interface AdminTableProps<T extends Record<string, any>> {
     columns: Partial<TableColumns<T>>;
     operations?: (rowData: T) => ReactNode;
     limit?: number;
+    ref?: React.RefObject<{ reQuery: () => Promise<void> } | null>;
 }
 
 interface TableModel<T extends Record<string, any>> {
@@ -23,7 +24,7 @@ interface TableModel<T extends Record<string, any>> {
     total: number;
 }
 
-function AdminTable<T extends Record<string, any>>({ columns, title, operations, query, limit = 10 }: AdminTableProps<T>) {
+function AdminTable<T extends Record<string, any>>({ columns, title, operations, query, limit = 10, ref }: AdminTableProps<T>) {
     const [tableModel, setTableModel] = useState<TableModel<T>>({
         data: [],
         total: 0
@@ -34,7 +35,6 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations,
         key,
         ...column
     }));
-
     const onQuery = useCallback(
         async (pageIndex: number, limit: number) => {
             setLoading(true);
@@ -62,6 +62,10 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations,
         },
         [query]
     );
+
+    useImperativeHandle(ref, () => ({
+        reQuery: () => onQuery(pageIndex, limit)
+    }));
 
     useEffect(() => {
         onQuery(pageIndex, limit);
