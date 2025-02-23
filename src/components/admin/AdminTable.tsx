@@ -1,3 +1,5 @@
+'use client';
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { IResponse, TableColumns } from '../../../types';
@@ -78,7 +80,9 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations,
                 <TableHeader>
                     <TableRow>
                         {renderColumns.map(header => (
-                            <TableHead key={header.key}>{header.header}</TableHead>
+                            <TableHead key={header.key} className="border-r last:border-r-0">
+                                {header.header}
+                            </TableHead>
                         ))}
                         {operations && <TableHead>操作</TableHead>}
                     </TableRow>
@@ -102,7 +106,7 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations,
                         : tableModel.data.map(rowData => (
                               <TableRow key={rowData.invoice}>
                                   {renderColumns.map(column => (
-                                      <TableCell key={column.key}>
+                                      <TableCell key={column.key} className="min-w-32 border-r last:border-r-0">
                                           {column.render && typeof column.render === 'function'
                                               ? column.render(rowData[column.key], rowData)
                                               : rowData[column.key]}
