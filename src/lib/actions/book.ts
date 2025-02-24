@@ -9,7 +9,7 @@ import { eq } from 'drizzle-orm';
 import { workflowClient } from '../workflow';
 import { nextProdUrl } from '../../../envConfig';
 import { selectUserById } from '@/db/utils/users';
-import { queryBook, selectBookById } from '@/db/utils/books';
+import { selectBookById } from '@/db/utils/books';
 import { returnBorrowBook, borrowBookAddRecord } from '@/db/utils/borrowRecord';
 import dayjs from 'dayjs';
 
@@ -120,35 +120,4 @@ async function returnBook({ recordId, userId }: returnBookParams) {
     }
 }
 
-async function tableQueryBook(limit: number, pageIndex: number) {
-    try {
-        const [data, total] = await Promise.all([queryBook(limit, pageIndex), db.$count(books)]);
-
-        return responseBody(true, '查询成功', {
-            data,
-            pageIndex,
-            limit,
-            total
-        });
-    } catch (error) {
-        return responseBody(false, error instanceof Error ? error.message : '查询失败');
-    }
-}
-
-async function deleteBook(id: string, userId: string) {
-    try {
-        const user = await selectUserById(userId);
-
-        if (user?.role !== 'ADMIN') {
-            throw new Error('你无权进行该操作');
-        }
-
-        await db.delete(books).where(eq(books.id, id));
-
-        return responseBody(true, '删除成功');
-    } catch (error) {
-        return responseBody(false, error instanceof Error ? error.message : '删除失败');
-    }
-}
-
-export { borrowBook, returnBook, tableQueryBook, deleteBook };
+export { borrowBook, returnBook };

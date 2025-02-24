@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { IBook, IResponse, TableColumnsConfig } from '../../../../types';
 import { useSession } from 'next-auth/react';
-import { deleteBook } from '@/lib/actions/book';
+import { deleteBook } from '@/lib/admin/actions/book';
 import { toast } from '@/hooks/useToast';
 import { useRef } from 'react';
 import PopoverConfirm from '@/components/PopoverConfirm';
