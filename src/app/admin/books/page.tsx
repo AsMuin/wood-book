@@ -9,6 +9,8 @@ import { useSession } from 'next-auth/react';
 import { deleteBook } from '@/lib/actions/book';
 import { toast } from '@/hooks/useToast';
 import { useRef } from 'react';
+import Dialog from '@/components/Dialog';
+import BookForm from '@/components/admin/BookForm';
 
 export default function BooksPage() {
     const { data: session } = useSession();
@@ -59,7 +61,7 @@ export default function BooksPage() {
     const operations = (rowData: IBook) => (
         <div className="flex flex-col gap-2">
             <Button variant={'link'} className="text-primary">
-                编辑
+                <Link href={`/admin/books/edit/${rowData.id}`}>编辑</Link>
             </Button>
             <Button variant={'link'} className="text-red-600" onClick={() => onDelete(rowData.id)}>
                 删除

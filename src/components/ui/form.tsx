@@ -12,11 +12,12 @@ const Form = <TFieldValues extends FieldValues, TContext = any, TTransformedValu
     onSubmit,
     children,
     className,
+    style,
     ...props
-}: FormProviderProps<TFieldValues, TContext, TTransformedValues> & { onSubmit: FormEventHandler<HTMLFormElement>; className?: string }) => {
+}: FormProviderProps<TFieldValues, TContext, TTransformedValues> & { onSubmit: FormEventHandler<HTMLFormElement>; className?: string,style: Record<string,string>| undefined }) => {
     return (
         <FormProvider {...props}>
-            <form onSubmit={onSubmit} className={className}>
+            <form style={style} onSubmit={onSubmit} className={className}>
                 {children}
             </form>
         </FormProvider>

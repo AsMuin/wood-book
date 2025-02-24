@@ -1,3 +1,5 @@
+'use client';
+
 import { bookSchema } from '@/lib/validations';
 import { FormItemConfig, IBook } from '../../../types';
 import FlexForm from '@/components/FlexForm';
@@ -13,6 +15,8 @@ interface BookFormProps extends Partial<IBook> {
 type bookFormParams = z.infer<typeof bookSchema>;
 
 export default function BookForm({ ...book }: BookFormProps) {
+    console.log({book});
+    
     const bookFormConfig: FormItemConfig<bookFormParams>[] = [
         {
             key: 'title',
@@ -95,6 +99,7 @@ export default function BookForm({ ...book }: BookFormProps) {
             key: 'description',
             label: '描述',
             type: 'textarea',
+            value: book.description || '',
             options: {
                 placeholder: '请输入描述'
             }
@@ -103,6 +108,7 @@ export default function BookForm({ ...book }: BookFormProps) {
             key: 'summary',
             label: '摘要',
             type: 'textarea',
+            value: book.summary || '',
             options: {
                 placeholder: '请输入摘要'
             }
@@ -134,16 +140,15 @@ export default function BookForm({ ...book }: BookFormProps) {
     }
 
     return (
-        <div>
-            <FlexForm
-                schema={bookSchema}
-                formConfig={bookFormConfig}
-                onSubmit={onSubmit}
-                parentClass="flex flex-col gap-2"
-                formInputClass="book-form_input light"
-                formItemClass="flex flex-col gap-1"
-                formLabelClass="text-base font-normal text-dark-500"
-            />
-        </div>
+        <FlexForm
+            schema={bookSchema}
+            formConfig={bookFormConfig}
+            onSubmit={onSubmit}
+            width="60vw"
+            parentClass="grid grid-cols-2 gap-20 min-w-[672px]"
+            formInputClass="book-form_input light"
+            formItemClass="flex flex-col gap-1"
+            formLabelClass="text-base font-normal text-dark-500"
+        />
     );
 }
