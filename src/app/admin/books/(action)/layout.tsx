@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Link } from 'lucide-react';
+import Link from 'next/link';
 
 function EditLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -11,4 +11,5 @@ function EditLayout({ children }: { children: React.ReactNode }) {
         </>
     );
 }
+
 export default EditLayout;

@@ -11,7 +11,7 @@ import { Button } from '../ui/button';
 
 interface AdminTableProps<T extends Record<string, any>> {
     title: ReactNode;
-    query: (limit: number, pageIndex: number) => Promise<IResponse<T[]>>;
+    query: (limit: number, pageIndex: number, signal?: AbortSignal) => Promise<IResponse<T[]>>;
     // data: T[];
     columns: Partial<TableColumns<T>>;
     operations?: (rowData: T) => ReactNode;
@@ -36,11 +36,11 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations,
         ...column
     }));
     const onQuery = useCallback(
-        async (pageIndex: number, limit: number) => {
+        async (pageIndex: number, limit: number, signal?: AbortSignal) => {
             setLoading(true);
 
             try {
-                const result = await query(limit, pageIndex);
+                const result = await query(limit, pageIndex, signal);
 
                 if (!result.success) {
                     throw new Error(result.message);
@@ -51,11 +51,13 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations,
                     });
                 }
             } catch (error) {
-                toast({
-                    title: '失败',
-                    description: (error as Error).message,
-                    variant: 'destructive'
-                });
+                if (error instanceof Error && error.name !== 'AbortError') {
+                    toast({
+                        title: '失败',
+                        description: (error as Error).message,
+                        variant: 'destructive'
+                    });
+                }
             }
 
             setLoading(false);
@@ -64,11 +66,17 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations,
     );
 
     useImperativeHandle(ref, () => ({
-        reQuery: () => onQuery(pageIndex, limit)
+        reQuery: (signal?: AbortSignal) => onQuery(pageIndex, limit, signal)
     }));
 
     useEffect(() => {
-        onQuery(pageIndex, limit);
+        const controller = new AbortController();
+
+        onQuery(pageIndex, limit, controller.signal);
+
+        return () => {
+            controller.abort();
+        };
     }, [onQuery, pageIndex, limit]);
 
     return (
@@ -107,8 +115,8 @@ function AdminTable<T extends Record<string, any>>({ columns, title, operations,
                                   )}
                               </TableRow>
                           ))
-                        : tableModel.data.map(rowData => (
-                              <TableRow key={rowData.invoice}>
+                        : tableModel.data.map((rowData, i) => (
+                              <TableRow key={i}>
                                   {renderColumns.map(column => (
                                       <TableCell key={column.key} className="min-w-32 border-r last:border-r-0">
                                           {column.render && typeof column.render === 'function'

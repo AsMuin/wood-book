@@ -9,8 +9,7 @@ import { useSession } from 'next-auth/react';
 import { deleteBook } from '@/lib/actions/book';
 import { toast } from '@/hooks/useToast';
 import { useRef } from 'react';
-import Dialog from '@/components/Dialog';
-import BookForm from '@/components/admin/BookForm';
+import PopoverConfirm from '@/components/PopoverConfirm';
 
 export default function BooksPage() {
     const { data: session } = useSession();
@@ -63,14 +62,20 @@ export default function BooksPage() {
             <Button variant={'link'} className="text-primary">
                 <Link href={`/admin/books/edit/${rowData.id}`}>编辑</Link>
             </Button>
-            <Button variant={'link'} className="text-red-600" onClick={() => onDelete(rowData.id)}>
-                删除
-            </Button>
+            <PopoverConfirm
+                onConfirm={() => onDelete(rowData.id)}
+                trigger={
+                    <Button variant={'link'} className="text-red-600">
+                        删除
+                    </Button>
+                }>
+                确定删除该书籍吗？
+            </PopoverConfirm>
         </div>
     );
 
-    async function tableQueryBook(limit: number, pageIndex: number) {
-        const result = await fetch(`/api/query/book?limit=${limit}&pageIndex=${pageIndex}`);
+    async function tableQueryBook(limit: number, pageIndex: number, signal?: AbortSignal) {
+        const result = await fetch(`/api/query/book?limit=${limit}&pageIndex=${pageIndex}`, { signal });
 
         return (await result.json()) as IResponse<IBook[]>;
     }

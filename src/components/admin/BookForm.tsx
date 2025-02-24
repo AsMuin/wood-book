@@ -14,9 +14,7 @@ interface BookFormProps extends Partial<IBook> {
 }
 type bookFormParams = z.infer<typeof bookSchema>;
 
-export default function BookForm({ ...book }: BookFormProps) {
-    console.log({book});
-    
+export default function BookForm({ type, ...book }: BookFormProps) {
     const bookFormConfig: FormItemConfig<bookFormParams>[] = [
         {
             key: 'title',
@@ -117,8 +115,10 @@ export default function BookForm({ ...book }: BookFormProps) {
     const router = useRouter();
 
     async function onSubmit(data: bookFormParams) {
+        const isCreate = type === 'CREATE';
+
         try {
-            const res = await createBook(data);
+            const res = await (isCreate ? createBook(data) : createBook(data));
 
             if (!res.success) {
                 throw new Error(res.message);
@@ -126,14 +126,14 @@ export default function BookForm({ ...book }: BookFormProps) {
 
             toast({
                 title: '成功',
-                description: '添加成功'
+                description: isCreate ? '添加成功' : '更新成功'
             });
-            router.push(`/admin/books/${res.data?.id}`);
+            router.push(`/admin/books`);
         } catch (error) {
             console.error(error);
             toast({
                 title: '失败',
-                description: error instanceof Error ? error.message : '添加失败',
+                description: error instanceof Error ? error.message : isCreate ? '添加失败' : '更新失败',
                 variant: 'destructive'
             });
         }
