@@ -2,6 +2,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
 import prettierPlugin from 'eslint-plugin-prettier';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -15,9 +16,11 @@ const eslintConfig = [
     ...compat.extends('next/core-web-vitals', 'next/typescript'),
     {
         plugins: {
-            prettier: prettierPlugin
+            prettier: prettierPlugin,
+            'react-hooks': reactHooksPlugin
         },
         rules: {
+            ...reactHooksPlugin.configs.recommended.rules,
             '@typescript-eslint/no-explicit-any': 'off',
             'prettier/prettier': 'warn',
             'padding-line-between-statements': [
