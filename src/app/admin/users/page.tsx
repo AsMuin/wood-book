@@ -80,9 +80,9 @@ export default function UsersPage() {
 
     const operations = (rowData: IUser) => (
         <div className="flex flex-col gap-2">
-            {/* <Button variant={'link'} className="text-primary">
-                <Link href={`/admin/books/edit/${rowData.id}`}>编辑</Link>
-            </Button> */}
+            <Button variant={'link'} className="text-primary">
+                <Link href={`/admin/users/edit/${rowData.id}`}>编辑</Link>
+            </Button>
             <PopoverConfirm
                 onConfirm={() => onDelete(rowData.id)}
                 trigger={
@@ -90,7 +90,7 @@ export default function UsersPage() {
                         删除
                     </Button>
                 }>
-                确定删除该书籍吗？
+                确定删除该用户吗？
             </PopoverConfirm>
         </div>
     );

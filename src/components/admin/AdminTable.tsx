@@ -168,6 +168,7 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
         return () => {
             controller.abort();
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [onQuery, pageIndex, limit]);
 
     return (
