@@ -115,9 +115,11 @@ export interface SearchFilterItem<P> {
     placeholder?: string;
     render?: (value: P[key], allParams: P, onChange: (value: P[key]) => void) => ReactNode;
 }
+
 export interface SearchColumnItem<P> extends SearchFilterItem<P> {
     key: keyof P;
 }
+
 export type SearchColumns<P> = {
     [key in keyof P]: SearchFilterItem<P>;
 };

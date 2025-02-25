@@ -273,7 +273,7 @@ AdminTable.Pagination = function AdminTablePagination({ pageIndex, limit, total,
     return (
         <Pagination className={cn('mt-4 flex justify-end pr-8')}>
             <PaginationContent>
-                <PaginationPrevious onClick={prevPageIndex} />
+                <PaginationPrevious disabled={pageIndex === 0} onClick={prevPageIndex} />
                 {Array.from({ length: pageCount }).map((_, i) => (
                     <PaginationItem key={i}>
                         <PaginationLink className={cn(pageIndex === i && 'bg-slate-100 text-light-200')} onClick={() => setPageIndex(i)}>
@@ -281,7 +281,7 @@ AdminTable.Pagination = function AdminTablePagination({ pageIndex, limit, total,
                         </PaginationLink>
                     </PaginationItem>
                 ))}
-                <PaginationNext onClick={nextPageIndex} />
+                <PaginationNext disabled={pageIndex === pageCount - 1} onClick={nextPageIndex} />
             </PaginationContent>
         </Pagination>
     );
