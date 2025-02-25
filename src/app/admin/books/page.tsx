@@ -4,21 +4,26 @@ import AdminTable from '@/components/admin/AdminTable';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { IBook, IResponse, TableColumnsConfig } from '../../../../types';
+import { BookQueryParams, IBook, IResponse, QueryParams, SearchColumns, TableColumnsConfig, TableRef } from '@types';
 import { useSession } from 'next-auth/react';
 import { deleteBook } from '@/lib/admin/actions/book';
 import { toast } from '@/hooks/useToast';
 import { useRef } from 'react';
 import PopoverConfirm from '@/components/PopoverConfirm';
+import { transformGetParams } from '@/lib/utils';
 
 export default function BooksPage() {
     const { data: session } = useSession();
     const userId = session?.user?.id || '';
-    const tableRef = useRef<{ reQuery: () => Promise<void> } | null>(null);
+    const tableRef = useRef<TableRef>(null);
     const tableColumns: TableColumnsConfig<IBook> = {
         title: {
             header: '书名',
             render: value => <h4 className="w-64 scroll-m-20 text-lg font-semibold tracking-tight">《{value}》</h4>
+        },
+        author: {
+            header: '作者',
+            render: value => <h4 className="w-64 scroll-m-20 text-lg font-semibold tracking-tight">{value}</h4>
         },
         coverColor: {
             header: '封面颜色',
@@ -47,7 +52,7 @@ export default function BooksPage() {
                 description: '删除成功'
             });
 
-            tableRef.current?.reQuery();
+            tableRef.current?.query();
         } catch (error) {
             toast({
                 title: '失败',
@@ -57,6 +62,18 @@ export default function BooksPage() {
         }
     }
 
+    const bookSearchParams: SearchColumns<BookQueryParams> = {
+        title: {
+            label: '书名',
+            placeholder: '请填写书名',
+            defaultValue: ''
+        },
+        author: {
+            label: '作者',
+            placeholder: '请填写作者名字',
+            defaultValue: ''
+        }
+    };
     const operations = (rowData: IBook) => (
         <div className="flex flex-col gap-2">
             <Button variant={'link'} className="text-primary">
@@ -74,8 +91,16 @@ export default function BooksPage() {
         </div>
     );
 
-    async function tableQueryBook(limit: number, pageIndex: number, signal?: AbortSignal) {
-        const result = await fetch(`/api/query/book?limit=${limit}&pageIndex=${pageIndex}`, { signal });
+    async function tableQueryBook({ pageIndex, limit, signal, ...searchParams }: QueryParams<BookQueryParams>) {
+        const requestUrl = transformGetParams({
+            baseUrl: '/api/query/book',
+            params: {
+                pageIndex: pageIndex.toString(),
+                limit: limit.toString(),
+                ...searchParams
+            }
+        });
+        const result = await fetch(requestUrl, { signal });
 
         return (await result.json()) as IResponse<IBook[]>;
     }
@@ -91,7 +116,14 @@ export default function BooksPage() {
                 </Button>
             </div>
             <div className="mt-7 w-full overflow-hidden">
-                <AdminTable ref={tableRef} query={tableQueryBook} columns={tableColumns} title="所有书籍" operations={operations} />
+                <AdminTable
+                    ref={tableRef}
+                    query={tableQueryBook}
+                    columns={tableColumns}
+                    searchFilter={bookSearchParams}
+                    title="所有书籍"
+                    operations={operations}
+                />
             </div>
         </section>
     );

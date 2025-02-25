@@ -85,12 +85,41 @@ export interface returnBookParams {
     userId: string;
 }
 
+export interface BookQueryParams {
+    title?: string;
+    author?: string;
+}
+
+export interface TableRef extends null {
+    query: () => Promise<void>;
+}
+
+export type QueryParams<P = unknown> = {
+    pageIndex: number;
+    limit: number;
+    signal?: AbortSignal;
+} & P;
+
 export type TableColumns<T extends Record<string, any>> = {
     [key in keyof T]: {
         header: ReactNode;
         render?: (value: T[key], rowData: T) => ReactNode;
     };
 };
+
 export type TableColumnsConfig<T> = Partial<TableColumns<T>>;
+
+export interface SearchFilterItem<P> {
+    label: ReactNode;
+    defaultValue?: P[key];
+    placeholder?: string;
+    render?: (value: P[key], allParams: P, onChange: (value: P[key]) => void) => ReactNode;
+}
+export interface SearchColumnItem<P> extends SearchFilterItem<P> {
+    key: keyof P;
+}
+export type SearchColumns<P> = {
+    [key in keyof P]: SearchFilterItem<P>;
+};
 
 export type ModelMap = 'User' | 'Book' | 'BorrowRecord';

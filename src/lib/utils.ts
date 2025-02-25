@@ -61,3 +61,20 @@ export function isServer() {
         console.log('client component');
     }
 }
+
+interface transformUrlParams {
+    baseUrl: string;
+    params: Record<string, string | number>;
+}
+
+export function transformGetParams({ baseUrl, params }: transformUrlParams) {
+    const url = new URL(baseUrl, window.location.href);
+
+    Object.keys(params).forEach(key => {
+        if (params[key]) {
+            url.searchParams.append(key, params[key] as string);
+        }
+    });
+
+    return url;
+}

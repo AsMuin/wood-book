@@ -1,6 +1,7 @@
 import { text, pgTable, uuid, varchar, pgEnum, date, timestamp } from 'drizzle-orm/pg-core';
 
 export const STATUS_ENUM = pgEnum('status', ['PENDING', 'APPROVED', 'REJECTED']);
+
 export const ROLE_ENUM = pgEnum('role', ['USER', 'ADMIN']);
 
 export default pgTable('users', {

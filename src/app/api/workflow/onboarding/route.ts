@@ -1,4 +1,4 @@
-import { getUserState } from '@/lib/actions/utils';
+import { getUserState } from '@/db/utils/users';
 import { sendEmail } from '@/lib/workflow';
 import { serve } from '@upstash/workflow/nextjs';
 
