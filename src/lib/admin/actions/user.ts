@@ -7,7 +7,8 @@ import { eq } from 'drizzle-orm';
 import responseBody from '@/lib/response';
 
 type EditUserParams = Omit<IUser, 'createAt' | 'lastActivityDate' | 'emailVerified' | 'password'>;
-async function editUser({ id, ...user }: EditUserParams) {
+
+async function editUser({ id, ...userParams }: EditUserParams) {
     try {
         const user = await db.query.users.findFirst({
             where: (table, { eq }) => eq(table.id, id)
@@ -20,7 +21,7 @@ async function editUser({ id, ...user }: EditUserParams) {
         await db
             .update(users)
             .set({
-                ...user
+                ...userParams
             })
             .where(eq(users.id, id));
 
@@ -35,6 +36,7 @@ async function deleteUser(id: string) {
         const user = await db.query.users.findFirst({
             where: table => eq(table.id, id)
         });
+
         if (!user) {
             throw new Error('用户不存在');
         }

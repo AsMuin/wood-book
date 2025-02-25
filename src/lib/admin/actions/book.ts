@@ -9,6 +9,7 @@ import { queryBook } from '@/db/utils/books';
 import { eq } from 'drizzle-orm';
 
 type CreateBookParams = Omit<IBook, 'id' | 'availableCopies' | 'createdAt'>;
+
 async function createBook(bookParams: CreateBookParams) {
     try {
         const newBook = await db
@@ -28,19 +29,23 @@ async function createBook(bookParams: CreateBookParams) {
         return responseBody(false, error instanceof Error ? error.message : '创建失败');
     }
 }
+
 type UpdateBookParams = Omit<IBook, 'createdAt' | 'borrowRecordId' | 'returnDueDay' | 'availableCopies'>;
-async function editBook({ id, ...book }: UpdateBookParams) {
+
+async function editBook({ id, ...bookParams }: UpdateBookParams) {
     try {
         const book = await db.query.books.findFirst({
             where: table => eq(table.id, id)
         });
+
         if (!book) {
             throw new Error('书籍不存在');
         }
+
         await db
             .update(books)
             .set({
-                ...book
+                ...bookParams
             })
             .where(eq(books.id, id));
 

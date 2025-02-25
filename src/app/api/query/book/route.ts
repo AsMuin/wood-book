@@ -1,4 +1,4 @@
-import { tableQueryBook } from '@/lib/actions/book';
+import { tableQueryBook } from '@/lib/admin/actions/book';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
