@@ -52,28 +52,3 @@ function queryBook({ limit = 10, pageIndex = 0, ...filterParams }: { limit: numb
 }
 
 export { selectBookById, queryBook, getBorrowState };
-function islike(
-    createdAt: PgColumn<
-        {
-            name: 'created_at';
-            tableName: 'books';
-            dataType: 'date';
-            columnType: 'PgTimestamp';
-            data: Date;
-            driverParam: string;
-            notNull: false;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        },
-        {},
-        {}
-    >
-) {
-    throw new Error('Function not implemented.');
-}
