@@ -31,3 +31,11 @@ export const bookSchema = z.object({
     videoUrl: z.string().nonempty(),
     summary: z.string().trim().min(10)
 });
+
+export const userSchema = z.object({
+    id: z.string().nonempty(),
+    name: z.string().trim().min(2).max(100),
+    email: z.string().email(),
+    image: z.string().nonempty('请上传图片'),
+    role: z.enum(['ADMIN', 'USER'])
+});

@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm';
 import responseBody from '@/lib/response';
 import { queryUser } from '@/db/utils/users';
 
-type EditUserParams = Omit<IUser, 'createAt' | 'lastActivityDate' | 'emailVerified' | 'password'>;
+type EditUserParams = Omit<IUser, 'createAt' | 'lastActivityDate' | 'emailVerified' | 'password' | 'status'>;
 
 async function editUser({ id, ...userParams }: EditUserParams) {
     try {

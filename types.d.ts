@@ -38,11 +38,11 @@ export interface IUser {
     email: string;
     password: string;
     image: string;
-    status: 'PENDING' | 'APPROVED' | 'REJECTED';
+    status: "PENDING" | "APPROVED" | "REJECTED" | null;
     emailVerified: Date | null;
-    role: 'USER' | 'ADMIN';
-    lastActivityDate: Date | null;
-    createAt: Date;
+    role: "USER" | "ADMIN" | null;
+    lastActivityDate: string | null;
+    createAt: Date | null;
 }
 
 export interface IResponse<T = unknown> {
@@ -101,13 +101,11 @@ export type QueryParams<P = unknown> = {
 } & P;
 
 export type TableColumns<T extends Record<string, any>> = {
-    [key in keyof T]: {
+    [key in keyof Partial<T>]: {
         header: ReactNode;
         render?: (value: T[key], rowData: T) => ReactNode;
     };
 };
-
-export type TableColumnsConfig<T> = Partial<TableColumns<T>>;
 
 export interface SearchFilterItem<P> {
     label: ReactNode;

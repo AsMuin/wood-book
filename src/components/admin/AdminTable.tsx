@@ -48,7 +48,7 @@ interface AdminTableProps<T extends Record<string, any>, P extends Record<string
     query: (params: QueryParams<P>) => Promise<IResponse<T[]>>;
     searchFilter?: SearchColumns<P>;
     // data: T[];
-    columns: Partial<TableColumns<T>>;
+    columns: TableColumns<T>;
     operations?: (rowData: T) => ReactNode;
     limit?: number;
     ref?: React.RefObject<{ query: () => Promise<void> } | null>;
@@ -77,17 +77,17 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
     //表格渲染配置初始化
     const renderColumns = useMemo(
         () =>
-            Object.keys(columns).map(key => ({
+            Object.entries(columns).map(([key]) => ({
                 key,
                 ...columns[key]
             })),
         [columns]
     );
     // 搜索配置初始化
-    const searchColumns: SearchColumnItem<P>[] = useMemo(
+    const searchColumns = useMemo(
         () =>
             searchFilter
-                ? Object.keys(searchFilter).map(key => ({
+                ? Object.entries(searchFilter).map(([key]) => ({
                       key,
                       ...searchFilter[key]
                   }))
@@ -142,10 +142,12 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
             }));
         };
     }
+
     function onSearchParamsReset() {
         setSearchParams(prev => {
             return Object.keys(prev).reduce((acc, key) => {
                 (acc as any)[key] = '';
+
                 return acc;
             }, {} as P);
         });

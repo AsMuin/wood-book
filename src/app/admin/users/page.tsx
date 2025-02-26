@@ -4,7 +4,7 @@ import AdminTable from '@/components/admin/AdminTable';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { IUser, IResponse, TableColumnsConfig, QueryParams, TableRef } from '@types';
+import { IUser, IResponse, QueryParams, TableRef, TableColumns } from '@types';
 import { useSession } from 'next-auth/react';
 import { deleteBook } from '@/lib/admin/actions/book';
 import { toast } from '@/hooks/useToast';
@@ -22,7 +22,7 @@ export default function UsersPage() {
     const userId = session?.user?.id || '';
     const tableRef = useRef<TableRef>(null);
     const now = dayjs();
-    const tableColumns: TableColumnsConfig<IUser> = {
+    const tableColumns: TableColumns<IUser> = {
         name: {
             header: '用户名'
         },
@@ -31,11 +31,11 @@ export default function UsersPage() {
         },
         role: {
             header: '权限',
-            render: value => UserEnum[value] || value
+            render: value => UserEnum[value!] || value
         },
         image: {
             header: '认证图片',
-            render: value => <Image src={value} alt="book cover" width={100} height={100} />
+            render: value => <Image src={value!} alt="book cover" width={100} height={100} />
         },
         lastActivityDate: {
             header: '是否活跃',
