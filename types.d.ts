@@ -38,9 +38,9 @@ export interface IUser {
     email: string;
     password: string;
     image: string;
-    status: "PENDING" | "APPROVED" | "REJECTED" | null;
+    status: 'PENDING' | 'APPROVED' | 'REJECTED' | null;
     emailVerified: Date | null;
-    role: "USER" | "ADMIN" | null;
+    role: 'USER' | 'ADMIN' | null;
     lastActivityDate: string | null;
     createAt: Date | null;
 }
@@ -88,6 +88,7 @@ export interface returnBookParams {
 export interface BookQueryParams {
     title?: string;
     author?: string;
+    genre?: string;
 }
 
 export interface TableRef extends null {

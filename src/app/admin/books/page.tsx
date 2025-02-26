@@ -4,7 +4,7 @@ import AdminTable from '@/components/admin/AdminTable';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BookQueryParams, IBook, IResponse, QueryParams, SearchColumns, TableColumnsConfig, TableRef } from '@types';
+import { BookQueryParams, IBook, IResponse, QueryParams, SearchColumns,  TableColumns,  TableRef } from '@types';
 import { useSession } from 'next-auth/react';
 import { deleteBook } from '@/lib/admin/actions/book';
 import { toast } from '@/hooks/useToast';
@@ -16,7 +16,7 @@ export default function BooksPage() {
     const { data: session } = useSession();
     const userId = session?.user?.id || '';
     const tableRef = useRef<TableRef>(null);
-    const tableColumns: TableColumnsConfig<IBook> = {
+    const tableColumns: TableColumns<IBook> = {
         title: {
             header: '书名',
             render: value => <h4 className="w-64 scroll-m-20 text-lg font-semibold tracking-tight">《{value}》</h4>

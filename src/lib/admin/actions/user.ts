@@ -1,10 +1,10 @@
 'use server';
 
 import db from '@/db';
+import responseBody from '@/lib/response';
 import { IUser } from '../../../../types';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import responseBody from '@/lib/response';
 import { queryUser } from '@/db/utils/users';
 
 type EditUserParams = Omit<IUser, 'createAt' | 'lastActivityDate' | 'emailVerified' | 'password' | 'status'>;

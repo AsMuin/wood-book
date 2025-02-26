@@ -1,6 +1,8 @@
-import { desc } from 'drizzle-orm';
+import { SQL, desc, eq, ilike } from 'drizzle-orm';
 import db from '..';
 import { books } from '../schema';
+import { BookQueryParams } from '@types';
+import { PgColumn } from 'drizzle-orm/pg-core';
 
 //id查询书籍
 function selectBookById(bookId: string) {
@@ -23,12 +25,55 @@ async function getBorrowState(recordId: string): Promise<boolean> {
 }
 
 //分页查询书籍
-function queryBook(limit: number = 10, pageIndex: number = 0) {
+function queryBook({ limit = 10, pageIndex = 0, ...filterParams }: { limit: number; pageIndex: number } & BookQueryParams) {
+    const filterConfigMap = {
+        title: (value: string) => ilike(books.title, value),
+        author: (value: string) => ilike(books.author, value),
+        genre: (value: string) => eq(books.genre, value)
+    };
+
+    const filters: SQL[] = [];
+    Object.entries(filterParams).forEach(([key, value]) => {
+        //TODO 这里需要对value进行类型判断
+        if (value) {
+            const filterConfig = filterConfigMap[key as keyof typeof filterConfigMap];
+            if (filterConfig) {
+                filters.push(filterConfig(value));
+            }
+        }
+    });
+
     return db.query.books.findMany({
         limit,
         offset: pageIndex * limit,
-        orderBy: desc(books.createdAt)
+        orderBy: desc(books.createdAt),
+        where: (table, { and }) => and(...filters)
     });
 }
 
 export { selectBookById, queryBook, getBorrowState };
+function islike(
+    createdAt: PgColumn<
+        {
+            name: 'created_at';
+            tableName: 'books';
+            dataType: 'date';
+            columnType: 'PgTimestamp';
+            data: Date;
+            driverParam: string;
+            notNull: false;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        },
+        {},
+        {}
+    >
+) {
+    throw new Error('Function not implemented.');
+}

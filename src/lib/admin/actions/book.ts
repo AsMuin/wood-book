@@ -1,9 +1,9 @@
 'use server';
 
-import responseBody from '@/lib/response';
-import { IBook } from '../../../../types';
 import db from '@/db';
 import books from '@/db/schema/books';
+import responseBody from '@/lib/response';
+import { BookQueryParams, IBook } from '@types';
 import { selectUserById } from '@/db/utils/users';
 import { queryBook } from '@/db/utils/books';
 import { eq } from 'drizzle-orm';
@@ -57,9 +57,9 @@ async function editBook({ id, ...bookParams }: UpdateBookParams) {
     }
 }
 //表格查询书籍
-async function tableQueryBook(limit: number, pageIndex: number) {
+async function tableQueryBook({ limit, pageIndex,title,author }: { limit: number; pageIndex: number } & BookQueryParams) {
     try {
-        const [data, total] = await Promise.all([queryBook(limit, pageIndex), db.$count(books)]);
+        const [data, total] = await Promise.all([queryBook({limit, pageIndex,title,author}), db.$count(books)]);
 
         return responseBody(true, '查询成功', {
             data,
