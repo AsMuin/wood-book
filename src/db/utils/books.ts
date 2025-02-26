@@ -2,7 +2,7 @@ import { SQL, desc, eq, ilike } from 'drizzle-orm';
 import db from '..';
 import { books } from '../schema';
 import { BookQueryParams } from '@types';
-import { PgColumn } from 'drizzle-orm/pg-core';
+import { queryFilter } from '@/lib/utils';
 
 //id查询书籍
 function selectBookById(bookId: string) {
@@ -32,16 +32,7 @@ function queryBook({ limit = 10, pageIndex = 0, ...filterParams }: { limit: numb
         genre: (value: string) => eq(books.genre, value)
     };
 
-    const filters: SQL[] = [];
-    Object.entries(filterParams).forEach(([key, value]) => {
-        //TODO 这里需要对value进行类型判断
-        if (value) {
-            const filterConfig = filterConfigMap[key as keyof typeof filterConfigMap];
-            if (filterConfig) {
-                filters.push(filterConfig(value));
-            }
-        }
-    });
+    const filters: SQL[] = queryFilter(filterConfigMap, filterParams);
 
     return db.query.books.findMany({
         limit,

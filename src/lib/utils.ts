@@ -1,6 +1,7 @@
 import { twMerge, twJoin, type ClassNameValue } from 'tailwind-merge';
 import { IResponse } from '../../types';
 import { toast } from '@/hooks/useToast';
+import { SQL } from 'drizzle-orm';
 
 // 动态样式组合以及合并函数
 export function cn(...inputs: ClassNameValue[]) {
@@ -81,4 +82,23 @@ export function transformGetParams({ baseUrl, params }: transformUrlParams) {
     });
 
     return url;
+}
+
+export function queryFilter<T extends Record<string, any>, RT = Required<T>>(
+    filterConfig: Record<keyof T, (value: RT[keyof RT]) => SQL>,
+    filterParams: T
+): SQL[] {
+    const filters: SQL[] = [];
+
+    Object.entries(filterParams).forEach(([key, value]) => {
+        if (value) {
+            const filter = filterConfig[key as keyof typeof filterConfig];
+
+            if (filter) {
+                filters.push(filter(value));
+            }
+        }
+    });
+
+    return filters;
 }
