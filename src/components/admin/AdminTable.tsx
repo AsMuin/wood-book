@@ -142,6 +142,14 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
             }));
         };
     }
+    function onSearchParamsReset() {
+        setSearchParams(prev => {
+            return Object.keys(prev).reduce((acc, key) => {
+                (acc as any)[key] = '';
+                return acc;
+            }, {} as P);
+        });
+    }
 
     // 整合tableContext传递的参数
     const contextValue: TableContextType<T, P> = {
@@ -178,9 +186,14 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
             </div>
             <div className="flex justify-between">
                 {searchFilter && <AdminTable.SearchFilter />}
-                <Button className="bg-light-100" disabled={loading} onClick={() => onQuery({ pageIndex, limit, ...searchParams })}>
-                    查询
-                </Button>
+                <div className="flex gap-2">
+                    <Button className="bg-light-200" disabled={loading} onClick={onSearchParamsReset}>
+                        重置
+                    </Button>
+                    <Button className="bg-admin-primary" disabled={loading} onClick={() => onQuery({ pageIndex, limit, ...searchParams })}>
+                        查询
+                    </Button>
+                </div>
             </div>
             <Table>
                 {/* <TableCaption>{title}</TableCaption> */}
@@ -312,7 +325,7 @@ AdminTable.SearchFilter = function AdminTableSearchFilter<P extends Record<strin
                                     onChange={e => {
                                         const value = e.target.value;
 
-                                        setSearchParams!(key)(value as any);
+                                        setSearchParams!(key)(value as P[keyof P]);
                                     }}
                                 />
                             </label>

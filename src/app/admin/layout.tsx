@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation';
 import Sidebar from '@/components/admin/Sidebar';
 import Header from '@/components/admin/Header';
 import { selectUserById } from '@/db/utils/users';
-import '@/styles/admin.css';
 import { SessionProvider } from 'next-auth/react';
+import '@/styles/admin.css';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
     const session = await auth();
