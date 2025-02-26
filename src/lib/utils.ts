@@ -2,10 +2,12 @@ import { twMerge, twJoin, type ClassNameValue } from 'tailwind-merge';
 import { IResponse } from '../../types';
 import { toast } from '@/hooks/useToast';
 
+// 动态样式组合以及合并函数
 export function cn(...inputs: ClassNameValue[]) {
     return twMerge(twJoin(inputs));
 }
 
+//签发授权上传Url到R2
 export async function uploadFileByUrl(file: File) {
     try {
         const getUrl = await fetch('/api/upload', {
@@ -54,6 +56,7 @@ export async function uploadFileByUrl(file: File) {
     }
 }
 
+// 判断是服务端还是客户端组件
 export function isServer() {
     if (typeof window == 'undefined') {
         console.log('server component');
@@ -67,6 +70,7 @@ interface transformUrlParams {
     params: Record<string, string | number>;
 }
 
+//GET请求参数拼接
 export function transformGetParams({ baseUrl, params }: transformUrlParams) {
     const url = new URL(baseUrl, window.location.href);
 

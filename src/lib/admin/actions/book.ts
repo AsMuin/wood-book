@@ -10,6 +10,7 @@ import { eq } from 'drizzle-orm';
 
 type CreateBookParams = Omit<IBook, 'id' | 'availableCopies' | 'createdAt'>;
 
+//添加书籍
 async function createBook(bookParams: CreateBookParams) {
     try {
         const newBook = await db
@@ -32,6 +33,7 @@ async function createBook(bookParams: CreateBookParams) {
 
 type UpdateBookParams = Omit<IBook, 'createdAt' | 'borrowRecordId' | 'returnDueDay' | 'availableCopies'>;
 
+//编辑书籍
 async function editBook({ id, ...bookParams }: UpdateBookParams) {
     try {
         const book = await db.query.books.findFirst({
@@ -54,7 +56,7 @@ async function editBook({ id, ...bookParams }: UpdateBookParams) {
         return responseBody(false, error instanceof Error ? error.message : '修改失败');
     }
 }
-
+//表格查询书籍
 async function tableQueryBook(limit: number, pageIndex: number) {
     try {
         const [data, total] = await Promise.all([queryBook(limit, pageIndex), db.$count(books)]);
@@ -69,7 +71,7 @@ async function tableQueryBook(limit: number, pageIndex: number) {
         return responseBody(false, error instanceof Error ? error.message : '查询失败');
     }
 }
-
+//删除书籍
 async function deleteBook(id: string, userId: string) {
     try {
         const user = await selectUserById(userId);

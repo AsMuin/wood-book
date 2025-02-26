@@ -12,6 +12,7 @@ import { nextProdUrl } from '../../../envConfig';
 import { AuthCredentials } from '../../../types';
 import { selectUserByEmail } from '@/db/utils/users';
 
+//注册
 async function Register(params: AuthCredentials) {
     const getHeaders = await headers();
     const ip = getHeaders.get('x-forwarded-for') || getHeaders.get('x-real-ip') || '127.0.0.1';
@@ -55,6 +56,7 @@ async function Register(params: AuthCredentials) {
     }
 }
 
+//登录验证
 async function LoginWithCredentials(credentials: Pick<AuthCredentials, 'email' | 'password'>) {
     const getHeaders = await headers();
     const ip = getHeaders.get('x-forwarded-for') || getHeaders.get('x-real-ip') || '127.0.0.1';
@@ -82,6 +84,7 @@ async function LoginWithCredentials(credentials: Pick<AuthCredentials, 'email' |
     }
 }
 
+//邮箱授权链接登录
 async function LoginWithEmail(credentials: Pick<AuthCredentials, 'email'>) {
     const getHeaders = await headers();
     const ip = getHeaders.get('x-forwarded-for') || getHeaders.get('x-real-ip') || '127.0.0.1';
@@ -104,6 +107,7 @@ async function LoginWithEmail(credentials: Pick<AuthCredentials, 'email'>) {
     }
 }
 
+//登出
 async function signOut() {
     await onSignOut();
 }

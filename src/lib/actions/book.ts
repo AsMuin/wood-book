@@ -13,6 +13,7 @@ import { selectBookById } from '@/db/utils/books';
 import { returnBorrowBook, borrowBookAddRecord } from '@/db/utils/borrowRecord';
 import dayjs from 'dayjs';
 
+// 借书
 async function borrowBook({ bookId, userId, day = 7 }: borrowBookParams) {
     try {
         const bookPromise = selectBookById(bookId);
@@ -56,6 +57,7 @@ async function borrowBook({ bookId, userId, day = 7 }: borrowBookParams) {
     }
 }
 
+//还书
 async function returnBook({ recordId, userId }: returnBookParams) {
     try {
         const selectedRecord = await db.query.borrowRecords.findFirst({

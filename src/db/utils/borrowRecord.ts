@@ -9,6 +9,7 @@ interface borrowBookParams {
     day?: number;
 }
 
+// 添加借书记录
 function borrowBookAddRecord({ bookId, userId, day = 7 }: borrowBookParams) {
     const dueDate = dayjs().add(day, 'day').toDate().toDateString();
 
@@ -20,6 +21,7 @@ function borrowBookAddRecord({ bookId, userId, day = 7 }: borrowBookParams) {
     });
 }
 
+// 还书时更新相应的借书记录
 function returnBorrowBook(borrowRecordId: string) {
     const nowDate = dayjs().toDate().toDateString();
 
@@ -32,6 +34,7 @@ function returnBorrowBook(borrowRecordId: string) {
         .where(eq(borrowRecords.id, borrowRecordId));
 }
 
+// 查询借书记录
 function queryBorrowRecord(limit: number = 10, pageIndex: number = 0) {
     return db.query.borrowRecords.findMany({
         limit,

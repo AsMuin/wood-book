@@ -9,6 +9,7 @@ import { queryUser } from '@/db/utils/users';
 
 type EditUserParams = Omit<IUser, 'createAt' | 'lastActivityDate' | 'emailVerified' | 'password' | 'status'>;
 
+//编辑用户
 async function editUser({ id, ...userParams }: EditUserParams) {
     try {
         const user = await db.query.users.findFirst({
@@ -31,7 +32,7 @@ async function editUser({ id, ...userParams }: EditUserParams) {
         return responseBody(false, error instanceof Error ? error.message : '修改失败');
     }
 }
-
+//删除用户
 async function deleteUser(id: string) {
     try {
         const user = await db.query.users.findFirst({
@@ -49,7 +50,7 @@ async function deleteUser(id: string) {
         return responseBody(false, error instanceof Error ? error.message : '删除失败');
     }
 }
-
+// 表格查询用户
 async function tableQueryUser(limit: number, pageIndex: number) {
     try {
         const result = await Promise.all([queryUser(limit, pageIndex), db.$count(users)]);

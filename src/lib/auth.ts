@@ -19,6 +19,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt: {
         maxAge: 60 * 60 * 24
     },
+    //数据库适配, (MagicLinks需要数据库管理Token)
     adapter: DrizzleAdapter(db, {
         usersTable: users,
         accountsTable: accounts,

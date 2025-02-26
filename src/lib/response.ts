@@ -1,6 +1,7 @@
 // import { NextResponse } from 'next/server';
 import { IResponse } from '../../types';
 
+//统一响应数据处理
 function responseBody<T = undefined>(
     success: boolean,
     message: string,
