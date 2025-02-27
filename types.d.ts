@@ -91,6 +91,10 @@ export interface BookQueryParams {
     genre?: string;
 }
 
+export interface UserQueryParams {
+    role?: 'USER' | 'ADMIN';
+}
+
 export interface TableRef extends null {
     query: () => Promise<void>;
 }

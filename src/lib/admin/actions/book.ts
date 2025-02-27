@@ -56,10 +56,11 @@ async function editBook({ id, ...bookParams }: UpdateBookParams) {
         return responseBody(false, error instanceof Error ? error.message : '修改失败');
     }
 }
+
 //表格查询书籍
-async function tableQueryBook({ limit, pageIndex,title,author }: { limit: number; pageIndex: number } & BookQueryParams) {
+async function tableQueryBook({ limit, pageIndex, ...filterParams }: { limit: number; pageIndex: number } & BookQueryParams) {
     try {
-        const [data, total] = await Promise.all([queryBook({limit, pageIndex,title,author}), db.$count(books)]);
+        const [data, total] = await Promise.all([queryBook({ limit, pageIndex, ...filterParams }), db.$count(books)]);
 
         return responseBody(true, '查询成功', {
             data,
@@ -71,6 +72,7 @@ async function tableQueryBook({ limit, pageIndex,title,author }: { limit: number
         return responseBody(false, error instanceof Error ? error.message : '查询失败');
     }
 }
+
 //删除书籍
 async function deleteBook(id: string, userId: string) {
     try {

@@ -7,8 +7,9 @@ export async function GET(request: Request) {
     const pageIndex = searchParams.get('pageIndex') ? Number(searchParams.get('pageIndex')) : 0;
     const title = searchParams.get('title') || '';
     const author = searchParams.get('author') || '';
+    const genre = searchParams.get('genre') || '';
 
-    const result = await tableQueryBook({ limit, pageIndex });
+    const result = await tableQueryBook({ limit, pageIndex, title, author, genre });
 
     return NextResponse.json(result);
 }

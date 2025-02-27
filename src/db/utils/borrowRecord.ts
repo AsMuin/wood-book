@@ -35,7 +35,7 @@ function returnBorrowBook(borrowRecordId: string) {
 }
 
 // 查询借书记录
-function queryBorrowRecord(limit: number = 10, pageIndex: number = 0) {
+function queryBorrowRecord({ limit = 10, pageIndex = 0 }: { limit: number; pageIndex: number }) {
     return db.query.borrowRecords.findMany({
         limit,
         offset: pageIndex * limit,

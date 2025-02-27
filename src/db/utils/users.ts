@@ -1,6 +1,8 @@
-import { desc } from 'drizzle-orm';
+import { desc, eq, SQL } from 'drizzle-orm';
 import db from '..';
 import { users } from '../schema';
+import { UserQueryParams } from '@types';
+import { queryFilter } from '@/lib/utils';
 
 type UserState = 'non-active' | 'active';
 const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
@@ -42,11 +44,18 @@ function selectUserByEmail(email: string) {
 }
 
 //分页查询用户
-function queryUser(limit: number = 10, pageIndex: number = 0) {
+function queryUser({ limit = 10, pageIndex = 0, ...filterParams }: { limit: number; pageIndex: number } & UserQueryParams) {
+    const filterConfigMap = {
+        role: (value: 'USER' | 'ADMIN') => eq(users.role, value)
+    };
+
+    const filters: SQL[] = queryFilter(filterConfigMap, filterParams);
+
     return db.query.users.findMany({
         limit,
         offset: pageIndex * limit,
-        orderBy: desc(users.createAt)
+        orderBy: desc(users.createAt),
+        where: (table, { and }) => and(...filters)
     });
 }
 

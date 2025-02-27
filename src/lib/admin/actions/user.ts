@@ -2,7 +2,7 @@
 
 import db from '@/db';
 import responseBody from '@/lib/response';
-import { IUser } from '../../../../types';
+import { IUser, UserQueryParams } from '@types';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { queryUser } from '@/db/utils/users';
@@ -32,6 +32,7 @@ async function editUser({ id, ...userParams }: EditUserParams) {
         return responseBody(false, error instanceof Error ? error.message : '修改失败');
     }
 }
+
 //删除用户
 async function deleteUser(id: string) {
     try {
@@ -50,10 +51,11 @@ async function deleteUser(id: string) {
         return responseBody(false, error instanceof Error ? error.message : '删除失败');
     }
 }
+
 // 表格查询用户
-async function tableQueryUser(limit: number, pageIndex: number) {
+async function tableQueryUser({ limit, pageIndex, ...filterParams }: { limit: number; pageIndex: number } & UserQueryParams) {
     try {
-        const result = await Promise.all([queryUser(limit, pageIndex), db.$count(users)]);
+        const result = await Promise.all([queryUser({ limit, pageIndex, ...filterParams }), db.$count(users)]);
 
         return responseBody(true, '查询成功', {
             data: result[0],

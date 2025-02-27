@@ -91,7 +91,7 @@ export function queryFilter<T extends Record<string, any>, RT = Required<T>>(
     const filters: SQL[] = [];
 
     Object.entries(filterParams).forEach(([key, value]) => {
-        if (value) {
+        if (value || value === false || value === 0) {
             const filter = filterConfig[key as keyof typeof filterConfig];
 
             if (filter) {
