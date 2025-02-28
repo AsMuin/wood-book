@@ -183,10 +183,10 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
 
     return (
         <TableContextProvider value={contextValue}>
-            <div className="mb-2 flex justify-between border-b-2 px-4 pb-2 font-bebas-neue text-3xl">
+            <div className="mb-2 flex justify-between pb-2 font-bebas-neue text-3xl">
                 <h3>{title}</h3>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between border-b-2">
                 {searchFilter && <AdminTable.SearchFilter />}
                 <div className="flex gap-2">
                     <Button className="bg-light-200" disabled={loading} onClick={onSearchParamsReset}>
@@ -311,7 +311,7 @@ AdminTable.SearchFilter = function AdminTableSearchFilter<P extends Record<strin
     const { searchParams, setSearchParams, searchColumns: searchConfigList } = useTableContext<any, P>();
 
     return (
-        <div className="flex justify-end">
+        <div className="mb-4 flex justify-end">
             {searchConfigList &&
                 searchConfigList.map(({ key, label, placeholder, render }) => {
                     if (render) {

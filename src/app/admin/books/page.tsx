@@ -4,7 +4,7 @@ import AdminTable from '@/components/admin/AdminTable';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { BookQueryParams, IBook, IResponse, QueryParams, SearchColumns,  TableColumns,  TableRef } from '@types';
+import { BookQueryParams, IBook, IResponse, QueryParams, SearchColumns, TableColumns, TableRef } from '@types';
 import { useSession } from 'next-auth/react';
 import { deleteBook } from '@/lib/admin/actions/book';
 import { toast } from '@/hooks/useToast';
@@ -24,6 +24,10 @@ export default function BooksPage() {
         author: {
             header: '作者',
             render: value => <h4 className="w-64 scroll-m-20 text-lg font-semibold tracking-tight">{value}</h4>
+        },
+        genre: {
+            header: '分类',
+            render: value => <p className="w-64 scroll-m-20 text-lg font-semibold tracking-tight">{value}</p>
         },
         coverColor: {
             header: '封面颜色',
@@ -71,6 +75,11 @@ export default function BooksPage() {
         author: {
             label: '作者',
             placeholder: '请填写作者名字',
+            defaultValue: ''
+        },
+        genre: {
+            label: '分类',
+            placeholder: '请填写分类',
             defaultValue: ''
         }
     };
