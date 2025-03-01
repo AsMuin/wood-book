@@ -4,13 +4,14 @@ import AdminTable from '@/components/admin/AdminTable';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { IUser, IResponse, QueryParams, TableRef, TableColumns } from '@types';
+import { IUser, IResponse, QueryParams, TableRef, TableColumns, UserQueryParams } from '@types';
 import { useSession } from 'next-auth/react';
 import { deleteBook } from '@/lib/admin/actions/book';
 import { toast } from '@/hooks/useToast';
 import { useRef } from 'react';
 import PopoverConfirm from '@/components/PopoverConfirm';
 import dayjs from 'dayjs';
+import { transformGetParams } from '@/lib/utils';
 
 const UserEnum = {
     ADMIN: '管理员',
@@ -95,8 +96,17 @@ export default function UsersPage() {
         </div>
     );
 
-    async function tableQueryUser({ limit, pageIndex, signal }: QueryParams) {
-        const result = await fetch(`/api/query/book?limit=${limit}&pageIndex=${pageIndex}`, { signal });
+    async function tableQueryUser({ limit, pageIndex, signal, ...searchParams }: QueryParams<UserQueryParams>) {
+        const requestUrl = transformGetParams({
+            baseUrl: '/api/query/user',
+            params: {
+                limit: limit.toString(),
+                pageIndex: pageIndex.toString(),
+                ...searchParams
+            }
+        });
+
+        const result = await fetch(requestUrl, { signal });
 
         return (await result.json()) as IResponse<IUser[]>;
     }

@@ -84,10 +84,7 @@ export function transformGetParams({ baseUrl, params }: transformUrlParams) {
     return url;
 }
 
-export function queryFilter<T extends Record<string, any>, RT = Required<T>>(
-    filterConfig: Record<keyof T, (value: RT[keyof RT]) => SQL>,
-    filterParams: T
-): SQL[] {
+export function queryFilter<T extends Record<string, any>>(filterConfig: Record<keyof T, (value: any) => SQL>, filterParams: T): SQL[] {
     const filters: SQL[] = [];
 
     Object.entries(filterParams).forEach(([key, value]) => {

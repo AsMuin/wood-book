@@ -1,7 +1,9 @@
 import dayjs from 'dayjs';
 import db from '..';
-import { borrowRecords } from '../schema';
-import { desc, eq } from 'drizzle-orm';
+import { books, borrowRecords, users } from '../schema';
+import { and, desc, eq, gte, lte } from 'drizzle-orm';
+import { BorrowRecordQueryParams } from '@types';
+import { queryFilter } from '@/lib/utils';
 
 interface borrowBookParams {
     bookId: string;
@@ -35,12 +37,37 @@ function returnBorrowBook(borrowRecordId: string) {
 }
 
 // 查询借书记录
-function queryBorrowRecord({ limit = 10, pageIndex = 0 }: { limit: number; pageIndex: number }) {
-    return db.query.borrowRecords.findMany({
-        limit,
-        offset: pageIndex * limit,
-        orderBy: desc(borrowRecords.createdAt)
-    });
+async function queryBorrowRecord({ limit = 10, pageIndex = 0, ...filterParams }: { limit: number; pageIndex: number } & BorrowRecordQueryParams) {
+    const filterConfigMap = {
+        userName: (value: string) => eq(users.name, value),
+        bookName: (value: string) => eq(books.title, value),
+        status: (value: 'BORROWED' | 'RETURNED') => eq(borrowRecords.status, value),
+        startDate: (value: string) => gte(borrowRecords.createdAt, dayjs(value).toDate()),
+        endDate: (value: string) => lte(borrowRecords.createdAt, dayjs(value).toDate())
+    };
+    const filter = queryFilter(filterConfigMap, filterParams);
+
+    const data = await db
+        .select({
+            id: borrowRecords.id,
+            userId: borrowRecords.userId,
+            bookId: borrowRecords.bookId,
+            dueDate: borrowRecords.dueDate,
+            status: borrowRecords.status,
+            startDate: borrowRecords.createdAt,
+            returnDate: borrowRecords.returnDate,
+            userName: users.name,
+            bookName: books.title
+        })
+        .from(borrowRecords)
+        .innerJoin(users, eq(borrowRecords.userId, users.id))
+        .innerJoin(books, eq(borrowRecords.bookId, books.id))
+        .where(and(...filter))
+        .limit(limit)
+        .offset(pageIndex * limit)
+        .orderBy(desc(borrowRecords.createdAt));
+
+    return data;
 }
 
 export { returnBorrowBook, borrowBookAddRecord, queryBorrowRecord };

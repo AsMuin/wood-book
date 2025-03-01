@@ -23,13 +23,13 @@ export interface IBook {
 
 export interface IBorrowRecord {
     id: string;
-    userId: string;
-    bookId: string;
+    userName: string;
+    bookName: string;
     borrowDate: Date;
     dueDate: Date;
     returnDate: Date | null;
     status: 'BORROWED' | 'RETURNED';
-    createdAt: Date;
+    startDate: Date;
 }
 
 export interface IUser {
@@ -93,6 +93,14 @@ export interface BookQueryParams {
 
 export interface UserQueryParams {
     role?: 'USER' | 'ADMIN';
+}
+
+export interface BorrowRecordQueryParams {
+    bookName?: string;
+    userName?: string;
+    status?: 'BORROWED' | 'RETURNED';
+    startDate?: string;
+    endDate?: string;
 }
 
 export interface TableRef extends null {
