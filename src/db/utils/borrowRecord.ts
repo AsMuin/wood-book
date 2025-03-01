@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import db from '..';
 import { books, borrowRecords, users } from '../schema';
-import { and, desc, eq, gte, lte } from 'drizzle-orm';
+import { and, desc, eq, gte, inArray, lte } from 'drizzle-orm';
 import { BorrowRecordQueryParams } from '@types';
 import { queryFilter } from '@/lib/utils';
 
@@ -83,7 +83,7 @@ async function queryBorrowRecord({ limit = 10, pageIndex = 0, ...filterParams }:
     //     },
     //     where: and(
     //         filterParams.userName
-    //             ? eq(borrowRecords.userId, db.select({ id: users.id }).from(users).where(eq(users.name, filterParams.userName)))
+    //             ? inArray(borrowRecords.userId, db.select({ id: users.id }).from(users).where(eq(users.name, filterParams.userName)))
     //             : undefined
     //     ),
     //     limit,
