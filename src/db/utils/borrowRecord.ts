@@ -67,6 +67,30 @@ async function queryBorrowRecord({ limit = 10, pageIndex = 0, ...filterParams }:
         .offset(pageIndex * limit)
         .orderBy(desc(borrowRecords.createdAt));
 
+    //TODO query API的联表查询（不太好用，尤其是嵌套结构想取部分数据平铺出来）
+    // const data = await db.query.borrowRecords.findMany({
+    //     with: {
+    //         user: true,
+    //         book: true
+    //     },
+    //     columns: {
+    //         id: true,
+    //         userId: true,
+    //         bookId: true,
+    //         dueDate: true,
+    //         status: true,
+    //         returnDate: true
+    //     },
+    //     where: and(
+    //         filterParams.userName
+    //             ? eq(borrowRecords.userId, db.select({ id: users.id }).from(users).where(eq(users.name, filterParams.userName)))
+    //             : undefined
+    //     ),
+    //     limit,
+    //     offset: pageIndex * limit,
+    //     orderBy: desc(borrowRecords.createdAt)
+    // });
+
     return data;
 }
 
