@@ -2,7 +2,6 @@
 
 import AdminTable from '@/components/admin/AdminTable';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import Image from 'next/image';
 import { IUser, IResponse, QueryParams, TableRef, TableColumns, UserQueryParams } from '@types';
 import { useSession } from 'next-auth/react';
@@ -12,6 +11,7 @@ import { useRef } from 'react';
 import PopoverConfirm from '@/components/PopoverConfirm';
 import dayjs from 'dayjs';
 import { transformGetParams } from '@/lib/utils';
+import { changeUserPermission } from '@/lib/admin/actions/user';
 
 const UserEnum = {
     ADMIN: '管理员',
@@ -79,11 +79,41 @@ export default function UsersPage() {
         }
     }
 
+    async function onRoleChange(id: string, role: 'USER' | 'ADMIN') {
+        try {
+            const result = await changeUserPermission(id, userId, role);
+
+            if (!result.success) {
+                throw new Error(result.message);
+            }
+
+            toast({
+                title: '成功',
+                description: '角色切换成功'
+            });
+
+            tableRef.current?.query();
+        } catch (error) {
+            toast({
+                title: '失败',
+                description: error instanceof Error ? error.message : '角色切换失败',
+                variant: 'destructive'
+            });
+        }
+    }
+
     const operations = (rowData: IUser) => (
         <div className="flex flex-col gap-2">
-            <Button variant={'link'} className="text-primary">
-                <Link href={`/admin/users/edit/${rowData.id}`}>编辑</Link>
-            </Button>
+            <PopoverConfirm
+                onConfirm={() => onRoleChange(rowData.id, rowData.role === 'ADMIN' ? 'USER' : 'ADMIN')}
+                trigger={
+                    <Button variant={'link'} className="text-primary">
+                        {rowData.role === 'ADMIN' ? '切换为普通用户' : '切换为管理员'}
+                    </Button>
+                }>
+                确定将该角色切换为{rowData.role === 'ADMIN' ? '普通用户' : '管理员'}吗？
+            </PopoverConfirm>
+
             <PopoverConfirm
                 onConfirm={() => onDelete(rowData.id)}
                 trigger={

@@ -5,7 +5,7 @@ import responseBody from '@/lib/response';
 import { IUser, UserQueryParams } from '@types';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { queryUser } from '@/db/utils/users';
+import { queryUser, selectUserById } from '@/db/utils/users';
 
 type EditUserParams = Omit<IUser, 'createAt' | 'lastActivityDate' | 'emailVerified' | 'password' | 'status'>;
 
@@ -68,4 +68,31 @@ async function tableQueryUser({ limit, pageIndex, ...filterParams }: { limit: nu
     }
 }
 
-export { editUser, deleteUser, tableQueryUser };
+//更换用户权限
+async function changeUserPermission(userId: string, editId: string, role: 'USER' | 'ADMIN') {
+    try {
+        const user = await selectUserById(userId);
+
+        if (!user) {
+            throw new Error('登录状态异常');
+        }
+
+        if (user.role !== 'ADMIN') {
+            throw new Error('你的权限不足');
+        }
+
+        const editUser = await selectUserById(editId);
+
+        if (!editUser) {
+            throw new Error('用户不存在');
+        }
+
+        await db.update(users).set({ role }).where(eq(users.id, editId));
+
+        return responseBody(true, '权限修改成功');
+    } catch (error) {
+        return responseBody(false, error instanceof Error ? error.message : '权限修改失败');
+    }
+}
+
+export { editUser, deleteUser, tableQueryUser, changeUserPermission };

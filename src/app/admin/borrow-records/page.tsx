@@ -99,7 +99,7 @@ export default function BorrowRecordsPage() {
                         删除
                     </Button>
                 }>
-                确定删除该书籍吗？
+                确定删除该记录吗？
             </PopoverConfirm>
         </div>
     );
