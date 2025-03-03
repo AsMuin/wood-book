@@ -13,7 +13,8 @@ const db = drizzle({
     schema: {
         ...schemaList,
         ...relationList
-    }
+    },
+    logger: true,
 });
 
 export default db;
