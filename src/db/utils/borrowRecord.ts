@@ -47,7 +47,7 @@ async function queryBorrowRecord({ limit = 10, pageIndex = 0, ...filterParams }:
     };
     const filter = queryFilter(filterConfigMap, filterParams);
 
-    const data = await db
+    const sql = db
         .select({
             id: borrowRecords.id,
             userId: borrowRecords.userId,
@@ -62,10 +62,13 @@ async function queryBorrowRecord({ limit = 10, pageIndex = 0, ...filterParams }:
         .from(borrowRecords)
         .innerJoin(users, eq(borrowRecords.userId, users.id))
         .innerJoin(books, eq(borrowRecords.bookId, books.id))
-        .where(and(...filter))
+        .where(and(...filter));
+    const data = sql
         .limit(limit)
         .offset(pageIndex * limit)
         .orderBy(desc(borrowRecords.createdAt));
+
+    const total = db.$count(sql);
 
     //TODO query API的联表查询（不太好用，尤其是嵌套结构想取部分数据平铺出来）
     // const data = await db.query.borrowRecords.findMany({
@@ -91,7 +94,7 @@ async function queryBorrowRecord({ limit = 10, pageIndex = 0, ...filterParams }:
     //     orderBy: desc(borrowRecords.createdAt)
     // });
 
-    return data;
+    return Promise.all([data, total]);
 }
 
 export { returnBorrowBook, borrowBookAddRecord, queryBorrowRecord };

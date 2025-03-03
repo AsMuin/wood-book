@@ -10,10 +10,11 @@ import { eq } from 'drizzle-orm';
 
 async function tableQueryBorrowRecord({ limit, pageIndex, ...filterParams }: { limit: number; pageIndex: number } & BorrowRecordQueryParams) {
     try {
-        const result = await queryBorrowRecord({ limit, pageIndex, ...filterParams });
+        const [data,total] = await queryBorrowRecord({ limit, pageIndex, ...filterParams });
 
         return responseBody(true, '查询成功', {
-            data: result,
+            data,
+            total,
             pageIndex,
             limit
         });

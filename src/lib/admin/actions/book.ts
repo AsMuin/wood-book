@@ -60,7 +60,7 @@ async function editBook({ id, ...bookParams }: UpdateBookParams) {
 //表格查询书籍
 async function tableQueryBook({ limit, pageIndex, ...filterParams }: { limit: number; pageIndex: number } & BookQueryParams) {
     try {
-        const [data, total] = await Promise.all([queryBook({ limit, pageIndex, ...filterParams }), db.$count(books)]);
+        const [data, total] = await queryBook({ limit, pageIndex, ...filterParams });
 
         return responseBody(true, '查询成功', {
             data,

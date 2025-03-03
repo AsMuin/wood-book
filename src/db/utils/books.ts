@@ -1,4 +1,4 @@
-import { SQL, desc, eq, ilike } from 'drizzle-orm';
+import { SQL, and, desc, eq, ilike } from 'drizzle-orm';
 import db from '..';
 import { books } from '../schema';
 import { BookQueryParams } from '@types';
@@ -34,12 +34,15 @@ function queryBook({ limit = 10, pageIndex = 0, ...filterParams }: { limit: numb
 
     const filters: SQL[] = queryFilter(filterConfigMap, filterParams);
 
-    return db.query.books.findMany({
-        limit,
-        offset: pageIndex * limit,
-        orderBy: desc(books.createdAt),
-        where: (table, { and }) => and(...filters)
-    });
+    return Promise.all([
+        db.query.books.findMany({
+            limit,
+            offset: pageIndex * limit,
+            orderBy: desc(books.createdAt),
+            where: (table, { and }) => and(...filters)
+        }),
+        db.$count(books, and(...filters))
+    ]);
 }
 
 export { selectBookById, queryBook, getBorrowState };

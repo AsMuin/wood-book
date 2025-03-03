@@ -1,4 +1,4 @@
-import { desc, eq, SQL } from 'drizzle-orm';
+import { and, desc, eq, SQL } from 'drizzle-orm';
 import db from '..';
 import { users } from '../schema';
 import { UserQueryParams } from '@types';
@@ -51,12 +51,15 @@ function queryUser({ limit = 10, pageIndex = 0, ...filterParams }: { limit: numb
 
     const filters: SQL[] = queryFilter(filterConfigMap, filterParams);
 
-    return db.query.users.findMany({
-        limit,
-        offset: pageIndex * limit,
-        orderBy: desc(users.createAt),
-        where: (table, { and }) => and(...filters)
-    });
+    return Promise.all([
+        db.query.users.findMany({
+            limit,
+            offset: pageIndex * limit,
+            orderBy: desc(users.createAt),
+            where: (table, { and }) => and(...filters)
+        }),
+        db.$count(users, and(...filters))
+    ]);
 }
 
 export { selectUserById, selectUserByEmail, queryUser, getUserState };

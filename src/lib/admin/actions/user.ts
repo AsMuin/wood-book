@@ -55,11 +55,11 @@ async function deleteUser(id: string) {
 // 表格查询用户
 async function tableQueryUser({ limit, pageIndex, ...filterParams }: { limit: number; pageIndex: number } & UserQueryParams) {
     try {
-        const result = await Promise.all([queryUser({ limit, pageIndex, ...filterParams }), db.$count(users)]);
+        const [data, total] = await queryUser({ limit, pageIndex, ...filterParams });
 
         return responseBody(true, '查询成功', {
-            data: result[0],
-            total: result[1],
+            data,
+            total,
             pageIndex,
             limit
         });
