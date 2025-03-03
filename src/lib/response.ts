@@ -9,7 +9,7 @@ function responseBody<T = undefined>(
 ) {
     let response;
 
-    if (returnInfo?.total && (returnInfo?.pageIndex || returnInfo?.pageIndex === 0) && returnInfo?.limit) {
+    if ((returnInfo?.total === 0 || returnInfo?.total) && (returnInfo?.pageIndex || returnInfo?.pageIndex === 0) && returnInfo?.limit) {
         response = {
             success,
             message,

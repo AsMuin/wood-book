@@ -1,7 +1,7 @@
 'use client';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useCallback, useEffect, useImperativeHandle, useState, type ReactNode, createContext, useContext, useMemo } from 'react';
+import { useCallback, useEffect, useImperativeHandle, useState, type ReactNode, createContext, useContext, useMemo, useRef } from 'react';
 import { IResponse, QueryParams, SearchColumnItem, SearchColumns, TableColumns } from '@types';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../ui/pagination';
 import { cn } from '@/lib/utils';
@@ -64,7 +64,7 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
     title,
     operations,
     query,
-    limit = 10,
+    limit = 5,
     searchFilter,
     ref
 }: AdminTableProps<T, P>) {
@@ -94,7 +94,7 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
                 : [],
         [searchFilter]
     );
-    // 搜索项的默认值
+    // 搜索项的默认值()
     const [searchParams, setSearchParams] = useState<P>(
         searchColumns.reduce((acc, { key, defaultValue }) => {
             (acc as any)[key] = defaultValue || '';
@@ -102,6 +102,8 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
             return acc;
         }, {} as P)
     );
+    // 请求参数真正的来源
+    const realParams = useRef<P>(searchParams);
     // 真正的请求方法,接收所有请求相关的参数
     const onQuery = useCallback(
         async ({ limit, pageIndex, signal, ...searchParams }: QueryParams<P>) => {
@@ -132,6 +134,23 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
         },
         [query]
     );
+
+    //主动发起查询
+    function activeQuery(searchParams: P) {
+        //搜索参数是否变化了
+        if (JSON.stringify(searchParams) !== JSON.stringify(realParams.current)) {
+            realParams.current = searchParams as any;
+
+            // 检测到参数变化就要回到第一页，如果本来就是第一页就重新发请求
+            if (pageIndex === 0) {
+                onQuery({ pageIndex, limit, ...realParams.current });
+            } else {
+                setPageIndex(0);
+            }
+        } else {
+            onQuery({ pageIndex, limit, ...realParams.current });
+        }
+    }
 
     // 搜索项参数修改
     function onSearchParamsChange(key: keyof P) {
@@ -167,18 +186,17 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
 
     //主动暴露 表格请求方法给外部进行控制
     useImperativeHandle(ref, () => ({
-        query: (signal?: AbortSignal) => onQuery({ pageIndex, limit, signal, ...searchParams })
+        query: (signal?: AbortSignal) => onQuery({ pageIndex, limit, signal, ...realParams.current })
     }));
     // 监听分页标自动请求表格数据
     useEffect(() => {
         const controller = new AbortController();
 
-        onQuery({ pageIndex, limit, signal: controller.signal, ...searchParams });
+        onQuery({ pageIndex, limit, signal: controller.signal, ...realParams.current });
 
         return () => {
             controller.abort();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [onQuery, pageIndex, limit]);
 
     return (
@@ -189,10 +207,13 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
             <div className="flex justify-between border-b-2 pb-4">
                 {searchFilter && <AdminTable.SearchFilter />}
                 <div className="ml-auto inline-flex gap-2">
-                    <Button className="bg-light-200" disabled={loading} onClick={onSearchParamsReset}>
+                    <Button
+                        className="bg-red-400 text-white duration-500 hover:bg-white hover:text-red-400"
+                        disabled={loading}
+                        onClick={onSearchParamsReset}>
                         重置
                     </Button>
-                    <Button className="bg-admin-primary" disabled={loading} onClick={() => onQuery({ pageIndex, limit, ...searchParams })}>
+                    <Button className="bg-admin-primary" disabled={loading} onClick={() => activeQuery(searchParams)}>
                         查询
                     </Button>
                 </div>
@@ -249,7 +270,7 @@ function AdminTable<T extends Record<string, any>, P extends Record<string, any>
                     </TableRow>
                 </TableFooter> */}
             </Table>
-            <AdminTable.Pagination pageIndex={pageIndex} setPageIndex={setPageIndex} limit={10} total={tableModel.total} />
+            <AdminTable.Pagination pageIndex={pageIndex} setPageIndex={setPageIndex} limit={limit} total={tableModel.total} />
         </TableContextProvider>
     );
 }

@@ -6,7 +6,10 @@ import { auth } from '@/lib/auth';
 export default async function Home() {
     const session = await auth();
     const userId = session?.user?.id;
-    const latestBooks = await queryBook(10, 0);
+    const [latestBooks] = await queryBook({
+        limit: 10,
+        pageIndex: 0
+    });
 
     return (
         <>

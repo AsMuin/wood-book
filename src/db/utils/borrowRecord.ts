@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import db from '..';
 import { books, borrowRecords, users } from '../schema';
-import { and, desc, eq, gte, inArray, lte } from 'drizzle-orm';
+import { and, desc, eq, gte, lte } from 'drizzle-orm';
 import { BorrowRecordQueryParams } from '@types';
 import { queryFilter } from '@/lib/utils';
 
@@ -47,7 +47,7 @@ async function queryBorrowRecord({ limit = 10, pageIndex = 0, ...filterParams }:
     };
     const filter = queryFilter(filterConfigMap, filterParams);
 
-    const sql = db
+    const baseSql = db
         .select({
             id: borrowRecords.id,
             userId: borrowRecords.userId,
@@ -62,13 +62,17 @@ async function queryBorrowRecord({ limit = 10, pageIndex = 0, ...filterParams }:
         .from(borrowRecords)
         .innerJoin(users, eq(borrowRecords.userId, users.id))
         .innerJoin(books, eq(borrowRecords.bookId, books.id))
-        .where(and(...filter));
-    const data = sql
+        .where(and(...filter))
+        .as('baseSql');
+
+    const data = db
+        .select()
+        .from(baseSql)
         .limit(limit)
         .offset(pageIndex * limit)
-        .orderBy(desc(borrowRecords.createdAt));
+        .orderBy(desc(baseSql.startDate));
 
-    const total = db.$count(sql);
+    const total = db.$count(baseSql);
 
     //TODO query API的联表查询（不太好用，尤其是嵌套结构想取部分数据平铺出来）
     // const data = await db.query.borrowRecords.findMany({

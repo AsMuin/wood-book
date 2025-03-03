@@ -14,7 +14,7 @@ const db = drizzle({
         ...schemaList,
         ...relationList
     },
-    logger: true,
+    logger: true
 });
 
 export default db;
